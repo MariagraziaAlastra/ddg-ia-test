@@ -1,6 +1,7 @@
 casper.test.begin('Urban Dictionary IA is correctly shown', function suite(test) {
-    var query = "ud rad";
-    var api_url = "http://api.urbandictionary.com/v0/define?term=rad";
+    var ud_word = "rad";
+    var query = "!safeoff ud " + ud_word;
+    var api_url = "http://api.urbandictionary.com/v0/define?term=";
 
     casper.start("https://bttf.duckduckgo.com", function() {
         test.assertTitle("DuckDuckGo", "DDG title is the one expected");
@@ -33,7 +34,7 @@ casper.test.begin('Urban Dictionary IA is correctly shown', function suite(test)
     casper.then(function() {
         var data = this.evaluate(function(api_url) {
             return JSON.parse(__utils__.sendAJAX(api_url));
-        }, {api_url: api_url});
+        }, {api_url: api_url + ud_word});
 
         // Check if all the elements have the right values from the API response
         header_text =  this.fetchText('div.zci--urban_dictionary h3 span.zci__urban__word');
@@ -47,6 +48,33 @@ casper.test.begin('Urban Dictionary IA is correctly shown', function suite(test)
         example_text = example_text.replace(/\r?\n/gi, "");
         data.list[0].example = data.list[0].example.replace(/\r?\n/gi, "");
         test.assertEquals(example_text, data.list[0].example, "the example is the right one");
+
+        var tags = this.evaluate(function() {
+            var related_words = __utils__.findAll('div.zci--urban_dictionary div.info span.info__label a');
+            return Array.prototype.map.call(related_words, function(word) {
+                return {
+                    'text': word.text,
+                    'href': word.href
+                };
+            });
+        });
+
+        test.assertEval(function(tags, api_url) {
+            tags.forEach(function(item) {
+                if (item.href !== api_url + item.text) {
+                    return false;
+                }
+            });
+            return true;
+        }, "each related word links to the correct Urban Dictionary page", {tags: tags, api_url: api_url});
+
+        var tags_text = this.evaluate(function(tags) {
+            return Array.prototype.map.call(tags, function(item) {
+                return item.text;
+            });
+        }, {tags: tags});
+
+        test.assertEquals(tags_text, data.tags, "all the related words returned by the API are shown");
     });
 
     casper.run(function() {
