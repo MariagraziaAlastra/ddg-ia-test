@@ -77,6 +77,20 @@ casper.test.begin('Urban Dictionary IA is correctly shown', function suite(test)
         test.assertEquals(tags_text, data.tags, "all the related words returned by the API are shown");
     });
 
+    casper.then(function() {
+        // Check if Infobox is visible on desktop screens
+        casper.viewport(1336, 768).then(function() {
+            test.assertVisible('div.zci--urban_dictionary div.zci__aux', "Infobox is visible on desktop screens");
+        });
+    });
+
+    casper.then(function() {
+        // Check if Infobox is hidden on mobile screens
+        casper.viewport(360, 640).then(function() {
+            test.assertNotVisible('div.zci--urban_dictionary div.zci__aux', "Infobox is hidden on mobile screens");
+        });
+    });
+
     casper.run(function() {
         test.done();
     });
