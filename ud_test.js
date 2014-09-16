@@ -3,6 +3,20 @@ casper.test.begin('Urban Dictionary IA is correctly shown', function suite(test)
     var query = "!safeoff ud " + ud_word;
     var api_url = "http://api.urbandictionary.com/v0/define?term=";
     var define_url = "http://www.urbandictionary.com/define.php?term=";
+    var selectors = {
+        'ia_tab': 'a.zcm__link--urban_dictionary',
+        'main': 'div.zci--urban_dictionary',
+        'content': 'div.cw',
+        'aux': 'div.zci__aux',
+        'header': 'h3 span.zci__urban__word',
+        'definition': 'p.ud_definition',
+        'example': 'div.ud_example',
+        'example_line': 'div.example',
+        'moreAt': 'a.zci__more-at',
+        'moreAt_icon': 'img.zci__more-at__icon',
+        'aux_header': 'h6.info--head',
+        'aux_label': 'div.info span.info__label a'
+    };
 
     casper.start("https://bttf.duckduckgo.com", function() {
         test.assertTitle("DuckDuckGo", "DDG title is the one expected");
@@ -15,22 +29,22 @@ casper.test.begin('Urban Dictionary IA is correctly shown', function suite(test)
 
     casper.then(function() {
         test.assertUrlMatch(/q=ud\srad&kp=-1/, "search term has been submitted");
-        test.assertExists('a.zcm__link--urban_dictionary', "Urban Dictionary IA is shown");
+        test.assertExists(selectors.ia_tab, "Urban Dictionary IA is shown");
 
         // Check if main content and Infobox exist
-        test.assertExists('div.zci--urban_dictionary div.cw', "main content exists");
-        test.assertExists('div.zci--urban_dictionary div.zci__aux', "Infobox exists");
+        test.assertExists((selectors.main + " " + selectors.content), "main content exists");
+        test.assertExists((selectors.main + " " + selectors.aux), "Infobox exists");
 
         // Check if the content elements exist
-        test.assertExists('div.zci--urban_dictionary h3 span.zci__urban__word', "title exists");
-        test.assertExists('div.zci--urban_dictionary p.ud_definition', "definition exists");
-        test.assertExists('div.zci--urban_dictionary div.ud_example', "example exists");
-        test.assertExists('div.zci--urban_dictionary a.zci__more-at', "moreAt exists");
-        test.assertExists('div.zci--urban_dictionary a.zci__more-at img.zci__more-at__icon', "moreAt icon exists");
+        test.assertExists((selectors.main + " " + selectors.header), "title exists");
+        test.assertExists((selectors.main + " " + selectors.definition), "definition exists");
+        test.assertExists((selectors.main + " " + selectors.example), "example exists");
+        test.assertExists((selectors.main + " " + selectors.moreAt), "moreAt exists");
+        test.assertExists((selectors.main + " " + selectors.moreAt + " " + selectors.moreAt_icon), "moreAt icon exists");
 
         // Check if the Infobox elements exist
-        test.assertExists('div.zci--urban_dictionary h6.info--head', "Infobox title exists");
-        test.assertExists('div.zci--urban_dictionary div.info span.info__label a', "related words exist");
+        test.assertExists((selectors.main + " " + selectors.aux_header), "Infobox title exists");
+        test.assertExists((selectors.main + " " + selectors.aux_label), "related words exist");
     });
 
     casper.then(function() {
@@ -39,33 +53,33 @@ casper.test.begin('Urban Dictionary IA is correctly shown', function suite(test)
         }, {api_url: api_url + ud_word});
 
         // Check if all the elements have the right values from the API response
-        header_text =  this.fetchText('div.zci--urban_dictionary h3 span.zci__urban__word');
+        header_text =  this.fetchText(selectors.main + " " + selectors.header);
         test.assertEquals(header_text, data.list[0].word, "title equals the searched word");
 
-        definition_text =  this.fetchText('div.zci--urban_dictionary p.ud_definition').trim();
+        definition_text =  this.fetchText(selectors.main + " " + selectors.definition).trim();
         definition_text = definition_text.replace("\n", "");
         test.assertEquals(definition_text, data.list[0].definition, "the definition is the right one");
 
-        example_text =  this.fetchText('div.zci--urban_dictionary div.ud_example div.example').trim();
+        example_text =  this.fetchText(selectors.main + " " + selectors.example + " " + selectors.example_line).trim();
         example_text = example_text.replace(/\r?\n/gi, "");
         data.list[0].example = data.list[0].example.replace(/\r?\n/gi, "");
         test.assertEquals(example_text, data.list[0].example, "the example is the right one");
 
-        moreAt_text = this.fetchText('div.zci--urban_dictionary a.zci__more-at').trim();
+        moreAt_text = this.fetchText(selectors.main + " " + selectors.moreAt).trim();
         test.assertEquals(moreAt_text, "More at Urban Dictionary");
 
-        moreAt_href = this.getElementAttribute('div.zci--urban_dictionary a.zci__more-at', 'href');
+        moreAt_href = this.getElementAttribute((selectors.main + " " + selectors.moreAt), 'href');
         test.assertEquals(moreAt_href, define_url + header_text);
 
-        var tags = this.evaluate(function() {
-            var related_words = __utils__.findAll('div.zci--urban_dictionary div.info span.info__label a');
+        var tags = this.evaluate(function(selectors) {
+            var related_words = __utils__.findAll(selectors.main + " " + selectors.aux_label);
             return Array.prototype.map.call(related_words, function(word) {
                 return {
                     'text': word.text,
                     'href': word.href
                 };
             });
-        });
+        }, {selectors: selectors});
 
         test.assertEval(function(tags, define_url) {
             tags.forEach(function(item) {
@@ -88,14 +102,14 @@ casper.test.begin('Urban Dictionary IA is correctly shown', function suite(test)
     casper.then(function() {
         // Check if Infobox is visible on desktop screens
         casper.viewport(1336, 768).then(function() {
-            test.assertVisible('div.zci--urban_dictionary div.zci__aux', "Infobox is visible on desktop screens");
+            test.assertVisible((selectors.main + " " + selectors.aux), "Infobox is visible on desktop screens");
         });
     });
 
     casper.then(function() {
         // Check if Infobox is hidden on mobile screens
         casper.viewport(360, 640).then(function() {
-            test.assertNotVisible('div.zci--urban_dictionary div.zci__aux', "Infobox is hidden on mobile screens");
+            test.assertNotVisible((selectors.main + " " + selectors.aux), "Infobox is hidden on mobile screens");
         });
     });
 
