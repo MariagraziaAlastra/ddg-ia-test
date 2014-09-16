@@ -2,6 +2,7 @@ casper.test.begin('Urban Dictionary IA is correctly shown', function suite(test)
     var ud_word = "rad";
     var query = "!safeoff ud " + ud_word;
     var api_url = "http://api.urbandictionary.com/v0/define?term=";
+    var define_url = "http://www.urbandictionary.com/define.php?term=";
 
     casper.start("https://bttf.duckduckgo.com", function() {
         test.assertTitle("DuckDuckGo", "DDG title is the one expected");
@@ -25,6 +26,7 @@ casper.test.begin('Urban Dictionary IA is correctly shown', function suite(test)
         test.assertExists('div.zci--urban_dictionary p.ud_definition', "definition exists");
         test.assertExists('div.zci--urban_dictionary div.ud_example', "example exists");
         test.assertExists('div.zci--urban_dictionary a.zci__more-at', "moreAt exists");
+        test.assertExists('div.zci--urban_dictionary a.zci__more-at img.zci__more-at__icon', "moreAt icon exists");
 
         // Check if the Infobox elements exist
         test.assertExists('div.zci--urban_dictionary h6.info--head', "Infobox title exists");
@@ -49,6 +51,12 @@ casper.test.begin('Urban Dictionary IA is correctly shown', function suite(test)
         data.list[0].example = data.list[0].example.replace(/\r?\n/gi, "");
         test.assertEquals(example_text, data.list[0].example, "the example is the right one");
 
+        moreAt_text = this.fetchText('div.zci--urban_dictionary a.zci__more-at').trim();
+        test.assertEquals(moreAt_text, "More at Urban Dictionary");
+
+        moreAt_href = this.getElementAttribute('div.zci--urban_dictionary a.zci__more-at', 'href');
+        test.assertEquals(moreAt_href, define_url + header_text);
+
         var tags = this.evaluate(function() {
             var related_words = __utils__.findAll('div.zci--urban_dictionary div.info span.info__label a');
             return Array.prototype.map.call(related_words, function(word) {
@@ -59,14 +67,14 @@ casper.test.begin('Urban Dictionary IA is correctly shown', function suite(test)
             });
         });
 
-        test.assertEval(function(tags, api_url) {
+        test.assertEval(function(tags, define_url) {
             tags.forEach(function(item) {
-                if (item.href !== api_url + item.text) {
+                if (item.href !== define_url + item.text) {
                     return false;
                 }
             });
             return true;
-        }, "each related word links to the correct Urban Dictionary page", {tags: tags, api_url: api_url});
+        }, "each related word links to the correct Urban Dictionary page", {tags: tags, define_url: define_url});
 
         var tags_text = this.evaluate(function(tags) {
             return Array.prototype.map.call(tags, function(item) {
