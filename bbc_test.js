@@ -68,48 +68,66 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
                 test.assertDoesntExist((selectors.main + " " +  selectors.tileview_grid), "tileview is not a grid");
 
                 test.comment("Check if tileview contains metabar, tiles wrapper and detail");
-                test.assertExists((selectors.main + " " + selectors.tileview + " " + selectors.metabar.root), "tileview contains metabar");
-                test.assertExists((selectors.main + " " + selectors.tileview + " " + selectors.tiles.root), "tileview contains tiles wrapper");
-                test.assertExists((selectors.main + " " + selectors.tileview + " " + selectors.detail.root), "tileview contains detail");
+                test.assertExists((selectors.main + " " + selectors.tileview + " " + selectors.metabar.root),
+                                 "tileview contains metabar");
+                test.assertExists((selectors.main + " " + selectors.tileview + " " + selectors.tiles.root),
+                                 "tileview contains tiles wrapper");
+                test.assertExists((selectors.main + " " + selectors.tileview + " " + selectors.detail.root),
+                                 "tileview contains detail");
 
                 test.comment("Check if metabar contains mode, moreAt and text");
-                test.assertExists((selectors.main + " " + selectors.metabar.root + " " + selectors.metabar.mode), "metabar contains mode");
-                test.assertExists((selectors.main + " " + selectors.metabar.root + " " + selectors.metabar.moreAt.root), "metabar contains moreAt");
-                test.assertExists((selectors.main + " " + selectors.metabar.root + " " + selectors.metabar.text.root), "metabar contains text");
+                test.assertExists((selectors.main + " " + selectors.metabar.root + " " + selectors.metabar.mode),
+                                 "metabar contains mode");
+                test.assertExists((selectors.main + " " + selectors.metabar.root + " " + selectors.metabar.moreAt.root),
+                                 "metabar contains moreAt");
+                test.assertExists((selectors.main + " " + selectors.metabar.root + " " + selectors.metabar.text.root),
+                                 "metabar contains text");
 
                 test.comment("Check if metabar moreAt contains moreAt icon");
-                test.assertExists((selectors.main + " " + selectors.metabar.moreAt.root + " " + selectors.metabar.moreAt.icon), "moreAt contains moreAt icon");
+                test.assertExists((selectors.main + " " + selectors.metabar.moreAt.root + " " + selectors.metabar.moreAt.icon),
+                                 "moreAt contains moreAt icon");
 
                 test.comment("Check if metabar text contains count and item type");
-                test.assertExists((selectors.main + " " + selectors.metabar.text.root + " " + selectors.metabar.text.count), "metabar text contains count");
-                test.assertExists((selectors.main + " " + selectors.metabar.text.root + " " + selectors.metabar.text.item_type), 
+                test.assertExists((selectors.main + " " + selectors.metabar.text.root + " " + selectors.metabar.text.count),
+                                 "metabar text contains count");
+                test.assertExists((selectors.main + " " + selectors.metabar.text.root + " " + selectors.metabar.text.item_type),
                                  "metabar text contains item type");
 
                 test.comment("Check if tiles wrapper contains navigation and tiles");
-                test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.nav_next), 
+                test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.nav_next),
                                  "tiles wrapper contains forward navigation icon");
-                test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.nav_prev), 
+                test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.nav_prev),
                                  "tiles wrapper contains backwards navigation icon");
-                test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.tile.root), "tiles wrapper contains tiles");
+                test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.tile.root),
+                                 "tiles wrapper contains tiles");
 
                 test.comment("Check if tiles contain image, title and rating");
-                test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.media_img), "tiles contain image");
-                test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.title), "tiles contain title");
-                test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.rating), "tiles contain rating");
+                test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.media_img),
+                                 "tiles contain image");
+                test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.title),
+                                 "tiles contain title");
+                test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.rating),
+                                 "tiles contain rating");
 
                 test.comment("Check if detail contains closing icon, content and controls");
-                test.assertExists((selectors.main + " " + selectors.detail.root + " " + selectors.detail.close), "detail contains closing icon");
-                test.assertExists((selectors.main + " " + selectors.detail.root + " " + selectors.detail.content.root), "detail contains content");
-                test.assertExists((selectors.main + " " + selectors.detail.root + " " + selectors.detail.controls.root), "detail contains controls");
+                test.assertExists((selectors.main + " " + selectors.detail.root + " " + selectors.detail.close),
+                                 "detail contains closing icon");
+                test.assertExists((selectors.main + " " + selectors.detail.root + " " + selectors.detail.content.root),
+                                 "detail contains content");
+                test.assertExists((selectors.main + " " + selectors.detail.root + " " + selectors.detail.controls.root),
+                                 "detail contains controls");
 
                 test.comment("Check if detail content is empty, since no tile is selected yet");
-                test.assertDoesntExist((selectors.main + " " + selectors.detail.content.root + " " + selectors.detail.content.media_img), "no image in detail");
-                test.assertDoesntExist((selectors.main + " " + selectors.detail.content.root + " " + selectors.detail.content.body.root), "no body in detail");
+                test.assertDoesntExist((selectors.main + " " + selectors.detail.content.root + " " + selectors.detail.content.media_img),
+                                      "no image in detail");
+                test.assertDoesntExist((selectors.main + " " + selectors.detail.content.root + " " + selectors.detail.content.body.root),
+                                      "no body in detail");
 
                 test.comment("Check if detail controls contain previous and next");
-                test.assertExists((selectors.main + " " + selectors.detail.controls.root + " " + selectors.detail.controls.prev), 
+                test.assertExists((selectors.main + " " + selectors.detail.controls.root + " " + selectors.detail.controls.prev),
                                  "detail controls contain previous");
-                test.assertExists((selectors.main + " " + selectors.detail.controls.root + " " + selectors.detail.controls.next), "detail controls contain next");
+                test.assertExists((selectors.main + " " + selectors.detail.controls.root + " " + selectors.detail.controls.next),
+                                 "detail controls contain next");
 
                 test.comment("\n###### End checking for elements existence and correct nesting ######\n");
             });
