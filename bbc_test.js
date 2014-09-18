@@ -5,6 +5,7 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
     var program_url = "http://bbc.co.uk/programmes/";
     var hour_regex = /^[0-9][0-9]:[0-9][0-9](A|P){1}M\s-\s[0-9][0-9]:[0-9][0-9](A|P){1}M$/;
     var metabar_regex = /^Showing\s[0-9]+\s[a-zA-Z]+\sfor$/;
+    var runtime_regex = /^Run\sTime:\s[0-9][0-9]?\s(hours?|mins){1}$/;
     var moreAt_regex = /BBC/;
     var selectors = {
         'ia_tab': 'a.zcm__link--bbc',
@@ -179,16 +180,21 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
         test.assertEquals(this.getElementAttribute(selectors.main + " " + selectors.metabar.moreAt.root, 'href'), bbc_url,
                          "moreAt URL is correct");
 
-        // Choose a single tile to fetch title and text
+        // Choose a single tile and fetch its title and rating text
         var tile = this.evaluate(function(selectors) {
             return {
                 'title': __utils__.findAll(selectors.main + " " + selectors.tiles.tile.title)[0].innerHTML,
                 'rating': __utils__.findAll(selectors.main + " " + selectors.tiles.tile.rating)[0].innerHTML
             };
         }, {selectors: selectors});
+
         test.comment("Check tiles content");
         test.assertMatch(tile.rating, hour_regex,
-                        "rating has the correct text");
+                        "rating has the correct text value");
+
+        test.comment("Check detail content");
+        test.assertMatch(this.fetchText(selectors.main + " " + selectors.detail.content.body.source).trim(), runtime_regex,
+                        "detail body source has the correct text value");
 
         test.comment("\n###### End checking IA content values ######\n");
     });
