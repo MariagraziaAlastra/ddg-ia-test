@@ -59,7 +59,6 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
         casper.viewport(1336, 768).then(function() {
             this.reload(function() {
                 test.comment("Viewport changed to {width: 1336, height: 768}");
-                this.captureSelector('bbc.jpeg', 'html');
                 test.assertExists(selectors.ia_tab, "BBC IA is shown");
 
                 test.comment("\n###### Begin checking for elements existence and correct nesting ######\n");
