@@ -134,6 +134,37 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
         });
     });
 
+    casper.then(function() {
+        test.comment("\n###### Begin checking for detail visibility before and after selecting a tile ######\n");
+
+        test.comment("Check if detail is hidden when no tile is selected");
+        test.assertNotVisible((selectors.main + " " + selectors.detail.root), "detail is hidden");
+
+        this.click(selectors.tiles.tile.root);
+        test.comment("Performed click on tile");
+
+        test.comment("Check if detail is visible now");
+        test.assertVisible((selectors.main + " " + selectors.detail.root), "detail is visible");
+
+        test.comment("Check if detail content has image and body now");
+        test.assertExists((selectors.main + " " + selectors.detail.content.root + " " + selectors.detail.content.media_img),
+                         "detail content has image");
+        test.assertExists((selectors.main + " " + selectors.detail.content.root + " " + selectors.detail.content.body.root),
+                         "detail content has body");
+
+        test.comment("Check if detail body has title, subtitle, source and description");
+        test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.title),
+                         "detail body has title");
+        test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.subtitle),
+                         "detail body has subtitle");
+        test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.source),
+                         "detail body has source");
+        test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.desc),
+                         "detail body has description");
+
+        test.comment("\n###### End checking for detail visibility before and after selecting a tile ######\n");
+    });
+
     casper.run(function() {
         test.done();
     });
