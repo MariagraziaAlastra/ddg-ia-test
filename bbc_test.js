@@ -1,9 +1,11 @@
 casper.test.begin('BBC IA is correctly shown', function suite(test) {
     var query = "what+is+on+bbc+one";
     var api_url = "http://www.bbc.co.uk/bbcone/programmes/schedules/london/today.json";
-    var bbc_url = "http://bbc.co.uk/";
-    var program_url = bbc_url + "programmes/";
-    var hour_regex = /^[0-9][0-9]:[0-9][0-9]\s-\s.[0-9][0-9]:[0-9][0-9]$/;
+    var bbc_url = "http://www.bbc.co.uk";
+    var program_url = "http://bbc.co.uk/programmes/";
+    var hour_regex = /^[0-9][0-9]:[0-9][0-9](A|P){1}M\s-\s[0-9][0-9]:[0-9][0-9](A|P){1}M$/;
+    var metabar_regex = /^Showing\s[0-9]+\s[a-zA-Z]+\sfor$/;
+    var moreAt_regex = /BBC/;
     var selectors = {
         'ia_tab': 'a.zcm__link--bbc',
         'main': 'div.zci--bbc',
@@ -61,7 +63,7 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
                 test.comment("Viewport changed to {width: 1336, height: 768}");
                 test.assertExists(selectors.ia_tab, "BBC IA is shown");
 
-                test.comment("\n###### Begin checking for elements existence and correct nesting ######\n");
+                test.comment("\n###### Start checking elements existence and correct nesting ######\n");
                 test.comment("Check if tileview exists and it's not a grid");
                 test.assertExists((selectors.main + " " +  selectors.tileview), "tileview exists");
                 test.assertDoesntExist((selectors.main + " " +  selectors.tileview_grid), "tileview is not a grid");
@@ -128,13 +130,13 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
                 test.assertExists((selectors.main + " " + selectors.detail.controls.root + " " + selectors.detail.controls.next),
                                  "detail controls contain next");
 
-                test.comment("\n###### End checking for elements existence and correct nesting ######\n");
+                test.comment("\n###### End checking elements existence and correct nesting ######\n");
             });
         });
     });
 
     casper.then(function() {
-        test.comment("\n###### Begin checking for detail visibility before and after selecting a tile ######\n");
+        test.comment("\n###### Start checking detail visibility before and after selecting a tile ######\n");
 
         test.comment("Check if detail is hidden when no tile is selected");
         test.assertNotVisible((selectors.main + " " + selectors.detail.root), "detail is hidden");
@@ -161,7 +163,34 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
         test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.desc),
                          "detail body has description");
 
-        test.comment("\n###### End checking for detail visibility before and after selecting a tile ######\n");
+        test.comment("\n###### End checking detail visibility before and after selecting a tile ######\n");
+    });
+
+    casper.then(function() {
+        test.comment("\n###### Start checking IA content values ######\n");
+
+        test.comment("Check metabar text");
+        test.assertMatch(this.fetchText(selectors.main + " " + selectors.metabar.text.root).trim(), metabar_regex, 
+                         "metabar text value is correct");
+
+        test.comment("Check moreAt text and URL");
+        test.assertMatch(this.fetchText(selectors.main + " " + selectors.metabar.moreAt.root).trim(), moreAt_regex,
+                         "moreAt text value is correct");
+        test.assertEquals(this.getElementAttribute(selectors.main + " " + selectors.metabar.moreAt.root, 'href'), bbc_url,
+                         "moreAt URL is correct");
+
+        // Choose a single tile to fetch title and text
+        var tile = this.evaluate(function(selectors) {
+            return {
+                'title': __utils__.findAll(selectors.main + " " + selectors.tiles.tile.title)[0].innerHTML,
+                'rating': __utils__.findAll(selectors.main + " " + selectors.tiles.tile.rating)[0].innerHTML
+            };
+        }, {selectors: selectors});
+        test.comment("Check tiles content");
+        test.assertMatch(tile.rating, hour_regex,
+                        "rating has the correct text");
+
+        test.comment("\n###### End checking IA content values ######\n");
     });
 
     casper.run(function() {
