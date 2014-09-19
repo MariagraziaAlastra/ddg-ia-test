@@ -8,6 +8,7 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
     var runtime_regex = /^Run\sTime:\s[0-9][0-9]?\s(hours?|mins){1}$/;
     var moreAt_regex = /BBC/;
     var class_selected = ".is-selected";
+    var class_scroll = ".can-scroll";
     var selectors = {
         'ia_tab': 'a.zcm__link--bbc',
         'main': 'div.zci--bbc',
@@ -146,7 +147,7 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
         test.assertNotVisible((selectors.main + " " + selectors.detail.root), "detail is hidden");
 
         this.click(selectors.tiles.tile.root);
-        test.comment("Performed click on tile");
+        test.comment("Performed click on the first tile");
 
         test.comment("Check if detail is visible now");
         test.assertVisible((selectors.main + " " + selectors.detail.root), "detail is visible");
@@ -218,33 +219,40 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
 
         var programmes = [];
         for (var item in broadcasts) {
-            if (broadcasts[item].programme.programme != null && broadcasts[item].programme.programme.pid != null) {
-                programmes.push({
-                    'link': program_url + broadcasts[item].programme.programme.pid,
-                    'title': broadcasts[item].programme.display_titles.title,
-                    'desc': broadcasts[item].programme.short_synopsis
-                });
-            }
+            programmes.push({
+                'title': broadcasts[item].programme.display_titles.title,
+                'desc': broadcasts[item].programme.short_synopsis
+            });
         }
 
         var detail_desc = this.fetchText(selectors.main + " " + selectors.detail.content.body.desc).trim();
 
-        test.assertEvaluate(function(programmes, detail_link, detail_title, detail_desc) {
+        test.assertEvaluate(function(programmes, detail_title, detail_desc) {
             var detail_obj = {
-                'link': detail_link,
                 'title': detail_title,
                 'desc': detail_desc
             };
             for (var item in programmes) {
-                if (programmes[item].link === detail_obj.link &&
-                    programmes[item].title === detail_obj.title &&
+                if (programmes[item].title === detail_obj.title &&
                     programmes[item].desc === detail_obj.desc) {
                     return true;
                 }
             }
             return false;
         }, "detail content is correctly fetched from API result",
-        {programmes: programmes, detail_link: detail_link, detail_title: detail_title, detail_desc: detail_desc});
+        {programmes: programmes, detail_title: detail_title, detail_desc: detail_desc});
+
+        test.comment("Check detail controls");
+        test.assertExists((selectors.main + " " + selectors.detail.controls.next + class_scroll), "next control is active");
+        test.assertDoesntExist((selectors.main + " " + selectors.detail.controls.prev + class_scroll), "previous control is disabled");
+
+        test.comment("Check tileview navigation");
+        test.assertExists((selectors.main + " " + selectors.tiles.nav_next + class_scroll), "next navigation is active");
+        test.assertDoesntExist((selectors.main + " " + selectors.tiles.nav_prev + class_scroll), "previous navigation is disabled");
+        var next_items = this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items');
+        var prev_items = this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items');
+        test.assert(( next_items < this.fetchText(selectors.main + " " + selectors.metabar.text.count) && next_items > 0), "next navigation has items");
+        test.assert((prev_items === '0'), "previous navigation is empty");
 
         test.comment("\n###### End checking IA content values ######\n");
     });
