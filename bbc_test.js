@@ -9,6 +9,7 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
     var moreAt_regex = /BBC/;
     var class_selected = ".is-selected";
     var class_scroll = ".can-scroll";
+    var class_grid = ".has-tiles--grid";
     var tileview_capacity = 5;
     var detail_link, next_items, prev_items, tot_items;
     var selectors = {
@@ -38,7 +39,8 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
                 'media_img': 'div.tile__media img.tile__media__img',
                 'title': 'div.tile__body h6.tile__title',
                 'rating': 'div.tile__body div.tile__rating.one-line span.tile__source.one-line'
-            }
+            },
+            'mobile': 'div.tile--m--bbc div.tile--m--mob'
         },
         'detail': {
             'root': 'div.tile-wrap div.zci__detail.detail--bbc div.detail__wrap',
@@ -99,13 +101,15 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
                 test.assertExists((selectors.main + " " + selectors.metabar.text.root + " " + selectors.metabar.text.item_type),
                                  "metabar text contains item type");
 
-                test.comment("Check if tiles wrapper contains navigation and tiles");
+                test.comment("Check if tiles wrapper contains navigation and tiles and doesn't contain mobile tile");
                 test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.nav_next),
                                  "tiles wrapper contains forward navigation icon");
                 test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.nav_prev),
                                  "tiles wrapper contains backwards navigation icon");
                 test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.tile.root),
                                  "tiles wrapper contains tiles");
+                test.assertDoesntExist((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.mobile),
+                                 "tiles wrapper does not contain mobile tile");
 
                 test.comment("Check if tiles contain image, title and rating");
                 test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.media_img),
@@ -301,6 +305,24 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
 
             test.comment("\n###### End checking tileview navigation functionality ######\n");
         });
+    });
+
+    casper.then(function() {
+            if (tot_items >= (tileview_capacity * 2)) {
+                test.comment("\n###### Start checking grid mode ######\n");
+
+                test.comment("Click on the metabar mode button and check if tileview expands to grid");
+                this.click(selectors.main + " " + selectors.metabar.mode);
+                test.assertExists((selectors.main + " " +  selectors.tileview_grid), "mode switched to grid");
+                test.assertExists((selectors.main + " " + selectors.tiles.root + class_grid), "tileview expanded to grid");
+
+                test.comment("Click again on the metabar mode button and check if tileview collapses");
+                this.click(selectors.main + " " + selectors.metabar.mode);
+                test.assertDoesntExist((selectors.main + " " +  selectors.tileview_grid), "mode switched back");
+                test.assertDoesntExist((selectors.main + " " + selectors.tiles.root + class_grid), "tileview collapsed");
+
+                test.comment("\n###### End checking grid mode ######\n");
+            }
     });
 
     casper.run(function() {
