@@ -3,10 +3,11 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
     var api_url = "http://www.bbc.co.uk/bbcone/programmes/schedules/london/today.json";
     var bbc_url = "http://www.bbc.co.uk";
     var program_url = "http://bbc.co.uk/programmes/";
-    var hour_regex = /^[0-9][0-9]:[0-9][0-9](A|P){1}M\s-\s[0-9][0-9]:[0-9][0-9](A|P){1}M$/;
+    var hour_regex = /^[0-9][0-9]?:[0-9][0-9](A|P){1}M\s-\s[0-9][0-9]?:[0-9][0-9](A|P){1}M$/;
     var metabar_regex = /^Showing\s[0-9]+\s[a-zA-Z]+\sfor$/;
     var runtime_regex = /^Run\sTime:\s[0-9][0-9]?\s(hours?|mins){1}$/;
     var moreAt_regex = /BBC/;
+    var class_selected = ".is-selected";
     var selectors = {
         'ia_tab': 'a.zcm__link--bbc',
         'main': 'div.zci--bbc',
@@ -180,21 +181,68 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
         test.assertEquals(this.getElementAttribute(selectors.main + " " + selectors.metabar.moreAt.root, 'href'), bbc_url,
                          "moreAt URL is correct");
 
-        // Choose a single tile and fetch its title and rating text
-        var tile = this.evaluate(function(selectors) {
-            return {
-                'title': __utils__.findAll(selectors.main + " " + selectors.tiles.tile.title)[0].innerHTML,
-                'rating': __utils__.findAll(selectors.main + " " + selectors.tiles.tile.rating)[0].innerHTML
-            };
-        }, {selectors: selectors});
-
-        test.comment("Check tiles content");
-        test.assertMatch(tile.rating, hour_regex,
-                        "rating has the correct text value");
-
-        test.comment("Check detail content");
+        test.comment("Check selected tile and detail content");
+        test.assertMatch(this.fetchText(selectors.main + " " + selectors.tiles.tile.root + class_selected + " " + selectors.tiles.tile.rating),
+                        hour_regex, "rating has the correct text value");
         test.assertMatch(this.fetchText(selectors.main + " " + selectors.detail.content.body.source).trim(), runtime_regex,
                         "detail body source has the correct text value");
+
+        var detail_title = this.fetchText(selectors.main + " " + selectors.detail.content.body.title).trim();
+        var tile_title = this.fetchText(selectors.main + " " + selectors.tiles.tile.root + class_selected + " " + selectors.tiles.tile.title).trim();
+
+        if (detail_title.length === tile_title.length) {
+            test.assertEquals(detail_title, tile_title, "detail title matches selected tile title");
+        } else if (detail_title.length > tile_title.length) {
+            test.assertEquals(tile_title.substr(-3, 3), "...", "selected tile title has ellipsis");
+            test.assertEquals(tile_title.substring(0, -3), detail_title.substr(0, tile_title.length - 3), "detail title matches selected tile title");
+        } else {
+            test.fail("detail title is different from selected tile title");
+        }
+
+        var detail_img = this.getElementAttribute(selectors.main + " " + selectors.detail.content.media_img, 'src');
+        var tile_img = this.getElementAttribute(selectors.main + " " + selectors.tiles.tile.media_img, 'src');
+
+        test.assertEquals(detail_img, tile_img, "detail image matches selected tile image");
+
+        var detail_link = this.getElementAttribute(selectors.main + " " + selectors.detail.content.body.root + " " + 'a', 'href');
+        var tile_link = this.getElementAttribute(selectors.main + " " + selectors.tiles.tile.root, 'data-link');
+
+        test.assertEquals(detail_link, tile_link, "detail URL matches selected tile URL");
+
+        var broadcasts = this.evaluate(function(api_url) {
+            var data = JSON.parse(__utils__.sendAJAX(api_url));
+            return data.schedule.day.broadcasts;
+        }, {api_url: api_url});
+
+        var programmes = [];
+        for (var item in broadcasts) {
+            if (broadcasts[item].programme.programme != null && broadcasts[item].programme.programme.pid != null) {
+                programmes.push({
+                    'link': program_url + broadcasts[item].programme.programme.pid,
+                    'title': broadcasts[item].programme.display_titles.title,
+                    'desc': broadcasts[item].programme.short_synopsis
+                });
+            }
+        }
+
+        var detail_desc = this.fetchText(selectors.main + " " + selectors.detail.content.body.desc).trim();
+
+        test.assertEvaluate(function(programmes, detail_link, detail_title, detail_desc) {
+            var detail_obj = {
+                'link': detail_link,
+                'title': detail_title,
+                'desc': detail_desc
+            };
+            for (var item in programmes) {
+                if (programmes[item].link === detail_obj.link &&
+                    programmes[item].title === detail_obj.title &&
+                    programmes[item].desc === detail_obj.desc) {
+                    return true;
+                }
+            }
+            return false;
+        }, "detail content is correctly fetched from API result",
+        {programmes: programmes, detail_link: detail_link, detail_title: detail_title, detail_desc: detail_desc});
 
         test.comment("\n###### End checking IA content values ######\n");
     });
