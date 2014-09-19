@@ -6,7 +6,8 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
     var hour_regex = /^[0-9][0-9]?:[0-9][0-9](A|P){1}M\s-\s[0-9][0-9]?:[0-9][0-9](A|P){1}M$/;
     var metabar_regex = /^Showing\s[0-9]+\s[a-zA-Z]+\sfor$/;
     var runtime_regex = /^Run\sTime:\s[0-9][0-9]?\s(hours?|mins){1}$/;
-    var moreAt_regex = /BBC/;
+    var moreAt_regex = /([a-zA-Z]+\s)*BBC/;
+    var mobile_regex = /([a-zA-Z]+\s)*TV/;
     var class_selected = ".is-selected";
     var class_scroll = ".can-scroll";
     var class_grid = ".has-tiles--grid";
@@ -40,7 +41,10 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
                 'title': 'div.tile__body h6.tile__title',
                 'rating': 'div.tile__body div.tile__rating.one-line span.tile__source.one-line'
             },
-            'mobile': 'div.tile--m--bbc span.tile--m--mob'
+            'mobile': {
+                'root': 'div.tile--m--bbc span.tile--m--mob',
+                'icon': 'i.tile--m--mob__icn'
+            }
         },
         'detail': {
             'root': 'div.tile-wrap div.zci__detail.detail--bbc div.detail__wrap',
@@ -108,7 +112,7 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
                                  "tiles wrapper contains backwards navigation icon");
                 test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.tile.root),
                                  "tiles wrapper contains tiles");
-                test.assertDoesntExist((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.mobile),
+                test.assertDoesntExist((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.mobile.root),
                                  "tiles wrapper does not contain mobile tile");
 
                 test.comment("Check if tiles contain image, title and rating");
@@ -332,14 +336,20 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
                 test.comment("\n###### Start checking mobile view ######\n");
 
                 test.comment("Check elements existence");
-                test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.mobile),
+                test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.mobile.root),
                                  "tiles wrapper now contains mobile tile");
+                test.assertExists((selectors.main + " " + selectors.tiles.mobile.root + " " + selectors.tiles.mobile.icon),
+                                 "mobile tile contains icon");
                 test.assertExists((selectors.main + " " +  selectors.tileview_grid), "grid mode active");
                 test.assertExists((selectors.main + " " + selectors.tiles.root + class_grid), "tileview is visualized as a grid");
 
+                test.comment("Check mobile tile text value");
+                test.assertMatch(this.fetchText(selectors.main + " " + selectors.tiles.mobile.root).trim(), mobile_regex,
+                                "mobile tile text value is correct");
+
                 test.comment("Check metabar visibility before and after expanding content");
                 test.assertNotVisible((selectors.main + " " + selectors.metabar.root), "metabar is hidden on mobile");
-                this.click(selectors.main + " " + selectors.tiles.mobile);
+                this.click(selectors.main + " " + selectors.tiles.mobile.root);
                 test.assertVisible((selectors.main + " " + selectors.metabar.root), "metabar is now visible");
 
                 test.comment("Click on metabar mode button and check if tileview collapses");
