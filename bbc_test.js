@@ -40,7 +40,7 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
                 'title': 'div.tile__body h6.tile__title',
                 'rating': 'div.tile__body div.tile__rating.one-line span.tile__source.one-line'
             },
-            'mobile': 'div.tile--m--bbc div.tile--m--mob'
+            'mobile': 'div.tile--m--bbc span.tile--m--mob'
         },
         'detail': {
             'root': 'div.tile-wrap div.zci__detail.detail--bbc div.detail__wrap',
@@ -291,7 +291,7 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
             test.comment("Click on next navigation and check number of items again");
             this.click(selectors.main + " " + selectors.tiles.nav_next);
             if (next_items >= (tileview_capacity * 2)) {
-                test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items')) === 
+                test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items')) ===
                            (tot_items - (tileview_capacity * 2)), "next navigation has the correct number of items");
                 test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items')) == tileview_capacity,
                            "previous navigation has the correct number of items");
@@ -323,6 +323,32 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
 
                 test.comment("\n###### End checking grid mode ######\n");
             }
+    });
+
+    casper.then(function() {
+        casper.viewport(360, 640).then(function() {
+            this.reload(function() {
+                test.comment("Viewport changed to {width: 360, height: 640}");
+                test.comment("\n###### Start checking mobile view ######\n");
+
+                test.comment("Check elements existence");
+                test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.mobile),
+                                 "tiles wrapper now contains mobile tile");
+                test.assertExists((selectors.main + " " +  selectors.tileview_grid), "grid mode active");
+                test.assertExists((selectors.main + " " + selectors.tiles.root + class_grid), "tileview is visualized as a grid");
+
+                test.comment("Check metabar visibility before and after expanding content");
+                test.assertNotVisible((selectors.main + " " + selectors.metabar.root), "metabar is hidden on mobile");
+                this.click(selectors.main + " " + selectors.tiles.mobile);
+                test.assertVisible((selectors.main + " " + selectors.metabar.root), "metabar is now visible");
+
+                test.comment("Click on metabar mode button and check if tileview collapses");
+                this.click(selectors.main + " " + selectors.metabar.mode);
+                test.assertNotVisible((selectors.main + " " +  selectors.tileview), "tileview is hidden");
+
+                test.comment("\n###### End checking mobile view ######\n");
+            });
+        });
     });
 
     casper.run(function() {
