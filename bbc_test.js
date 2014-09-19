@@ -139,6 +139,8 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
 
     casper.then(function() {
         test.comment("\n###### Start checking detail visibility before and after selecting a tile ######\n");
+        test.comment("Check that no tile is selected right after page loading");
+        test.assertDoesntExist((selectors.main + " " + selectors.tiles.tile.root + class_selected), "no tile is selected");
 
         test.comment("Check if detail is hidden when no tile is selected");
         test.assertNotVisible((selectors.main + " " + selectors.detail.root), "detail is hidden");
