@@ -207,7 +207,8 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
             test.assertEquals(detail_title, tile_title, "detail title matches selected tile title");
         } else if (detail_title.length > tile_title.length) {
             test.assertEquals(tile_title.substr(-3, 3), "...", "selected tile title has ellipsis");
-            test.assertEquals(tile_title.substring(0, -3), detail_title.substr(0, tile_title.length - 3), "detail title matches selected tile title");
+            test.assertEquals(tile_title.substring(0, -3), detail_title.substr(0, tile_title.length - 3),
+                             "detail title matches selected tile title");
         } else {
             test.fail("detail title is different from selected tile title");
         }
@@ -264,9 +265,9 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
 
         test.comment("Click on next control and check if detail now refers to next tile");
         this.click(selectors.main + " " + selectors.detail.controls.next);
-        test.assertNotEquals(this.getElementAttribute(selectors.main + " " + selectors.detail.content.body.root + " " + 'a', 'href'), detail_link,
-                            "detail now links to a different show");
-        test.assertEquals(this.getElementAttribute(selectors.main + " " + selectors.tiles.tile.root, 'data-link'), detail_link,
+        var new_detail_link = this.getElementAttribute(selectors.main + " " + selectors.detail.content.body.root + " " + 'a', 'href');
+        test.assertNotEquals(new_detail_link, detail_link, "detail now links to a different show");
+        test.assertEquals(this.getElementAttribute(selectors.main + " " + selectors.tiles.tile.root + class_selected, 'data-link'), new_detail_link,
                          "detail now refers to next tile");
 
         test.comment("Click on the detail close icon and check if detail is now hidden and no tile is selected");
@@ -281,29 +282,29 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
         this.reload(function() {
             test.comment("\n###### Start checking tileview navigation functionality ######\n");
 
-        test.comment("Check tileview navigation");
-        next_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items'));
-        prev_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items'));
-        tot_items = parseInt(this.fetchText(selectors.main + " " + selectors.metabar.text.count));
-        this.echo(next_items + " " + tot_items);
-        test.assertDoesntExist((selectors.main + " " + selectors.tiles.nav_prev + class_scroll), "previous navigation is disabled");
-        test.assert((next_items === (tot_items - tileview_capacity)), "next navigation has the correct number of items");
-        test.assert((prev_items === 0), "previous navigation is empty");
+            test.comment("Check tileview navigation");
+            next_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items'));
+            prev_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items'));
+            tot_items = parseInt(this.fetchText(selectors.main + " " + selectors.metabar.text.count));
+            this.echo(next_items + " " + tot_items);
+            test.assertDoesntExist((selectors.main + " " + selectors.tiles.nav_prev + class_scroll), "previous navigation is disabled");
+            test.assert((next_items === (tot_items - tileview_capacity)), "next navigation has the correct number of items");
+            test.assert((prev_items === 0), "previous navigation is empty");
 
-        if (next_items > 0) {
-            test.assertExists((selectors.main + " " + selectors.tiles.nav_next + class_scroll), "next navigation is active");
-            test.comment("Click on next navigation and check number of items again");
-            this.click(selectors.main + " " + selectors.tiles.nav_next);
-            if (next_items >= (tileview_capacity * 2)) {
-                test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items')) ===
-                           (tot_items - (tileview_capacity * 2)), "next navigation has the correct number of items");
-                test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items')) == tileview_capacity,
-                           "previous navigation has the correct number of items");
-            } else {
-                test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items')) < next_items,
-                           "next navigation has less items now");
-                test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items')) > 0,
-                           "previous navigation has items now");
+            if (next_items > 0) {
+                test.assertExists((selectors.main + " " + selectors.tiles.nav_next + class_scroll), "next navigation is active");
+                test.comment("Click on next navigation and check number of items again");
+                this.click(selectors.main + " " + selectors.tiles.nav_next);
+                if (next_items >= (tileview_capacity * 2)) {
+                    test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items')) ===
+                               (tot_items - (tileview_capacity * 2)), "next navigation has the correct number of items");
+                    test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items')) == tileview_capacity,
+                               "previous navigation has the correct number of items");
+                } else {
+                    test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items')) < next_items,
+                               "next navigation has less items now");
+                    test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items')) > 0,
+                               "previous navigation has items now");
             }
         }
 
@@ -312,7 +313,7 @@ casper.test.begin('BBC IA is correctly shown', function suite(test) {
     });
 
     casper.then(function() {
-            if (tot_items >= (tileview_capacity * 2)) {
+            if (tot_items >= (tileview_capacity * 3)) {
                 test.comment("\n###### Start checking grid mode ######\n");
 
                 test.comment("Click on the metabar mode button and check if tileview expands to grid");
