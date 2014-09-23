@@ -236,6 +236,64 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
         test.comment("\n###### End checking IA content values ######\n");
     });
 
+    casper.then(function() {
+        if (data.has_detail) {
+            test.comment("\n###### Start checking detail functionality ######\n");
+
+            test.comment("Check detail controls");
+            test.assertExists((selectors.main + " " + selectors.detail.controls.next + class_scroll), "next control is active");
+            test.assertDoesntExist((selectors.main + " " + selectors.detail.controls.prev + class_scroll), "previous control is disabled");
+
+            test.comment("Click on next control and check if detail now refers to next tile");
+            this.click(selectors.main + " " + selectors.detail.controls.next);
+            var new_detail_link = this.getElementAttribute(selectors.main + " " + selectors.detail.content.body.root + " " + 'a', 'href');
+            test.assertNotEquals(new_detail_link, detail_link, "detail now links to a different show");
+            test.assertEquals(this.getElementAttribute(selectors.main + " " + selectors.tiles.tile.root + class_selected, 'data-link'), new_detail_link,
+                             "detail now refers to next tile");
+
+            test.comment("Click on the detail close icon and check if detail is now hidden and no tile is selected");
+            this.click(selectors.main + " " + selectors.detail.close);
+            test.assertNotVisible((selectors.main + " " + selectors.detail.root), "detail is hidden");
+            test.assertDoesntExist((selectors.main + " " + selectors.tiles.tile.root + class_selected), "no tile selected");
+
+            test.comment("\n###### End checking detail functionality ######\n");
+        }
+    });
+
+    casper.then(function() {
+        this.reload(function() {
+            test.comment("\n###### Start checking tileview navigation functionality ######\n");
+
+            test.comment("Check tileview navigation");
+            next_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items'));
+            prev_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items'));
+            tot_items = parseInt(this.fetchText(selectors.main + " " + selectors.metabar.text.count));
+            this.echo(next_items + " " + tot_items);
+            test.assertDoesntExist((selectors.main + " " + selectors.tiles.nav_prev + class_scroll), "previous navigation is disabled");
+            test.assert((next_items === (tot_items - data.tileview_capacity)), "next navigation has the correct number of items");
+            test.assert((prev_items === 0), "previous navigation is empty");
+
+            if (next_items > 0) {
+                test.assertExists((selectors.main + " " + selectors.tiles.nav_next + class_scroll), "next navigation is active");
+                test.comment("Click on next navigation and check number of items again");
+                this.click(selectors.main + " " + selectors.tiles.nav_next);
+                if (next_items >= (data.tileview_capacity * 2)) {
+                    test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items')) ===
+                               (tot_items - (data.tileview_capacity * 2)), "next navigation has the correct number of items");
+                    test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items')) == data.tileview_capacity,
+                               "previous navigation has the correct number of items");
+                } else {
+                    test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items')) < next_items,
+                               "next navigation has less items now");
+                    test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items')) > 0,
+                               "previous navigation has items now");
+            }
+        }
+
+            test.comment("\n###### End checking tileview navigation functionality ######\n");
+        });
+    });
+
     casper.run(function() {
         test.done();
     });
