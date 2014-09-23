@@ -150,6 +150,43 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
         });
     });
 
+    casper.then(function() {
+        test.comment("\n###### Start checking detail visibility before and after selecting a tile ######\n");
+        test.comment("Check that no tile is selected right after page loading");
+        test.assertDoesntExist((selectors.main + " " + selectors.tiles.tile.root + class_selected), "no tile is selected");
+
+        test.comment("Check if detail is hidden when no tile is selected");
+        test.assertNotVisible((selectors.main + " " + selectors.detail.root), "detail is hidden");
+
+        if (data.has_detail) {
+            this.click(selectors.tiles.tile.root);
+            test.comment("Performed click on the first tile");
+
+            test.comment("Check if detail is visible now");
+            test.assertVisible((selectors.main + " " + selectors.detail.root), "detail is visible");
+
+            test.comment("Check if detail content has image and body now");
+            test.assertExists((selectors.main + " " + selectors.detail.content.root + " " + selectors.detail.content.media_img),
+                             "detail content has image");
+            test.assertExists((selectors.main + " " + selectors.detail.content.root + " " + selectors.detail.content.body.root),
+                             "detail content has body");
+
+            test.comment("Check if detail body has title, subtitle, source and description");
+            test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.title),
+                             "detail body has title");
+            test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.subtitle),
+                             "detail body has subtitle");
+            test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.source),
+                             "detail body has source");
+            test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.desc),
+                             "detail body has description");
+        } else {
+            test.comment(data.name + " IA has no detail - skip the remaining detail visibility tests");
+        }
+
+        test.comment("\n###### End checking detail visibility before and after selecting a tile ######\n");
+    });
+
     casper.run(function() {
         test.done();
     });
