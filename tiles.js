@@ -2,7 +2,8 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
     var path = "./json/tiles/airlines.json";
     var data = require(path);
-    var metabar_regex = /^Showing\s[0-9]+\s[a-zA-Z]+\sfor$/;
+    var metabar_regex = /^Showing\s[0-9]+\s[a-zA-Z]+\s([a-zA-Z]+\s)*for$/;
+    var moreAt_regex = new RegExp(data.moreAt_regex);
     var class_selected = ".is-selected";
     var class_scroll = ".can-scroll";
     var class_grid = ".has-tiles--grid";
@@ -63,6 +64,8 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     };
 
     casper.start("https://bttf.duckduckgo.com/", function() {
+        this.echo(moreAt_regex);
+        this.echo(metabar_regex);
         casper.viewport(1336, 768).then(function() {
             this.open("https://bttf.duckduckgo.com/?q=" + data.query).then(function() {
                 test.comment("Viewport changed to {width: 1336, height: 768}");
@@ -185,6 +188,48 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
         }
 
         test.comment("\n###### End checking detail visibility before and after selecting a tile ######\n");
+    });
+
+    casper.then(function() {
+        test.comment("\n###### Start checking IA content values ######\n");
+
+        test.comment("Check metabar text");
+        test.assertMatch(this.fetchText(selectors.main + " " + selectors.metabar.text.root).trim(), metabar_regex, 
+                         "metabar text value is correct");
+
+        test.comment("Check moreAt text and URL");
+        test.assertMatch(this.fetchText(selectors.main + " " + selectors.metabar.moreAt.root).trim(), moreAt_regex,
+                         "moreAt text value is correct");
+        test.assertEquals(this.getElementAttribute(selectors.main + " " + selectors.metabar.moreAt.root, 'href'), data.moreAt_url,
+                         "moreAt URL is correct");
+
+        if (data.has_detail) {
+            test.comment("Check selected tile and detail content");
+            var detail_title = this.fetchText(selectors.main + " " + selectors.detail.content.body.title).trim();
+            var tile_title = this.fetchText(selectors.main + " " + selectors.tiles.tile.root + class_selected + " " + selectors.tiles.tile.title).trim();
+
+            if (detail_title.length === tile_title.length) {
+                test.assertEquals(detail_title, tile_title, "detail title matches selected tile title");
+            } else if (detail_title.length > tile_title.length) {
+                test.assertEquals(tile_title.substr(-3, 3), "...", "selected tile title has ellipsis");
+                test.assertEquals(tile_title.substring(0, -3), detail_title.substr(0, tile_title.length - 3),
+                                 "detail title matches selected tile title");
+            } else {
+                test.fail("detail title is different from selected tile title");
+            }
+
+            var detail_img = this.getElementAttribute(selectors.main + " " + selectors.detail.content.media_img, 'src');
+            var tile_img = this.getElementAttribute(selectors.main + " " + selectors.tiles.tile.media_img, 'src');
+
+            test.assertEquals(detail_img, tile_img, "detail image matches selected tile image");
+
+            detail_link = this.getElementAttribute(selectors.main + " " + selectors.detail.content.body.root + " " + 'a', 'href');
+            var tile_link = this.getElementAttribute(selectors.main + " " + selectors.tiles.tile.root, 'data-link');
+
+            test.assertEquals(detail_link, tile_link, "detail URL matches selected tile URL");
+        }
+
+        test.comment("\n###### End checking IA content values ######\n");
     });
 
     casper.run(function() {

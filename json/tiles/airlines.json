@@ -6,6 +6,7 @@
    "has_detail": false,
    "tileview_capacity" : "1",
    "moreAt_url" : "http://www.flightstats.com/go/FlightStatus/flightStatusByFlight.do?&airlineCode=AA&flightNumber=102",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*FlightStatus",
    "data-link_url" : "http://www.flightstats.com/go/FlightStatus/flightStatusByFlight.do?&airlineCode=AA&flightNumber=102",
    "api_url" : "https://duckduckgo.com/flights.js?airline=AA&flightno=102",
    "template_group" : "base",
