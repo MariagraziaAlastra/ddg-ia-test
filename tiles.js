@@ -64,8 +64,6 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     };
 
     casper.start("https://bttf.duckduckgo.com/", function() {
-        this.echo(moreAt_regex);
-        this.echo(metabar_regex);
         casper.viewport(1336, 768).then(function() {
             this.open("https://bttf.duckduckgo.com/?q=" + data.query).then(function() {
                 test.comment("Viewport changed to {width: 1336, height: 768}");
@@ -227,6 +225,12 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             var tile_link = this.getElementAttribute(selectors.main + " " + selectors.tiles.tile.root, 'data-link');
 
             test.assertEquals(detail_link, tile_link, "detail URL matches selected tile URL");
+        }
+
+        test.comment("Check regexes from JSON file");
+        for (var key in data.regexes) {
+            var regex = new RegExp(data.regexes[key]);
+            test.assertMatch(this.fetchText(selectors.main + " " + key).trim(), regex, key + " text value is correct");
         }
 
         test.comment("\n###### End checking IA content values ######\n");

@@ -19,8 +19,8 @@
       "tile_time" : "div.tile.tile--airlines div.tile__body div.half div.tile__time"
    },
    "regexes" : {
-      "div.tile__week" : "/^[A-Z][A-Z][A-Z]$/",
-      "div.tile__day" : "/^[0-9][0-9]?$/",
-      "div.tile__time" : "/^[0-9][0-9]?:[0-9][0-9](A|P){1}M\\s-\\s[0-9][0-9]?:[0-9][0-9](A|P){1}M$/"
+      "div.tile__week" : "^[A-Z][A-Z][A-Z]$",
+      "div.tile__day" : "^[0-9][0-9]?$",
+      "div.tile__time" : "^[0-9][0-9]?:[0-9][0-9]\\s(A|P)M[0-9][0-9]?:[0-9][0-9]\\s(A|P)M$"
    }
 }
