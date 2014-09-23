@@ -312,6 +312,41 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             }
     });
 
+    casper.then(function() {
+        casper.viewport(360, 640).then(function() {
+            this.reload(function() {
+                test.comment("Viewport changed to {width: 360, height: 640}");
+                test.comment("\n###### Start checking mobile view ######\n");
+
+                test.comment("Check metabar visibility before and after expanding content");
+                test.assertNotVisible((selectors.main + " " + selectors.metabar.root), "metabar is hidden on mobile");
+                if (tot_items > 1) {
+                    this.click(selectors.main + " " + selectors.tiles.mobile.root);
+                    test.assertVisible((selectors.main + " " + selectors.metabar.root), "metabar is now visible");
+
+                    test.comment("Check elements existence");
+                    test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.mobile.root),
+                                     "tiles wrapper now contains mobile tile");
+                    test.assertExists((selectors.main + " " + selectors.tiles.mobile.root + " " + selectors.tiles.mobile.icon),
+                                     "mobile tile contains icon");
+                    test.assertExists((selectors.main + " " +  selectors.tileview_grid), "grid mode active");
+                    test.assertExists((selectors.main + " " + selectors.tiles.root + class_grid), "tileview is visualized as a grid");
+
+                    test.comment("Check mobile tile text value");
+                    test.assertMatch(this.fetchText(selectors.main + " " + selectors.tiles.mobile.root).trim(), mobile_regex,
+                                    "mobile tile text value is correct");
+
+                    test.comment("Click on metabar mode button and check if tileview collapses");
+                    this.click(selectors.main + " " + selectors.metabar.mode);
+                    test.assertNotVisible((selectors.main + " " +  selectors.tileview), "tileview is hidden");
+                } else {
+                    test.comment(data.name + " IA has not enough tiles - skip remaining mobile tests");
+                }
+
+                test.comment("\n###### End checking mobile view ######\n");
+            });
+        });
+    });
 
     casper.run(function() {
         test.done();
