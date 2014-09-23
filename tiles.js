@@ -294,6 +294,25 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
         });
     });
 
+    casper.then(function() {
+            if (tot_items >= (data.tileview_capacity * 3)) {
+                test.comment("\n###### Start checking grid mode ######\n");
+
+                test.comment("Click on the metabar mode button and check if tileview expands to grid");
+                this.click(selectors.main + " " + selectors.metabar.mode);
+                test.assertExists((selectors.main + " " +  selectors.tileview_grid), "mode switched to grid");
+                test.assertExists((selectors.main + " " + selectors.tiles.root + class_grid), "tileview expanded to grid");
+
+                test.comment("Click again on the metabar mode button and check if tileview collapses");
+                this.click(selectors.main + " " + selectors.metabar.mode);
+                test.assertDoesntExist((selectors.main + " " +  selectors.tileview_grid), "mode switched back");
+                test.assertDoesntExist((selectors.main + " " + selectors.tiles.root + class_grid), "tileview collapsed");
+
+                test.comment("\n###### End checking grid mode ######\n");
+            }
+    });
+
+
     casper.run(function() {
         test.done();
     });
