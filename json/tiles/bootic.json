@@ -1,0 +1,14 @@
+{
+   "name" : "Bootic",
+   "id" : "bootic",
+   "status" : "live",
+   "query" : "bootic+watches",
+   "has_detail": false,
+   "tileview_capacity" : 6,
+   "moreAt_url" : "http://www.bootic.com/?q=?initial=1&q=watches",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*Bootic",
+   "template_group" : "products",
+   "has_rating" : false,
+   "custom_selectors" : {},
+   "regexes" : {}
+}

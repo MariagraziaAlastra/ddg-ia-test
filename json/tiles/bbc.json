@@ -9,6 +9,7 @@
    "moreAt_regex" : "([a-zA-Z]+\\s)*BBC",
    "mobile_regex" : "([a-zA-Z]+\\s)*TV",
    "template_group" : "media",
+   "has_rating" : true,
    "custom_selectors" : {},
    "regexes" : {
       "span.tile__source.one-line" : "^[0-9][0-9]?:[0-9][0-9](A|P)M\\s-\\s[0-9][0-9]?:[0-9][0-9](A|P)M$",

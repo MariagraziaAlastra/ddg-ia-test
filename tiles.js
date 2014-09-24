@@ -1,11 +1,11 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/bbc.json";
+    var path = "./json/tiles/bootic.json";
     var data = require(path);
     var metabar_regex = /^Showing\s[0-9]+\s[a-zA-Z]+\s([a-zA-Z]+\s)*for(\s[a-zA-Z]+\s?)*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
     var mobile_regex = new RegExp(data.mobile_regex);
-    var price_regex = /^..*[0-9][0-9]*,[0-9][0-9]$/;
+    var price_regex = /^..*[0-9][0-9]*(,|\.)[0-9][0-9]$/;
     var class_selected = ".is-selected";
     var class_scroll = ".can-scroll";
     var class_grid = ".has-tiles--grid";
@@ -129,11 +129,18 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
 
                 test.comment(data.name + " IA has template group " + data.template_group);
                 if (data.template_group === "media" || data.template_group === "products") {
-                    test.comment("Check if tiles contain image and rating");
+                    test.comment("Check if tiles contain image");
                     test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.media_img),
                                      "tiles contain image");
-                    test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.rating),
-                                     "tiles contain rating");
+                    if (data.has_rating) {
+                        test.comment("Check if tiles contain rating");
+                        test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.rating),
+                                         "tiles contain rating");
+                    } else {
+                        test.comment("Check that rating doesn't exist");
+                        test.assertDoesntExist((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.rating),
+                                              "tiles don't contain rating");
+                    }
                 }
 
                 if (data.template_group === "media" || data.template_group === "products" || data.template_group === "icon") {
