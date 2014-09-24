@@ -35,7 +35,10 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             'tile': {
                 'root': 'div.tile.tile--' + data.id,
                 'media_img': 'div.tile__media img.tile__media__img', // media, products
-                'title': 'div.tile__body .tile__title', // media, icon, products
+                'title': {
+                    'root': 'div.tile__body .tile__title', // media, icon, products, text
+                    'subtitle': 'span.tile__title__sub' // text
+                },
                 'icon': 'div.tile__body img.tile__icon', // icon
                 'content': 'div.tile__body div.tile__content', // icon, text
                 'footer': 'div.tile__body div.tile__footer', // icon, text
@@ -143,16 +146,25 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                     }
                 }
 
-                if (data.template_group === "media" || data.template_group === "products" || data.template_group === "icon") {
+                if (data.template_group !== "base" && data.template_group !== "") {
                     test.comment("Check if tiles contain title");
-                    test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.title),
+                    test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.title.root),
                                      "tiles contain title");
+                    if (data.template_group === "text" && data.has_subtitle) {
+                        test.comment("Check if tile title contains subtitle");
+                        test.assertExists((selectors.main + " " + selectors.tiles.tile.title.root + " " + selectors.tiles.tile.title.subtitle),
+                                         "title contains subtitle");
+                    }
                 }
 
                 if (data.template_group === "icon") {
-                    test.comment("Check if tiles contain icon, content and footer");
+                    test.comment("Check if tiles contain icon");
                     test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.icon),
                                      "tiles contain icon");
+                }
+
+                if (data.template_group === "icon" || data.template_group === "text") {
+                    test.comment("Check if tiles contain content and footer");
                     test.assertExists((selectors.main + " " + selectors.tiles.tile.root +  " " + selectors.tiles.tile.content),
                                      "tiles contain content");
                     test.assertExists((selectors.main + " " + selectors.tiles.tile.root +  " " + selectors.tiles.tile.footer),
@@ -287,7 +299,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
         if (data.has_detail) {
             test.comment("Check selected tile and detail content");
             var detail_title = this.fetchText(selectors.main + " " + selectors.detail.content.body.title).trim();
-            var tile_title = this.fetchText(selectors.main + " " + selectors.tiles.tile.root + class_selected + " " + selectors.tiles.tile.title).trim();
+            var tile_title = this.fetchText(selectors.main + " " + selectors.tiles.tile.root + class_selected + " " + selectors.tiles.tile.title.root).trim();
 
             if (detail_title.length === tile_title.length) {
                 test.assertEquals(detail_title, tile_title, "detail title matches selected tile title");
