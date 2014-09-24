@@ -1,8 +1,8 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/bootic.json";
+    var path = "./json/tiles/congress.json";
     var data = require(path);
-    var metabar_regex = /^Showing\s[0-9]+\s[a-zA-Z]+\s([a-zA-Z]+\s)*for(\s[a-zA-Z]+\s?)*$/;
+    var metabar_regex = /^Showing\s[0-9]+\s([a-zA-Z]+|[A-Z])(\s|\.)((\s[a-zA-Z]+|[A-Z])\.?)*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
     var mobile_regex = new RegExp(data.mobile_regex);
     var price_regex = /^..*[0-9][0-9]*(,|\.)[0-9][0-9]$/;
@@ -159,7 +159,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                                      "tiles contain footer");
                 }
 
-                if (data.template_group === "products") {
+                if (data.template_group === "products" && data.has_priceAndBrand) {
                     test.comment("Check if tiles contain price, separator and brand");
                     test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.price),
                                      "tiles contain price");
@@ -188,11 +188,6 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                                  "detail controls contain previous");
                 test.assertExists((selectors.main + " " + selectors.detail.controls.root + " " + selectors.detail.controls.next),
                                  "detail controls contain next");
-
-                test.comment("Check existence of custom selectors from JSON file");
-                for (var key in data.custom_selectors) {
-                    test.assertExists((selectors.main + " " + data.custom_selectors[key]), data.name + " IA contains " + key);
-                }
 
                 test.comment("\n###### End checking elements existence and correct nesting ######\n");
             });
@@ -234,21 +229,34 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                                  "detail body has source");
             }
 
-            if (data.template_group === "products") {
-                test.comment("Check if detail body has rating and callout");
-                test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.rating),
-                                 "detail body has rating");
-                test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.callout),
-                                 "detail body has callout");
+            if (data.template_group === "products" ) {
+                if (data.has_rating) {
+                    test.comment("Check if detail body has rating");
+                    test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.rating),
+                                     "detail body has rating");
+                }
 
-                test.comment("Check if detail subtitle has price, separator and brand");
-                test.assertExists((selectors.main + " " + selectors.detail.content.body.subtitle.root + " " + selectors.detail.content.body.subtitle.price),
-                                 "detail subtitle has price");
-                test.assertExists((selectors.main + " " + selectors.detail.content.body.subtitle.root + " " + selectors.detail.content.body.subtitle.sep),
-                                 "detail subtitle has separator");
-                test.assertExists((selectors.main + " " + selectors.detail.content.body.subtitle.root + " " + selectors.detail.content.body.subtitle.brand),
-                                 "detail subtitle has brand");
+                if (data.has_callout) {
+                    test.comment("Check if detail body has callout");
+                    test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.callout),
+                                     "detail body has callout");
+                }
+
+                if (data.has_priceAndBrand) {
+                    test.comment("Check if detail subtitle has price, separator and brand");
+                    test.assertExists((selectors.main + " " + selectors.detail.content.body.subtitle.root + " " + selectors.detail.content.body.subtitle.price),
+                                     "detail subtitle has price");
+                    test.assertExists((selectors.main + " " + selectors.detail.content.body.subtitle.root + " " + selectors.detail.content.body.subtitle.sep),
+                                     "detail subtitle has separator");
+                    test.assertExists((selectors.main + " " + selectors.detail.content.body.subtitle.root + " " + selectors.detail.content.body.subtitle.brand),
+                                     "detail subtitle has brand");
+                }
             }
+
+        test.comment("Check existence of custom selectors from JSON file");
+        for (var key in data.custom_selectors) {
+            test.assertExists((selectors.main + " " + data.custom_selectors[key]), data.name + " IA contains " + key);
+        }
 
         } else {
             test.comment(data.name + " IA has no detail - skip the remaining detail visibility tests");
@@ -270,7 +278,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
         test.assertEquals(this.getElementAttribute(selectors.main + " " + selectors.metabar.moreAt.root, 'href'), data.moreAt_url,
                          "moreAt URL is correct");
 
-        if (data.template_group === "products") {
+        if (data.template_group === "products" && data.has_priceAndBrand) {
             test.comment("Check price value");
             test.assertMatch(this.fetchText(selectors.main + " " + selectors.tiles.tile.price), price_regex,
                             "price text value is correct");
@@ -304,7 +312,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
 
             test.assertEquals(detail_link, tile_link, "detail URL matches selected tile URL");
 
-            if (data.template_group === "products") {
+            if (data.template_group === "products" && data.has_priceAndBrand) {
                 test.comment("Check tile and detail price values");
                 // Get only the text from the first element which has the given selector
                 var tile_price = this.evaluate(function(selectors, key) {

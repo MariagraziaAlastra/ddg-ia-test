@@ -9,6 +9,8 @@
    "moreAt_regex" : "([a-zA-Z]+\\s)*Amazon",
    "template_group" : "products",
    "has_rating" : true,
+   "has_priceAndBrand" : true,
+   "has_callout" : true,
    "custom_selectors" : {},
    "regexes" : {
       "span.detail__callout--pr a" : "([a-zA-Z]+\\s)*Amazon"

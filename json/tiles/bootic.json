@@ -9,6 +9,7 @@
    "moreAt_regex" : "([a-zA-Z]+\\s)*Bootic",
    "template_group" : "products",
    "has_rating" : false,
+   "has_priceAndBrand" : true,
    "custom_selectors" : {},
    "regexes" : {}
 }
