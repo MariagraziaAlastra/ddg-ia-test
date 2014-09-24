@@ -1,0 +1,17 @@
+{
+   "name" : "GooglePlus",
+   "id" : "googleplus",
+   "status" : "live",
+   "query" : "google%2B+neil+degrasse+tyson",
+   "has_detail": false,
+   "tileview_capacity" : 8,
+   "moreAt_url" : "http://plus.google.com",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*Google\\+",
+   "template_group" : "products",
+   "has_rating" : true,
+   "has_priceAndBrand" : false,
+   "has_subtitle" : true,
+   "custom_selectors" : {},
+   "regexes" : {}
+}
+

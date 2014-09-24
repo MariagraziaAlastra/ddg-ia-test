@@ -1,14 +1,15 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/github.json";
+    var path = "./json/tiles/google_plus.json";
     var data = require(path);
-    var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for$/;
+    var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+\+?|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
     var mobile_regex = new RegExp(data.mobile_regex);
     var price_regex = /^..*[0-9][0-9]*(,|\.)[0-9][0-9]$/;
     var class_selected = ".is-selected";
     var class_scroll = ".can-scroll";
     var class_grid = ".has-tiles--grid";
+    var class_active = ".is-active";
     var detail_link, next_items, prev_items, tot_items;
     var selectors = {
         'ia_tab': 'a.zcm__link--' + data.id,
@@ -84,10 +85,13 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     casper.start("https://bttf.duckduckgo.com/", function() {
         casper.viewport(1336, 768).then(function() {
             this.open("https://bttf.duckduckgo.com/?q=" + data.query).then(function() {
-                // leaving this here for now for debug purposes
-                this.captureSelector('C:\desktop.jpeg', 'html');
                 test.comment("Viewport changed to {width: 1336, height: 768}");
                 test.assertExists(selectors.ia_tab, data.name + " IA is shown");
+                if (!this.exists(selectors.ia_tab + class_active)) {
+                    test.comment(data.name + " IA tab is not active: click on it")
+                    this.click(selectors.ia_tab);
+                }
+                test.assertExists(selectors.ia_tab + class_active, data.name + " IA is active");
 
                 test.comment("\n###### Start checking elements existence and correct nesting ######\n");
                 test.comment("Check if tileview exists and it's not a grid");
@@ -380,56 +384,60 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     casper.then(function() {
         this.reload(function() {
             test.comment("\n###### Start checking tileview navigation functionality ######\n");
+            casper.waitForSelector(selectors.ia_tab + class_active, function() {
+                // leaving this here for now for debug purposes
+                this.captureSelector('C:\desktop.jpeg', 'html');
 
-            test.comment("Check tileview navigation");
-            next_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items'));
-            prev_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items'));
-            tot_items = parseInt(this.fetchText(selectors.main + " " + selectors.metabar.text.count));
-            test.assertDoesntExist((selectors.main + " " + selectors.tiles.nav_prev + class_scroll), "previous navigation is disabled");
-            if (tot_items > data.tileview_capacity && tot_items < (data.tileview_capacity * 2)) {
-                test.assert((next_items === ((tot_items - data.tileview_capacity) + 2)), "next navigation has the correct number of items");
-            } else {
-                test.assert((next_items === (tot_items - data.tileview_capacity)), "next navigation has the correct number of items");
-            }
-            test.assert((prev_items === 0), "previous navigation is empty");
-
-            if (next_items > 0) {
-                test.assertExists((selectors.main + " " + selectors.tiles.nav_next + class_scroll), "next navigation is active");
-                test.comment("Click on next navigation and check number of items again");
-                this.click(selectors.main + " " + selectors.tiles.nav_next);
-                if (next_items >= (data.tileview_capacity * 2)) {
-                    test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items')) ===
-                               (tot_items - (data.tileview_capacity * 2)), "next navigation has the correct number of items");
-                    test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items')) == data.tileview_capacity,
-                               "previous navigation has the correct number of items");
+                test.comment("Check tileview navigation");
+                next_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items'));
+                prev_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items'));
+                tot_items = parseInt(this.fetchText(selectors.main + " " + selectors.metabar.text.count));
+                test.assertDoesntExist((selectors.main + " " + selectors.tiles.nav_prev + class_scroll), "previous navigation is disabled");
+                if (data.id === "products") {
+                    test.assert((next_items === ((tot_items - data.tileview_capacity) + 2)), "next navigation has the correct number of items");
                 } else {
-                    test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items')) < next_items,
-                               "next navigation has less items now");
-                    test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items')) > 0,
-                               "previous navigation has items now");
-            }
-        }
+                    test.assert((next_items === (tot_items - data.tileview_capacity)), "next navigation has the correct number of items");
+                }
+                test.assert((prev_items === 0), "previous navigation is empty");
+
+                if (next_items > 0) {
+                    test.assertExists((selectors.main + " " + selectors.tiles.nav_next + class_scroll), "next navigation is active");
+                    test.comment("Click on next navigation and check number of items again");
+                    this.click(selectors.main + " " + selectors.tiles.nav_next);
+                    if (next_items >= (data.tileview_capacity * 2)) {
+                        test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items')) ===
+                                   (tot_items - (data.tileview_capacity * 2)), "next navigation has the correct number of items");
+                        test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items')) == data.tileview_capacity,
+                                   "previous navigation has the correct number of items");
+                    } else {
+                        test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items')) < next_items,
+                                   "next navigation has less items now");
+                        test.assert(parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items')) > 0,
+                                   "previous navigation has items now");
+                    }
+                }
 
             test.comment("\n###### End checking tileview navigation functionality ######\n");
+            });
         });
     });
 
     casper.then(function() {
-            if (tot_items >= (data.tileview_capacity * 3)) {
-                test.comment("\n###### Start checking grid mode ######\n");
+        if (tot_items >= (data.tileview_capacity * 3)) {
+            test.comment("\n###### Start checking grid mode ######\n");
 
-                test.comment("Click on the metabar mode button and check if tileview expands to grid");
-                this.click(selectors.main + " " + selectors.metabar.mode);
-                test.assertExists((selectors.main + " " +  selectors.tileview_grid), "mode switched to grid");
-                test.assertExists((selectors.main + " " + selectors.tiles.root + class_grid), "tileview expanded to grid");
+            test.comment("Click on the metabar mode button and check if tileview expands to grid");
+            this.click(selectors.main + " " + selectors.metabar.mode);
+            test.assertExists((selectors.main + " " +  selectors.tileview_grid), "mode switched to grid");
+            test.assertExists((selectors.main + " " + selectors.tiles.root + class_grid), "tileview expanded to grid");
 
-                test.comment("Click again on the metabar mode button and check if tileview collapses");
-                this.click(selectors.main + " " + selectors.metabar.mode);
-                test.assertDoesntExist((selectors.main + " " +  selectors.tileview_grid), "mode switched back");
-                test.assertDoesntExist((selectors.main + " " + selectors.tiles.root + class_grid), "tileview collapsed");
+            test.comment("Click again on the metabar mode button and check if tileview collapses");
+            this.click(selectors.main + " " + selectors.metabar.mode);
+            test.assertDoesntExist((selectors.main + " " +  selectors.tileview_grid), "mode switched back");
+            test.assertDoesntExist((selectors.main + " " + selectors.tiles.root + class_grid), "tileview collapsed");
 
-                test.comment("\n###### End checking grid mode ######\n");
-            }
+            test.comment("\n###### End checking grid mode ######\n");
+        }
     });
 
     casper.then(function() {
