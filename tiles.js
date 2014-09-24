@@ -32,12 +32,12 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             'nav_prev': 'i.tile-nav--prev',
             'tile': {
                 'root': 'div.tile.tile--' + data.id,
-                'media_img': 'div.tile__media img.tile__media__img', // media
-                'title': 'div.tile__body .tile__title', // media, icon
+                'media_img': 'div.tile__media img.tile__media__img', // media, products
+                'title': 'div.tile__body .tile__title', // media, icon, products
                 'icon': 'div.tile__body img.tile__icon', // icon
                 'content': 'div.tile__body div.tile__content', // icon
                 'footer': 'div.tile__body div.tile__footer', // icon
-                'rating': 'div.tile__body div.tile__rating.one-line span.tile__source.one-line' // media
+                'rating': 'div.tile__body div.tile__rating.one-line' // media, products
             },
             'mobile': {
                 'root': 'div.tile--m--bbc span.tile--m--mob',
@@ -113,15 +113,29 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                 test.assertDoesntExist((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.mobile.root),
                                  "tiles wrapper does not contain mobile tile");
 
-                if (data.template_group === "media") {
-                    test.comment(data.name + " IA has template group media:");
-                    test.comment("Check if tiles contain image, title and rating");
+                test.comment(data.name + " IA has template group " + data.template_group);
+                if (data.template_group === "media" || data.template_group === "products") {
+                    test.comment("Check if tiles contain image and rating");
                     test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.media_img),
                                      "tiles contain image");
-                    test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.title),
-                                     "tiles contain title");
                     test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.rating),
                                      "tiles contain rating");
+                }
+
+                if (data.template_group === "media" || data.template_group === "products" || data.template_group === "icon") {
+                    test.comment("Check if tiles contain title");
+                    test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.title),
+                                     "tiles contain title");
+                }
+
+                if (data.template_group === "icon") {
+                    test.comment("Check if tiles contain icon, content and footer");
+                    test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.icon),
+                                     "tiles contain icon");
+                    test.assertExists((selectors.main + " " + selectors.tiles.tile.root +  " " + selectors.tiles.tile.content),
+                                     "tiles contain content");
+                    test.assertExists((selectors.main + " " + selectors.tiles.tile.root +  " " + selectors.tiles.tile.footer),
+                                     "tiles contain footer");
                 }
 
                 test.comment("Check if detail contains closing icon, content and controls");
