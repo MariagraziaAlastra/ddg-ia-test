@@ -1,9 +1,10 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/alternative_to.json";
+    var path = "./json/tiles/amazon.json";
     var data = require(path);
     var metabar_regex = /^Showing\s[0-9]+\s[a-zA-Z]+\s([a-zA-Z]+\s)*for(\s[a-zA-Z]+\s?)*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
+    var price_regex = /^..*[0-9][0-9]*,[0-9][0-9]$/;
     var class_selected = ".is-selected";
     var class_scroll = ".can-scroll";
     var class_grid = ".has-tiles--grid";
@@ -37,7 +38,10 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                 'icon': 'div.tile__body img.tile__icon', // icon
                 'content': 'div.tile__body div.tile__content', // icon
                 'footer': 'div.tile__body div.tile__footer', // icon
-                'rating': 'div.tile__body div.tile__rating.one-line' // media, products
+                'rating': 'div.tile__body div.tile__rating.one-line', // media, products
+                'price': 'div.tile__body div.tile__tx.tile--pr__sub.one-line span.tile--pr__price.price', // products
+                'sep': 'div.tile__body div.tile__tx.tile--pr__sub.one-line span.tile__sep', // products
+                'brand': 'div.tile__body div.tile__tx.tile--pr__sub.one-line span.tile--pr__brand' // products
             },
             'mobile': {
                 'root': 'div.tile--m--bbc span.tile--m--mob',
@@ -53,9 +57,16 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                 'body': {
                     'root': 'div.detail__body div.detail__body__content',
                     'title': 'a h5.detail__title',
-                    'subtitle': 'p.detail__subtitle',
-                    'source': 'p.detail__source',
-                    'desc': 'p.detail__desc'
+                    'subtitle': {
+                        'root': 'p.detail__subtitle',
+                        'price': 'span.detail__price', // products
+                        'sep': 'span.detail__sep', // products
+                        'brand': 'span.detail__brand' // products
+                    },
+                    'source': 'p.detail__source', // media
+                    'desc': 'p.detail__desc',
+                    'rating': 'p.detail__rating', // products
+                    'callout': 'span.detail__callout--pr' // products
                 }
             },
             'controls': {
@@ -69,6 +80,8 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     casper.start("https://bttf.duckduckgo.com/", function() {
         casper.viewport(1336, 768).then(function() {
             this.open("https://bttf.duckduckgo.com/?q=" + data.query).then(function() {
+                // leaving this here for now for debug purposes
+                this.captureSelector('C:\desktop.jpeg', 'html');
                 test.comment("Viewport changed to {width: 1336, height: 768}");
                 test.assertExists(selectors.ia_tab, data.name + " IA is shown");
 
@@ -138,6 +151,16 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                                      "tiles contain footer");
                 }
 
+                if (data.template_group === "products") {
+                    test.comment("Check if tiles contain price, separator and brand");
+                    test.assertExists((selectors.main + " " + selectors.tiles.tile.root + " " + selectors.tiles.tile.price),
+                                     "tiles contain price");
+                    test.assertExists((selectors.main + " " + selectors.tiles.tile.root +  " " + selectors.tiles.tile.sep),
+                                     "tiles contain separator");
+                    test.assertExists((selectors.main + " " + selectors.tiles.tile.root +  " " + selectors.tiles.tile.brand),
+                                     "tiles contain brand");
+                }
+
                 test.comment("Check if detail contains closing icon, content and controls");
                 test.assertExists((selectors.main + " " + selectors.detail.root + " " + selectors.detail.close),
                                  "detail contains closing icon");
@@ -189,15 +212,36 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             test.assertExists((selectors.main + " " + selectors.detail.content.root + " " + selectors.detail.content.body.root),
                              "detail content has body");
 
-            test.comment("Check if detail body has title, subtitle, source and description");
+            test.comment("Check if detail body has title, subtitle and description");
             test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.title),
                              "detail body has title");
-            test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.subtitle),
+            test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.subtitle.root),
                              "detail body has subtitle");
-            test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.source),
-                             "detail body has source");
             test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.desc),
                              "detail body has description");
+
+            if (data.template_group === "media") {
+                test.comment("Check if detail body has source");
+                test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.source),
+                                 "detail body has source");
+            }
+
+            if (data.template_group === "products") {
+                test.comment("Check if detail body has rating and callout");
+                test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.rating),
+                                 "detail body has rating");
+                test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.callout),
+                                 "detail body has callout");
+
+                test.comment("Check if detail subtitle has price, separator and brand");
+                test.assertExists((selectors.main + " " + selectors.detail.content.body.subtitle.root + " " + selectors.detail.content.body.subtitle.price),
+                                 "detail subtitle has price");
+                test.assertExists((selectors.main + " " + selectors.detail.content.body.subtitle.root + " " + selectors.detail.content.body.subtitle.sep),
+                                 "detail subtitle has separator");
+                test.assertExists((selectors.main + " " + selectors.detail.content.body.subtitle.root + " " + selectors.detail.content.body.subtitle.brand),
+                                 "detail subtitle has brand");
+            }
+
         } else {
             test.comment(data.name + " IA has no detail - skip the remaining detail visibility tests");
         }
@@ -218,6 +262,12 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
         test.assertEquals(this.getElementAttribute(selectors.main + " " + selectors.metabar.moreAt.root, 'href'), data.moreAt_url,
                          "moreAt URL is correct");
 
+        if (data.template_group === "products") {
+            test.comment("Check price value");
+            test.assertMatch(this.fetchText(selectors.main + " " + selectors.tiles.tile.price), price_regex,
+                            "price text value is correct");
+        }
+
         if (data.has_detail) {
             test.comment("Check selected tile and detail content");
             var detail_title = this.fetchText(selectors.main + " " + selectors.detail.content.body.title).trim();
@@ -233,25 +283,38 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                 test.fail("detail title is different from selected tile title");
             }
 
-            var detail_img = this.getElementAttribute(selectors.main + " " + selectors.detail.content.media_img, 'src');
-            var tile_img = this.getElementAttribute(selectors.main + " " + selectors.tiles.tile.media_img, 'src');
+            if (data.template_group === "media") {
+                test.comment("Check if detail image matches selected tile image");
+                var detail_img = this.getElementAttribute(selectors.main + " " + selectors.detail.content.media_img, 'src');
+                var tile_img = this.getElementAttribute(selectors.main + " " + selectors.tiles.tile.media_img, 'src');
 
-            test.assertEquals(detail_img, tile_img, "detail image matches selected tile image");
+                test.assertEquals(detail_img, tile_img, "detail image matches selected tile image");
+            }
 
             detail_link = this.getElementAttribute(selectors.main + " " + selectors.detail.content.body.root + " " + 'a', 'href');
             var tile_link = this.getElementAttribute(selectors.main + " " + selectors.tiles.tile.root, 'data-link');
 
             test.assertEquals(detail_link, tile_link, "detail URL matches selected tile URL");
-        }
 
-        var text = this.evaluate(function() {
-            var elements = __utils__.findAll(selectors.main + " " + key);
-            return casper.fetchText(elements[0]);
-        });
+            if (data.template_group === "products") {
+                test.comment("Check tile and detail price values");
+                // Get only the text from the first element which has the given selector
+                var tile_price = this.evaluate(function(selectors, key) {
+                    var elements = __utils__.findAll(selectors.main + " " + selectors.tiles.tile.price);
+                    return elements[0].innerHTML.trim();
+                }, {selectors: selectors, key: key});
+                var detail_price = this.fetchText(selectors.main + " " + selectors.detail.content.body.subtitle.price).trim();
+
+                test.assertMatch(tile_price, price_regex, "tile price has the correct value");
+                test.assertMatch(detail_price, price_regex, "detail price has the correct value");
+                test.assertEquals(detail_price, tile_price, "detail and selected tile have the same price");
+            }
+        }
 
         test.comment("Check regexes from JSON file");
         for (var key in data.regexes) {
             var regex = new RegExp(data.regexes[key]);
+            // Get only the text from the first element which has the given selector
             var text = this.evaluate(function(selectors, key) {
                 var elements = __utils__.findAll(selectors.main + " " + key);
                 return elements[0].innerHTML.trim();
@@ -295,7 +358,11 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             prev_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items'));
             tot_items = parseInt(this.fetchText(selectors.main + " " + selectors.metabar.text.count));
             test.assertDoesntExist((selectors.main + " " + selectors.tiles.nav_prev + class_scroll), "previous navigation is disabled");
-            test.assert((next_items === (tot_items - data.tileview_capacity)), "next navigation has the correct number of items");
+            if (tot_items > data.tileview_capacity && tot_items < (data.tileview_capacity * 2)) {
+                test.assert((next_items === ((tot_items - data.tileview_capacity) + 2)), "next navigation has the correct number of items");
+            } else {
+                test.assert((next_items === (tot_items - data.tileview_capacity)), "next navigation has the correct number of items");
+            }
             test.assert((prev_items === 0), "previous navigation is empty");
 
             if (next_items > 0) {

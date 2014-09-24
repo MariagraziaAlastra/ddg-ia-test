@@ -1,0 +1,16 @@
+{
+   "name" : "Products",
+   "id" : "products",
+   "status" : "live",
+   "query" : "lord+of+the+rings+amazon",
+   "has_detail": true,
+   "tileview_capacity" : 7,
+   "moreAt_url" : "https://amazon.it/s/?tag=duc01-21&url=search-alias%3Daps&field-keywords=lord%20of%20the%20rings%20amazon",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*Amazon",
+   "template_group" : "products",
+   "custom_selectors" : {},
+   "regexes" : {
+      "span.detail__callout--pr a" : "([a-zA-Z]+\\s)*Amazon"
+   }
+}
+

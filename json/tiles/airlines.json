@@ -4,7 +4,7 @@
    "status" : "live",
    "query" : "AA+102",
    "has_detail": false,
-   "tileview_capacity" : 1,
+   "tileview_capacity" : 6,
    "moreAt_url" : "http://www.flightstats.com/go/FlightStatus/flightStatusByFlight.do?&airlineCode=AA&flightNumber=102",
    "moreAt_regex" : "([a-zA-Z]+\\s)*FlightStatus",
    "template_group" : "base",
