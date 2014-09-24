@@ -1,0 +1,16 @@
+{
+   "name" : "Github",
+   "id" : "github",
+   "status" : "live",
+   "query" : "github+zeroclickinfo",
+   "has_detail": false,
+   "tileview_capacity" : 5,
+   "moreAt_url" : "http://www.github.com/search?q=zeroclickinfo",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*GitHub",
+   "template_group" : "text",
+   "custom_selectors" : {},
+   "regexes" : {
+      "span.tile__title__sub" : "^duckduckgo/(zeroclickinfo-[a-z]+|[a-z]+-zeroclickinfo)$",
+      "div.tile__update__info.one-line" : "[0-9][0-9]*\\s.\\sUpdated\\s(today|yesterday|[0-9][0-9]*\\s(days|months?|years?)\\sago)$"
+   }
+}

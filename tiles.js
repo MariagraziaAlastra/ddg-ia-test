@@ -1,8 +1,8 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/congress.json";
+    var path = "./json/tiles/github.json";
     var data = require(path);
-    var metabar_regex = /^Showing\s[0-9]+\s([a-zA-Z]+|[A-Z])(\s|\.)((\s[a-zA-Z]+|[A-Z])\.?)*$/;
+    var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
     var mobile_regex = new RegExp(data.mobile_regex);
     var price_regex = /^..*[0-9][0-9]*(,|\.)[0-9][0-9]$/;
@@ -37,8 +37,8 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                 'media_img': 'div.tile__media img.tile__media__img', // media, products
                 'title': 'div.tile__body .tile__title', // media, icon, products
                 'icon': 'div.tile__body img.tile__icon', // icon
-                'content': 'div.tile__body div.tile__content', // icon
-                'footer': 'div.tile__body div.tile__footer', // icon
+                'content': 'div.tile__body div.tile__content', // icon, text
+                'footer': 'div.tile__body div.tile__footer', // icon, text
                 'rating': 'div.tile__body div.tile__rating.one-line', // media, products
                 'price': 'div.tile__body div.tile__tx.tile--pr__sub.one-line span.tile--pr__price.price', // products
                 'sep': 'div.tile__body div.tile__tx.tile--pr__sub.one-line span.tile__sep', // products
