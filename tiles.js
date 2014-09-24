@@ -1,8 +1,8 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/google_plus.json";
+    var path = "./json/tiles/hacker_news.json";
     var data = require(path);
-    var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+\+?|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for$/;
+    var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+\+?|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for(\s([A-Za-z]+|[A-Z]))*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
     var mobile_regex = new RegExp(data.mobile_regex);
     var price_regex = /^..*[0-9][0-9]*(,|\.)[0-9][0-9]$/;

@@ -10,7 +10,6 @@
    "template_group" : "products",
    "has_rating" : true,
    "has_priceAndBrand" : false,
-   "has_subtitle" : true,
    "custom_selectors" : {},
    "regexes" : {}
 }

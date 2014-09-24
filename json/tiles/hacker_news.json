@@ -1,0 +1,22 @@
+{
+   "name" : "HackerNews",
+   "id" : "hacker_news",
+   "status" : "live",
+   "query" : "hn+postgresql",
+   "has_detail": false,
+   "tileview_capacity" : 5,
+   "moreAt_url" : "https://hn.algolia.com/#!/story/forever/0/postgresql",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*HN\\sSearch",
+   "template_group" : "text",
+   "has_subtitle" : false,
+   "custom_selectors" : {
+      "domain" : "div.tile__footer div.one-line div.tile__domain.one-line",
+      "score" : "div.tile__footer div.one-line span.tile__score",
+      "comments" : "div.tile__footer div.one-line a"
+   },
+   "regexes" : {
+      "div.tile__content" : "^[0-9][0-9]*\\s(days?|months?|years?)\\sago$",
+      "span.tile__score" : "^[0-9]+$",
+      "div.tile__footer a" : "^[0-9]+\\sComments$"
+   }
+}
