@@ -1,0 +1,18 @@
+{
+   "name" : "BBC",
+   "id" : "bbc",
+   "status" : "live",
+   "query" : "what+is+on+bbc+one",
+   "has_detail": true,
+   "tileview_capacity" : 5,
+   "moreAt_url" : "http://www.bbc.co.uk",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*BBC",
+   "mobile_regex" : "([a-zA-Z]+\\s)*TV",
+   "template_group" : "media",
+   "custom_selectors" : {},
+   "regexes" : {
+      "span.tile__source.one-line" : "^[0-9][0-9]?:[0-9][0-9](A|P)M\\s-\\s[0-9][0-9]?:[0-9][0-9](A|P)M$",
+      "p.detail__source" : "^Run\\sTime:\\s[0-9][0-9]?\\s(hours?|mins)$"
+   }
+}
+

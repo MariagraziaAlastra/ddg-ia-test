@@ -1,9 +1,10 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/amazon.json";
+    var path = "./json/tiles/bbc.json";
     var data = require(path);
     var metabar_regex = /^Showing\s[0-9]+\s[a-zA-Z]+\s([a-zA-Z]+\s)*for(\s[a-zA-Z]+\s?)*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
+    var mobile_regex = new RegExp(data.mobile_regex);
     var price_regex = /^..*[0-9][0-9]*,[0-9][0-9]$/;
     var class_selected = ".is-selected";
     var class_scroll = ".can-scroll";
@@ -410,12 +411,9 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                 test.comment("Viewport changed to {width: 360, height: 640}");
                 test.comment("\n###### Start checking mobile view ######\n");
 
-                test.comment("Check metabar visibility before and after expanding content");
+                test.comment("Check metabar visibility - should be hidden");
                 test.assertNotVisible((selectors.main + " " + selectors.metabar.root), "metabar is hidden on mobile");
                 if (tot_items > 1 && data.template_group === 'media') {
-                    this.click(selectors.main + " " + selectors.tiles.mobile.root);
-                    test.assertVisible((selectors.main + " " + selectors.metabar.root), "metabar is now visible");
-
                     test.comment("Check elements existence");
                     test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.mobile.root),
                                      "tiles wrapper now contains mobile tile");
@@ -427,6 +425,10 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                     test.comment("Check mobile tile text value");
                     test.assertMatch(this.fetchText(selectors.main + " " + selectors.tiles.mobile.root).trim(), mobile_regex,
                                     "mobile tile text value is correct");
+
+                    test.comment("Check metabar visibility after expanding content");
+                    this.click(selectors.main + " " + selectors.tiles.mobile.root);
+                    test.assertVisible((selectors.main + " " + selectors.metabar.root), "metabar is now visible");
 
                     test.comment("Click on metabar mode button and check if tileview collapses");
                     this.click(selectors.main + " " + selectors.metabar.mode);
