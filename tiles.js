@@ -1,8 +1,8 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/airlines.json";
+    var path = "./json/tiles/alternative_to.json";
     var data = require(path);
-    var metabar_regex = /^Showing\s[0-9]+\s[a-zA-Z]+\s([a-zA-Z]+\s)*for$/;
+    var metabar_regex = /^Showing\s[0-9]+\s[a-zA-Z]+\s([a-zA-Z]+\s)*for(\s[a-zA-Z]+\s?)*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
     var class_selected = ".is-selected";
     var class_scroll = ".can-scroll";
@@ -33,8 +33,11 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             'tile': {
                 'root': 'div.tile.tile--' + data.id,
                 'media_img': 'div.tile__media img.tile__media__img', // media
-                'title': 'div.tile__body h6.tile__title', // media
-                'rating': 'div.tile__body div.tile__rating.one-line span.tile__source.one-line' //media
+                'title': 'div.tile__body .tile__title', // media, icon
+                'icon': 'div.tile__body img.tile__icon', // icon
+                'content': 'div.tile__body div.tile__content', // icon
+                'footer': 'div.tile__body div.tile__footer', // icon
+                'rating': 'div.tile__body div.tile__rating.one-line span.tile__source.one-line' // media
             },
             'mobile': {
                 'root': 'div.tile--m--bbc span.tile--m--mob',
@@ -227,10 +230,19 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             test.assertEquals(detail_link, tile_link, "detail URL matches selected tile URL");
         }
 
+        var text = this.evaluate(function() {
+            var elements = __utils__.findAll(selectors.main + " " + key);
+            return casper.fetchText(elements[0]);
+        });
+
         test.comment("Check regexes from JSON file");
         for (var key in data.regexes) {
             var regex = new RegExp(data.regexes[key]);
-            test.assertMatch(this.fetchText(selectors.main + " " + key).trim(), regex, key + " text value is correct");
+            var text = this.evaluate(function(selectors, key) {
+                var elements = __utils__.findAll(selectors.main + " " + key);
+                return elements[0].innerHTML.trim();
+            }, {selectors: selectors, key: key});
+            test.assertMatch(text, regex, key + " text value is correct");
         }
 
         test.comment("\n###### End checking IA content values ######\n");
@@ -268,7 +280,6 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             next_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items'));
             prev_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items'));
             tot_items = parseInt(this.fetchText(selectors.main + " " + selectors.metabar.text.count));
-            this.echo(next_items + " " + tot_items);
             test.assertDoesntExist((selectors.main + " " + selectors.tiles.nav_prev + class_scroll), "previous navigation is disabled");
             test.assert((next_items === (tot_items - data.tileview_capacity)), "next navigation has the correct number of items");
             test.assert((prev_items === 0), "previous navigation is empty");
@@ -320,7 +331,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
 
                 test.comment("Check metabar visibility before and after expanding content");
                 test.assertNotVisible((selectors.main + " " + selectors.metabar.root), "metabar is hidden on mobile");
-                if (tot_items > 1) {
+                if (tot_items > 1 && data.template_group === 'media') {
                     this.click(selectors.main + " " + selectors.tiles.mobile.root);
                     test.assertVisible((selectors.main + " " + selectors.metabar.root), "metabar is now visible");
 

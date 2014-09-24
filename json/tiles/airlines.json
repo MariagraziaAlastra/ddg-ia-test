@@ -7,8 +7,6 @@
    "tileview_capacity" : 1,
    "moreAt_url" : "http://www.flightstats.com/go/FlightStatus/flightStatusByFlight.do?&airlineCode=AA&flightNumber=102",
    "moreAt_regex" : "([a-zA-Z]+\\s)*FlightStatus",
-   "data-link_url" : "http://www.flightstats.com/go/FlightStatus/flightStatusByFlight.do?&airlineCode=AA&flightNumber=102",
-   "api_url" : "https://duckduckgo.com/flights.js?airline=AA&flightno=102",
    "template_group" : "base",
    "custom_selectors" : {
       "tile_week" : "div.tile.tile--airlines div.tile__body div.tile__heading div.tile__date div.tile__week",
@@ -21,6 +19,7 @@
    "regexes" : {
       "div.tile__week" : "^[A-Z][A-Z][A-Z]$",
       "div.tile__day" : "^[0-9][0-9]?$",
-      "div.tile__time" : "^[0-9][0-9]?:[0-9][0-9]\\s(A|P)M[0-9][0-9]?:[0-9][0-9]\\s(A|P)M$"
+      "div.tile__time" : "^[0-9][0-9]?:[0-9][0-9]\\s(A|P)M$"
    }
 }
+

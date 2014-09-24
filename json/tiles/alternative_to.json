@@ -1,0 +1,18 @@
+{
+   "name" : "AlternativeTo",
+   "id" : "alternative_to",
+   "status" : "live",
+   "query" : "alternative+to+notepad",
+   "has_detail": false,
+   "tileview_capacity" : 5,
+   "moreAt_url" : "http://alternativeto.net/software/notepad/",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*AlternativeTo",
+   "template_group" : "icon",
+   "custom_selectors" : {
+      "tile_hearts" : "div.tile.tile--alternative_to div.tile__body div.tile__footer span.one-line.tile__hearts"
+   },
+   "regexes" : {
+      "span.tile__hearts" : "^.+\\s[0-9]+\\s\\s.\\s[a-zA-Z]+\\s?([a-zA-Z]+\\s?)*$"
+   }
+}
+
