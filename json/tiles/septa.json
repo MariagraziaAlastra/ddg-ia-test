@@ -1,0 +1,23 @@
+{
+   "name" : "SEPTA",
+   "id" : "septa",
+   "ia_tab_id" : "septa",
+   "status" : "live",
+   "query" : "next+train+from+Villanova+to+Paoli",
+   "has_detail": false,
+   "tileview_capacity" : 6,
+   "moreAt_url" : "http://www.septa.org/schedules/rail/index.html",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*SEPTA",
+   "metabar_text" : "Villanova to Paoli",
+   "template_group" : "base",
+   "custom_selectors" : {
+      "time" : "div.tile--septa div.tile__body div.septa__time",
+      "details" : "div.tile--septa div.tile__body div.septa__details",
+      "status-sep-line" : "div.tile--septa div.tile__body div.septa__status-sep div.septa__sep-line",
+      "status-sep-badge" : "div.tile--septa div.tile__body div.septa__status-sep div.septa__badge",
+      "status-one-line" : "div.tile--septa div.tile__body div.septa__status div.one-line"
+   },
+   "regexes" : {
+      "div.septa__time" : "^[0-9][0-9]?:[0-9][0-9]\\s(A|P)M$"
+   }
+}

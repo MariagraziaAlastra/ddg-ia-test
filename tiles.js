@@ -1,6 +1,6 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/njt.json";
+    var path = "./json/tiles/septa.json";
     var data = require(path);
     var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+\+?|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for(\s([A-Za-z]+|[A-Z]))*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
@@ -126,7 +126,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                                      "metabar does not contain moreAt");
                 }
 
-                if (data.name !== "NJT") {
+                if (data.name !== "NJT" && data.name !== "SEPTA") {
                     test.comment("Check if metabar text contains count and item type");
                     test.assertExists((selectors.main + " " + selectors.metabar.text.root + " " + selectors.metabar.text.count),
                                      "metabar text contains count");
@@ -296,7 +296,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
         test.comment("\n###### Start checking IA content values ######\n");
 
         test.comment("Check metabar text");
-        if (data.name !== "NJT") {
+        if (data.name !== "NJT" && data.name !== "SEPTA") {
             test.assertMatch(this.fetchText(selectors.main + " " + selectors.metabar.text.root).trim(), metabar_regex, 
                             "metabar text value is correct");
         } else {
@@ -408,7 +408,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
 
                 next_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items'));
                 prev_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items'));
-                if (data.name === "NJT") {
+                if (data.name === "NJT" || data.name === "SEPTA") {
                     tot_items = this.evaluate(function(selectors) {
                         return __utils__.findAll(selectors.main + " " + selectors.tiles.tile.root).length;
                     }, {selectors: selectors});
