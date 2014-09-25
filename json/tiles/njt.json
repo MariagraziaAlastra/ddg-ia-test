@@ -1,0 +1,23 @@
+{
+   "name" : "NJT",
+   "id" : "njt",
+   "ia_tab_id" : "njt",
+   "status" : "live",
+   "query" : "next+train+from+Metropark+to+New+York+Penn",
+   "has_detail": false,
+   "tileview_capacity" : 6,
+   "moreAt_url" : "http://dv.njtransit.com/mobile/tid-mobile.aspx?sid=MP",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*NJ\\sTransit?",
+   "metabar_text" : "Metropark to New York Penn Station",
+   "template_group" : "base",
+   "custom_selectors" : {
+      "time" : "div.tile--njt div.tile__body div.njt__time",
+      "details" : "div.tile--njt div.tile__body div.njt__details",
+      "status-sep-line" : "div.tile--njt div.tile__body div.njt__status-sep div.njt__sep-line",
+      "status-sep-badge" : "div.tile--njt div.tile__body div.njt__status-sep div.njt__badge",
+      "status-one-line" : "div.tile--njt div.tile__body div.njt__status div.one-line"
+   },
+   "regexes" : {
+      "div.njt__time" : "^[0-9][0-9]?:[0-9][0-9]\\s(A|P)M$"
+   }
+}

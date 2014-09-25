@@ -1,6 +1,6 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/wgha.json";
+    var path = "./json/tiles/njt.json";
     var data = require(path);
     var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+\+?|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for(\s([A-Za-z]+|[A-Z]))*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
@@ -126,11 +126,13 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                                      "metabar does not contain moreAt");
                 }
 
-                test.comment("Check if metabar text contains count and item type");
-                test.assertExists((selectors.main + " " + selectors.metabar.text.root + " " + selectors.metabar.text.count),
-                                 "metabar text contains count");
-                test.assertExists((selectors.main + " " + selectors.metabar.text.root + " " + selectors.metabar.text.item_type),
-                                 "metabar text contains item type");
+                if (data.name !== "NJT") {
+                    test.comment("Check if metabar text contains count and item type");
+                    test.assertExists((selectors.main + " " + selectors.metabar.text.root + " " + selectors.metabar.text.count),
+                                     "metabar text contains count");
+                    test.assertExists((selectors.main + " " + selectors.metabar.text.root + " " + selectors.metabar.text.item_type),
+                                     "metabar text contains item type");
+                }
 
                 test.comment("Check if tiles wrapper contains navigation and tiles and doesn't contain mobile tile");
                 test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.nav_next),
@@ -294,8 +296,13 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
         test.comment("\n###### Start checking IA content values ######\n");
 
         test.comment("Check metabar text");
-        test.assertMatch(this.fetchText(selectors.main + " " + selectors.metabar.text.root).trim(), metabar_regex, 
-                         "metabar text value is correct");
+        if (data.name !== "NJT") {
+            test.assertMatch(this.fetchText(selectors.main + " " + selectors.metabar.text.root).trim(), metabar_regex, 
+                            "metabar text value is correct");
+        } else {
+            test.assertEquals(this.fetchText(selectors.main + " " + selectors.metabar.text.root).trim(), data.metabar_text,
+                             "metabar text value is correct");
+        }
 
         if (data.template_group !== "") {
             test.comment("Check moreAt text and URL");
@@ -401,7 +408,13 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
 
                 next_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items'));
                 prev_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items'));
-                tot_items = parseInt(this.fetchText(selectors.main + " " + selectors.metabar.text.count));
+                if (data.name === "NJT") {
+                    tot_items = this.evaluate(function(selectors) {
+                        return __utils__.findAll(selectors.main + " " + selectors.tiles.tile.root).length;
+                    }, {selectors: selectors});
+                } else {
+                    tot_items = parseInt(this.fetchText(selectors.main + " " + selectors.metabar.text.count));
+                }
                 test.comment("Check tileview navigation");
                 test.assertDoesntExist((selectors.main + " " + selectors.tiles.nav_prev + class_scroll), "previous navigation is disabled");
                 if (data.id === "products") {
