@@ -1,0 +1,22 @@
+{
+   "name" : "Octopart",
+   "id" : "octopart",
+   "status" : "live",
+   "query" : "atmega+datasheet",
+   "has_detail": true,
+   "tileview_capacity" : 6,
+   "moreAt_url" : "http://octopart.com/partsearch#search/requestData&q=atmega",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*Octopart",
+   "template_group" : "products",
+   "has_rating" : false,
+   "has_priceAndBrand" : true,
+   "has_callout" : false,
+   "custom_selectors" : {
+      "datasheet" : "div.detail__body__content a.btn__datasheet",
+      "buy" : "div.detail__body__content a.btn--primary"
+   },
+   "regexes" : {
+      "h5.detail__title" : "ATMEGA[0-9]+-?[0-9]+[A-Z]+",
+      "h6.tile__title a" : "ATMEGA[0-9]+-?[0-9]+[A-Z]+"
+   }
+}
