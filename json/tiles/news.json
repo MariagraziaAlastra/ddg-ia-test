@@ -1,0 +1,21 @@
+{
+   "name" : "News",
+   "id" : "news",
+   "status" : "live",
+   "query" : "duckduckgo+news",
+   "has_detail": false,
+   "tileview_capacity" : 5,
+   "moreAt_url" : "",
+   "moreAt_regex" : "",
+   "template_group" : "",
+   "custom_selectors" : {
+      "content-news" : "div.tile--news div.tile__body div.tile__content--news",
+      "news-more-at" : "div.tile--news div.tile__foot--news span.news-more-at",
+      "news-favicon" : "div.tile--news div.tile__foot--news span.news-more-at img.tile__favicon",
+      "news-sep" : "div.tile--news div.tile__foot--news span.tile__sep",
+      "news-time" : "div.tile--news div.tile__foot--news span.tile__time"
+   },
+   "regexes" : {
+      "span.tile__time" : "^(yesterday|[0-9][0-9]?\\s(seconds|minutes|hours|days|months|years)\\sago)$"
+   }
+}

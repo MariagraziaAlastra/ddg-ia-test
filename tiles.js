@@ -1,6 +1,6 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/kwixer.json";
+    var path = "./json/tiles/news.json";
     var data = require(path);
     var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+\+?|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for(\s([A-Za-z]+|[A-Z]))*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
@@ -105,17 +105,25 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                 test.assertExists((selectors.main + " " + selectors.tileview + " " + selectors.detail.root),
                                  "tileview contains detail");
 
-                test.comment("Check if metabar contains mode, moreAt and text");
+                test.comment("Check if metabar contains mode and text");
                 test.assertExists((selectors.main + " " + selectors.metabar.root + " " + selectors.metabar.mode),
                                  "metabar contains mode");
-                test.assertExists((selectors.main + " " + selectors.metabar.root + " " + selectors.metabar.moreAt.root),
-                                 "metabar contains moreAt");
                 test.assertExists((selectors.main + " " + selectors.metabar.root + " " + selectors.metabar.text.root),
                                  "metabar contains text");
 
-                test.comment("Check if metabar moreAt contains moreAt icon");
-                test.assertExists((selectors.main + " " + selectors.metabar.moreAt.root + " " + selectors.metabar.moreAt.icon),
-                                 "moreAt contains moreAt icon");
+                if (data.template_group !== "") {
+                    test.comment("Check if metabar contains moreAt");
+                    test.assertExists((selectors.main + " " + selectors.metabar.root + " " + selectors.metabar.moreAt.root),
+                                     "metabar contains moreAt");
+
+                    test.comment("Check if metabar moreAt contains moreAt icon");
+                    test.assertExists((selectors.main + " " + selectors.metabar.moreAt.root + " " + selectors.metabar.moreAt.icon),
+                                     "moreAt contains moreAt icon");
+                } else {
+                    test.comment("No template group - moreAt shouldn't exist");
+                    test.assertDoesntExist((selectors.main + " " + selectors.metabar.root + " " + selectors.metabar.moreAt.root),
+                                     "metabar does not contain moreAt");
+                }
 
                 test.comment("Check if metabar text contains count and item type");
                 test.assertExists((selectors.main + " " + selectors.metabar.text.root + " " + selectors.metabar.text.count),
@@ -281,11 +289,13 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
         test.assertMatch(this.fetchText(selectors.main + " " + selectors.metabar.text.root).trim(), metabar_regex, 
                          "metabar text value is correct");
 
-        test.comment("Check moreAt text and URL");
-        test.assertMatch(this.fetchText(selectors.main + " " + selectors.metabar.moreAt.root).trim(), moreAt_regex,
-                         "moreAt text value is correct");
-        test.assertEquals(this.getElementAttribute(selectors.main + " " + selectors.metabar.moreAt.root, 'href'), data.moreAt_url,
-                         "moreAt URL is correct");
+        if (data.template_group !== "") {
+            test.comment("Check moreAt text and URL");
+            test.assertMatch(this.fetchText(selectors.main + " " + selectors.metabar.moreAt.root).trim(), moreAt_regex,
+                             "moreAt text value is correct");
+            test.assertEquals(this.getElementAttribute(selectors.main + " " + selectors.metabar.moreAt.root, 'href'), data.moreAt_url,
+                             "moreAt URL is correct");
+        }
 
         if (data.template_group === "products" && data.has_priceAndBrand) {
             test.comment("Check price value");
