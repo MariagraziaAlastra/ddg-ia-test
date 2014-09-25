@@ -1,6 +1,7 @@
 {
    "name" : "Bootic",
    "id" : "bootic",
+   "ia_tab_id" : "bootic",
    "status" : "live",
    "query" : "bootic+watches",
    "has_detail": false,

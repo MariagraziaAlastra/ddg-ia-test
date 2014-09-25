@@ -1,6 +1,7 @@
 {
    "name" : "AlternativeTo",
    "id" : "alternative_to",
+   "ia_tab_id" : "alternative_to",
    "status" : "live",
    "query" : "alternative+to+notepad",
    "has_detail": false,

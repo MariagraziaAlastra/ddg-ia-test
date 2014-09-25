@@ -1,6 +1,7 @@
 {
    "name" : "Products",
    "id" : "products",
+   "ia_tab_id" : "products",
    "status" : "live",
    "query" : "lord+of+the+rings+amazon",
    "has_detail": true,

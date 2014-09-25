@@ -1,6 +1,7 @@
 {
    "name" : "Kwixer",
    "id" : "kwixer",
+   "ia_tab_id" : "kwixer",
    "status" : "live",
    "query" : "movies+with+Keira+Knightley",
    "has_detail": true,

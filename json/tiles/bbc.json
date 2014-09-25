@@ -1,6 +1,7 @@
 {
    "name" : "BBC",
    "id" : "bbc",
+   "ia_tab_id" : "bbc",
    "status" : "live",
    "query" : "what+is+on+bbc+one",
    "has_detail": true,

@@ -1,6 +1,7 @@
 {
    "name" : "PeopleInSpace",
    "id" : "people_in_space",
+   "ia_tab_id" : "people_in_space",
    "status" : "live",
    "query" : "people+in+space",
    "has_detail": false,

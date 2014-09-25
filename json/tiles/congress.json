@@ -1,6 +1,7 @@
 {
    "name" : "Congress",
    "id" : "congress",
+   "ia_tab_id" : "congress",
    "status" : "live",
    "query" : "new+york+senators",
    "has_detail": true,

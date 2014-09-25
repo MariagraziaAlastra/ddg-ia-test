@@ -1,0 +1,22 @@
+{
+   "name" : "Quixey",
+   "id" : "apps",
+   "ia_tab_id" : "apps",
+   "status" : "live",
+   "query" : "flight+tracking+app",
+   "has_detail": false,
+   "tileview_capacity" : 8,
+   "moreAt_url" : "https://www.quixey.com/search?q=flight%20tracking",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*.+",
+   "template_group" : "products",
+   "has_rating" : true,
+   "has_priceAndBrand" : true,
+   "custom_selectors" : {
+      "review_count" : "div.tile__rating span.review-count",
+      "moreAt_logo" : "a.zci__more-at img.zci__more-at__logo"
+   },
+   "regexes" : {
+      "span.review-count" : "^[0-9]+(\\.[0-9]+)?K?$"
+   }
+}
+

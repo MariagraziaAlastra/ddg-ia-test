@@ -1,6 +1,7 @@
 {
    "name" : "InTheaters",
    "id" : "in_theaters",
+   "ia_tab_id" : "in_theaters",
    "status" : "live",
    "query" : "movies+in+theaters",
    "has_detail": true,

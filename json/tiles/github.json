@@ -1,6 +1,7 @@
 {
    "name" : "Github",
    "id" : "github",
+   "ia_tab_id" : "github",
    "status" : "live",
    "query" : "github+zeroclickinfo",
    "has_detail": false,

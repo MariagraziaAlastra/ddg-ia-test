@@ -1,6 +1,7 @@
 {
    "name" : "Octopart",
    "id" : "octopart",
+   "ia_tab_id" : "octopart",
    "status" : "live",
    "query" : "atmega+datasheet",
    "has_detail": true,

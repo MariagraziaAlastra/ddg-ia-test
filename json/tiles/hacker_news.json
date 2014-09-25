@@ -1,6 +1,7 @@
 {
    "name" : "HackerNews",
    "id" : "hacker_news",
+   "ia_tab_id" : "hacker_news",
    "status" : "live",
    "query" : "hn+postgresql",
    "has_detail": false,

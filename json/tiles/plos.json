@@ -1,6 +1,7 @@
 {
    "name" : "Plos",
    "id" : "plos",
+   "ia_tab_id" : "plos",
    "status" : "live",
    "query" : "plos+dinosaurs",
    "has_detail": false,

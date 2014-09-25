@@ -1,6 +1,6 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/plos.json";
+    var path = "./json/tiles/quixey.json";
     var data = require(path);
     var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+\+?|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for(\s([A-Za-z]+|[A-Z]))*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
@@ -12,7 +12,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     var class_active = ".is-active";
     var detail_link, next_items, prev_items, tot_items;
     var selectors = {
-        'ia_tab': 'a.zcm__link--' + data.id,
+        'ia_tab': 'a.zcm__link--' + data.ia_tab_id,
         'main': 'div.zci--' + data.id,
         'tileview': 'div.tileview.js-tileview',
         'tileview_grid': 'div.tileview--grid',
@@ -115,10 +115,11 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                     test.comment("Check if metabar contains moreAt");
                     test.assertExists((selectors.main + " " + selectors.metabar.root + " " + selectors.metabar.moreAt.root),
                                      "metabar contains moreAt");
-
-                    test.comment("Check if metabar moreAt contains moreAt icon");
-                    test.assertExists((selectors.main + " " + selectors.metabar.moreAt.root + " " + selectors.metabar.moreAt.icon),
+                    if (data.name !== "Quixey") {
+                        test.comment("Check if metabar moreAt contains moreAt icon");
+                        test.assertExists((selectors.main + " " + selectors.metabar.moreAt.root + " " + selectors.metabar.moreAt.icon),
                                      "moreAt contains moreAt icon");
+                    }
                 } else {
                     test.comment("No template group - moreAt shouldn't exist");
                     test.assertDoesntExist((selectors.main + " " + selectors.metabar.root + " " + selectors.metabar.moreAt.root),

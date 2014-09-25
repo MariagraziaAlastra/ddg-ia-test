@@ -1,6 +1,7 @@
 {
    "name" : "Airlines",
    "id" : "airlines",
+   "ia_tab_id" : "airlines",
    "status" : "live",
    "query" : "AA+102",
    "has_detail": false,

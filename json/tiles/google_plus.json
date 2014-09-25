@@ -1,6 +1,7 @@
 {
    "name" : "GooglePlus",
    "id" : "googleplus",
+   "ia_tab_id" : "googleplus",
    "status" : "live",
    "query" : "google%2B+neil+degrasse+tyson",
    "has_detail": false,

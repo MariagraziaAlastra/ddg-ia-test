@@ -1,6 +1,7 @@
 {
    "name" : "News",
    "id" : "news",
+   "ia_tab_id" : "news",
    "status" : "live",
    "query" : "duckduckgo+news",
    "has_detail": false,
