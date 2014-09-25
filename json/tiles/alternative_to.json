@@ -9,6 +9,7 @@
    "moreAt_url" : "http://alternativeto.net/software/notepad/",
    "moreAt_regex" : "([a-zA-Z]+\\s)*AlternativeTo",
    "template_group" : "icon",
+   "has_footer" : true,
    "custom_selectors" : {
       "tile_hearts" : "div.tile.tile--alternative_to div.tile__body div.tile__footer span.one-line.tile__hearts"
    },

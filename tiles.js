@@ -1,6 +1,6 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/reddit_search.json";
+    var path = "./json/tiles/ruby_gems.json";
     var data = require(path);
     var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+\+?|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for(\s([A-Za-z]+|[A-Z]))*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
@@ -175,12 +175,14 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                                      "tiles contain icon");
                 }
 
-                if (data.template_group === "icon" || data.template_group === "text") {
+                if (data.template_group === "icon" ||data.template_group === "text") {
                     test.comment("Check if tiles contain content and footer");
                     test.assertExists((selectors.main + " " + selectors.tiles.tile.root +  " " + selectors.tiles.tile.content),
                                      "tiles contain content");
-                    test.assertExists((selectors.main + " " + selectors.tiles.tile.root +  " " + selectors.tiles.tile.footer),
-                                     "tiles contain footer");
+                    if (data.has_footer) {
+                        test.assertExists((selectors.main + " " + selectors.tiles.tile.root +  " " + selectors.tiles.tile.footer),
+                                         "tiles contain footer");
+                    }
                 }
 
                 if (data.template_group === "products" && data.has_priceAndBrand) {

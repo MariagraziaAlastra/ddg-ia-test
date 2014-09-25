@@ -10,6 +10,7 @@
    "moreAt_regex" : "([a-zA-Z]+\\s)*HN\\sSearch",
    "template_group" : "text",
    "has_subtitle" : false,
+   "has_footer" : true,
    "custom_selectors" : {
       "domain" : "div.tile__footer div.one-line div.tile__domain.one-line",
       "score" : "div.tile__footer div.one-line span.tile__score",

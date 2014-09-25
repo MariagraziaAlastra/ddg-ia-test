@@ -10,6 +10,7 @@
    "moreAt_regex" : "([a-zA-Z]+\\s)*GitHub",
    "template_group" : "text",
    "has_subtitle" : true,
+   "has_footer" : true,
    "custom_selectors" : {
       "star_icon" : "i.star.starIcon"
    },

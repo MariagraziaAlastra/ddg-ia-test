@@ -9,6 +9,7 @@
    "moreAt_url" : "http://www.howmanypeopleareinspacerightnow.com/",
    "moreAt_regex" : "([a-zA-Z]+\\s)*People\\sin\\sSpace",
    "template_group" : "icon",
+   "has_footer" : true,
    "custom_selectors" : {
       "tile_hearts" : "div.tile__footer div.tile__update__info.one-line"
    },

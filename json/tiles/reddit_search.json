@@ -10,6 +10,7 @@
    "moreAt_regex" : "([a-zA-Z]+\\s)*Reddit",
    "template_group" : "text",
    "has_subtitle" : false,
+   "has_footer" : true,
    "custom_selectors" : {
       "footer_sub" : "div.tile__footer div.one-line div.sub-title.one-line",
       "arrow_img" : "div.tile__footer div.one-line img"
