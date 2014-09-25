@@ -1,6 +1,6 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/octopart.json";
+    var path = "./json/tiles/people_in_space.json";
     var data = require(path);
     var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+\+?|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for(\s([A-Za-z]+|[A-Z]))*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
@@ -399,7 +399,11 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                 if (data.id === "products") {
                     test.assert((next_items === ((tot_items - data.tileview_capacity) + 2)), "next navigation has the correct number of items");
                 } else {
-                    test.assert((next_items === (tot_items - data.tileview_capacity)), "next navigation has the correct number of items");
+                    if (tot_items >= data.tileview_capacity) {
+                        test.assert((next_items === (tot_items - data.tileview_capacity)), "next navigation has the correct number of items");
+                    } else {
+                        test.assert((next_items === 0), "next navigation has the correct number of items");
+                    }
                 }
                 test.assert((prev_items === 0), "previous navigation is empty");
 

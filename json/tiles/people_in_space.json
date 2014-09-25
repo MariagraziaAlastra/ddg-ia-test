@@ -1,0 +1,18 @@
+{
+   "name" : "PeopleInSpace",
+   "id" : "people_in_space",
+   "status" : "live",
+   "query" : "people+in+space",
+   "has_detail": false,
+   "tileview_capacity" : 5,
+   "moreAt_url" : "http://www.howmanypeopleareinspacerightnow.com/",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*People\\sin\\sSpace",
+   "template_group" : "icon",
+   "custom_selectors" : {
+      "tile_hearts" : "div.tile__footer div.tile__update__info.one-line"
+   },
+   "regexes" : {
+      "div.tile__update__info" : "Since\\s[A-Z][a-z]+\\s([0-2][0-9]?|30|31),\\s201[0-9].+\\n[0-9]+\\sdays$"
+   }
+}
+
