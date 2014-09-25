@@ -1,0 +1,27 @@
+{
+   "name" : "Recipes",
+   "id" : "recipes",
+   "ia_tab_id" : "recipes",
+   "status" : "live",
+   "query" : "tofu+ginger+recipe",
+   "has_detail": true,
+   "tileview_capacity" : 6,
+   "moreAt_url" : "http://www.yummly.com/recipes/?q=tofu ginger",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*Yummly",
+   "template_group" : "products",
+   "has_rating" : true,
+   "has_priceAndBrand" : false,
+   "has_callout" : false,
+   "custom_selectors" : {
+      "source" : "div.tile__rating.one-line span.tile__source.one-line",
+      "detail_source" : "div.detail__desc p.detail__source",
+      "detail stars" : "div.detail__desc p.detail__source span.stars",
+      "ingredients" : "div.detail__desc div.detail__ingredients",
+      "flavors_name" : "div.detail__desc div.detail__flavors ul li a.detail__flavors__name",
+      "flavors_strength" : "div.detail__desc div.detail__flavors ul li div.detail__flavors__strength",
+      "btn" : "a.detail__links__btn.view-btn--recipes",
+      "btn_icon" : "a.detail__links__btn.view-btn--recipes img.btn__icon"
+   },
+   "regexes" : {}
+}
+

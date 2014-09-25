@@ -1,6 +1,6 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/quixey.json";
+    var path = "./json/tiles/recipes.json";
     var data = require(path);
     var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+\+?|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for(\s([A-Za-z]+|[A-Z]))*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
@@ -61,14 +61,14 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                 'media_img': 'div.detail__media img.detail__media__img',
                 'body': {
                     'root': 'div.detail__body div.detail__body__content',
-                    'title': 'a h5.detail__title',
+                    'title': 'h5.detail__title',
                     'subtitle': {
                         'root': 'p.detail__subtitle',
                         'price': 'span.detail__price', // products
                         'sep': 'span.detail__sep', // products
                         'brand': 'span.detail__brand' // products
                     },
-                    'desc': 'p.detail__desc',
+                    'desc': '.detail__desc',
                     'rating': 'p.detail__rating', // products
                     'callout': 'span.detail__callout--pr' // products
                 }
@@ -242,12 +242,17 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             test.comment("Check if detail body has title, subtitle and description");
             test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.title),
                              "detail body has title");
-            test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.subtitle.root),
-                             "detail body has subtitle");
+            if (data.name === "Recipes") {
+                test.assertDoesntExist((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.subtitle.root),
+                                 "no subtitle in detail body");
+            } else {
+                test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.subtitle.root),
+                                 "detail body has subtitle");
+            }
             test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.desc),
                              "detail body has description");
 
-            if (data.template_group === "products" ) {
+            if (data.template_group === "products" && data.name !== "Recipes") {
                 if (data.has_rating) {
                     test.comment("Check if detail body has rating");
                     test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.rating),
