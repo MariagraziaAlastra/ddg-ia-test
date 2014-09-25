@@ -1,0 +1,18 @@
+{
+   "name" : "Plos",
+   "id" : "plos",
+   "status" : "live",
+   "query" : "plos+dinosaurs",
+   "has_detail": false,
+   "tileview_capacity" : 5,
+   "moreAt_url" : "http://www.plosone.org/search/advanced?unformattedQuery=dinosaurs",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*PLOS",
+   "template_group" : "base",
+   "custom_selectors" : {
+      "tile_body" : "div.tile__body div.tile__body a"
+   },
+   "regexes" : {
+      "div.tile__body div.tile__body" : "\\(20[0-1][0-9]\\)$"
+   }
+}
+
