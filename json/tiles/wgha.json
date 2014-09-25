@@ -1,0 +1,20 @@
+{
+   "name" : "WGHA",
+   "id" : "wgha",
+   "ia_tab_id" : "wgha",
+   "status" : "live",
+   "query" : "was+geht+in+frankfurt",
+   "has_detail": false,
+   "tileview_capacity" : 5,
+   "moreAt_url" : "http://www.wasgehtheuteab.de",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*Was\\sgeht\\sheute\\sab\\?",
+   "template_group" : "text",
+   "has_subtitle" : false,
+   "has_footer" : true,
+   "custom_selectors" : {
+      "date" : "div.tile__footer div.tile__date.one-line"
+   },
+   "regexes" : {
+      "div.tile__date" : "(0[1-9]|[1-2][0-9]|3[0-1])\\.(0[1-9]|1[0-2]).201[0-9]\\s[a-z]+\\s[0-9][0-9]?:[0-9][0-9][A-Za-z]"
+   }
+}

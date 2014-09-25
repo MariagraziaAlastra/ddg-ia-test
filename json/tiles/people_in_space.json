@@ -14,7 +14,7 @@
       "tile_hearts" : "div.tile__footer div.tile__update__info.one-line"
    },
    "regexes" : {
-      "div.tile__update__info" : "Since\\s[A-Z][a-z]+\\s([0-2][0-9]?|30|31),\\s201[0-9].+\\n[0-9]+\\sdays$"
+      "div.tile__update__info" : "Since\\s[A-Z][a-z]+\\s([0-9]|[1-2][0-9]|30|31),\\s201[0-9].+\\n[0-9]+\\sdays$"
    }
 }
 

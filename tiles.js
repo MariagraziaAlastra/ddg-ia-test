@@ -1,6 +1,6 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/ruby_gems.json";
+    var path = "./json/tiles/wgha.json";
     var data = require(path);
     var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+\+?|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for(\s([A-Za-z]+|[A-Z]))*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
@@ -34,7 +34,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             'nav_next': 'i.tile-nav--next',
             'nav_prev': 'i.tile-nav--prev',
             'tile': {
-                'root': 'div.tile.tile--' + data.id,
+                'root': 'div.tile',
                 'media_img': 'div.tile__media img.tile__media__img', // media, products
                 'title': {
                     'root': 'div.tile__body .tile__title', // media, icon, products, text
