@@ -1,6 +1,6 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/hacker_news.json";
+    var path = "./json/tiles/in_theaters.json";
     var data = require(path);
     var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+\+?|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for(\s([A-Za-z]+|[A-Z]))*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
@@ -49,7 +49,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                 'brand': 'div.tile__body div.tile__tx.tile--pr__sub.one-line span.tile--pr__brand' // products
             },
             'mobile': {
-                'root': 'div.tile--m--bbc span.tile--m--mob',
+                'root': 'div.tile--m--' + data.id,
                 'icon': 'i.tile--m--mob__icn'
             }
         },
@@ -68,7 +68,6 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                         'sep': 'span.detail__sep', // products
                         'brand': 'span.detail__brand' // products
                     },
-                    'source': 'p.detail__source', // media
                     'desc': 'p.detail__desc',
                     'rating': 'p.detail__rating', // products
                     'callout': 'span.detail__callout--pr' // products
@@ -239,12 +238,6 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.desc),
                              "detail body has description");
 
-            if (data.template_group === "media") {
-                test.comment("Check if detail body has source");
-                test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.source),
-                                 "detail body has source");
-            }
-
             if (data.template_group === "products" ) {
                 if (data.has_rating) {
                     test.comment("Check if detail body has rating");
@@ -388,10 +381,10 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                 // leaving this here for now for debug purposes
                 this.captureSelector('C:\desktop.jpeg', 'html');
 
-                test.comment("Check tileview navigation");
                 next_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items'));
                 prev_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items'));
                 tot_items = parseInt(this.fetchText(selectors.main + " " + selectors.metabar.text.count));
+                test.comment("Check tileview navigation");
                 test.assertDoesntExist((selectors.main + " " + selectors.tiles.nav_prev + class_scroll), "previous navigation is disabled");
                 if (data.id === "products") {
                     test.assert((next_items === ((tot_items - data.tileview_capacity) + 2)), "next navigation has the correct number of items");

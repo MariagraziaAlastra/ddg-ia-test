@@ -10,7 +10,9 @@
    "mobile_regex" : "([a-zA-Z]+\\s)*TV",
    "template_group" : "media",
    "has_rating" : true,
-   "custom_selectors" : {},
+   "custom_selectors" : {
+      "source" : "div.detail__body div.detail__body__content p.detail__source"
+   },
    "regexes" : {
       "span.tile__source.one-line" : "^[0-9][0-9]?:[0-9][0-9](A|P)M\\s-\\s[0-9][0-9]?:[0-9][0-9](A|P)M$",
       "p.detail__source" : "^Run\\sTime:\\s[0-9][0-9]?\\s(hours?|mins)$"

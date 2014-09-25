@@ -1,0 +1,22 @@
+{
+   "name" : "InTheaters",
+   "id" : "in_theaters",
+   "status" : "live",
+   "query" : "movies+in+theaters",
+   "has_detail": true,
+   "tileview_capacity" : 8,
+   "moreAt_url" : "http://www.rottentomatoes.com/movie/in-theaters/",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*Rotten\\sTomatoes",
+   "template_group" : "media",
+   "has_rating" : "true",
+   "custom_selectors" : {
+      "copyright" : "p.detail__subtitle span.copyright",
+      "score" : "p.detail__subtitle span.in_theaters--critics_score",
+      "rotten_img" : "p.detail__subtitle span.in_theaters--critics_score img.no_retina",
+      "runtime" : "p.detail__subtitle span.in_theaters--runtime"
+   },
+   "regexes" : {
+      "span.in_theaters--runtime span" : "^Run\\sTime:\\s([0-9]\\shr\\.(\\s)[0-9][0-9][0-9]?\\smin\\.?|[0-9][0-9][0-9]?\\smin\\.)$",
+      "span.in_theaters--critics_score" : "([0-9][0-9]?|100)%\\sFresh$"
+   }
+}
