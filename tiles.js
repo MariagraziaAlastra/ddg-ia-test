@@ -1,6 +1,6 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/septa.json";
+    var path = "./json/tiles/forecast.json";
     var data = require(path);
     var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+\+?|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for(\s([A-Za-z]+|[A-Z]))*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
@@ -111,7 +111,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                 test.assertExists((selectors.main + " " + selectors.metabar.root + " " + selectors.metabar.text.root),
                                  "metabar contains text");
 
-                if (data.template_group !== "") {
+                if (data.moreAt_url.length > 0) {
                     test.comment("Check if metabar contains moreAt");
                     test.assertExists((selectors.main + " " + selectors.metabar.root + " " + selectors.metabar.moreAt.root),
                                      "metabar contains moreAt");
@@ -126,7 +126,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                                      "metabar does not contain moreAt");
                 }
 
-                if (data.name !== "NJT" && data.name !== "SEPTA") {
+                if (!data.metabar_regex) {
                     test.comment("Check if metabar text contains count and item type");
                     test.assertExists((selectors.main + " " + selectors.metabar.text.root + " " + selectors.metabar.text.count),
                                      "metabar text contains count");
@@ -296,11 +296,11 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
         test.comment("\n###### Start checking IA content values ######\n");
 
         test.comment("Check metabar text");
-        if (data.name !== "NJT" && data.name !== "SEPTA") {
+        if (!data.metabar_regex) {
             test.assertMatch(this.fetchText(selectors.main + " " + selectors.metabar.text.root).trim(), metabar_regex, 
                             "metabar text value is correct");
         } else {
-            test.assertEquals(this.fetchText(selectors.main + " " + selectors.metabar.text.root).trim(), data.metabar_text,
+            test.assertMatch(this.fetchText(selectors.main + " " + selectors.metabar.text.root).trim(), new RegExp(data.metabar_regex),
                              "metabar text value is correct");
         }
 
@@ -408,7 +408,8 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
 
                 next_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_next), 'data-items'));
                 prev_items = parseInt(this.getElementAttribute((selectors.main + " " + selectors.tiles.nav_prev), 'data-items'));
-                if (data.name === "NJT" || data.name === "SEPTA") {
+                // If we are passing metabar_regex in JSON file it means there is no metabar count to take tot_items from
+                if (data.metabar_regex) {
                     tot_items = this.evaluate(function(selectors) {
                         return __utils__.findAll(selectors.main + " " + selectors.tiles.tile.root).length;
                     }, {selectors: selectors});

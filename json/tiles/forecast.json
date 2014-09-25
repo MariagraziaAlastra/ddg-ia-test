@@ -1,0 +1,37 @@
+{
+   "name" : "Forecast",
+   "id" : "forecast",
+   "ia_tab_id" : "forecast",
+   "status" : "live",
+   "query" : "weather",
+   "has_detail": false,
+   "tileview_capacity" : 6,
+   "moreAt_url" : "http://forecast.io/#/f/37.6167,15.0833",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*Forecast\\.io",
+   "metabar_regex" : "^Weather\\sfor\\s[A-Z][a-z]+,\\s[A-Z][a-z]+$",
+   "template_group" : "",
+   "custom_selectors" : {
+      "fahrenheit" : "div.zci__metabar__secondary-text a#fe_temp_switch span#fe_fahrenheit",
+      "celsius" : "div.zci__metabar__secondary-text a#fe_temp_switch span#fe_celsius",
+      "current_label" : "div.tile--s div.fe_currently h5.fe_label a",
+      "current_icon" : "div.tile--s div.fe_currently div.fe_current-wrap div.fe_top img.fe_current_icon",
+      "current_temp" : "div.tile--s div.fe_currently div.fe_current-wrap div.fe_top h1.fe_temp span.fe_temp_str",
+      "current_summary" : "div.tile--s div.fe_currently div.fe_current-wrap div.fe_bottom h6.fe_topline span.fe_summary",
+      "current_wind" : "div.tile--s div.fe_currently div.fe_current-wrap div.fe_bottom h6.fe_wind",
+      "day_icon" : "div.tile--s div.fe_day img.fe_icon",
+      "day_label" : "div.tile--s div.fe_day h5.fe_label a",
+      "day_date" : "div.tile--s div.fe_day h6.fe_date",
+      "day_summary" : "div.tile--s div.fe_day div.fe_summary h6",
+      "day_high_temp" : "div.tile--s div.fe_day div.fe_temp_corner h1.fe_high_temp",
+      "day_low_temp" : "div.tile--s div.fe_day div.fe_temp_corner h1.fe_low_temp"
+   },
+   "regexes" : {
+      "div.fe_currently h5.fe_label a" : "^Right\\sNow:$",
+      "span.fe_temp_str" : "^-?[0-9][0-9]?°$",
+      "h6.fe_wind" : "^Wind:\\s[0-9][0-9]*\\sm/s$",
+      "div.fe_day h5.fe_label a" : "^Today:$",
+      "h6.fe_date" : "^[A-Z][a-z][a-z]\\s([0-9]|[1-2][0-9]|3[0-1])$",
+      "h1.fe_high_temp" : "^-?[0-9][0-9]?°$",
+      "h1.fe_low_temp" : "^-?[0-9][0-9]?°$"
+   }
+}

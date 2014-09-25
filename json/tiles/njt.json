@@ -8,7 +8,7 @@
    "tileview_capacity" : 6,
    "moreAt_url" : "http://dv.njtransit.com/mobile/tid-mobile.aspx?sid=MP",
    "moreAt_regex" : "([a-zA-Z]+\\s)*NJ\\sTransit",
-   "metabar_text" : "Metropark to New York Penn Station",
+   "metabar_regex" : "Metropark\\sto\\sNew\\sYork\\sPenn\\sStation",
    "template_group" : "base",
    "custom_selectors" : {
       "time" : "div.tile--njt div.tile__body div.njt__time",

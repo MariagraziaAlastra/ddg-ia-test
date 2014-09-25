@@ -8,7 +8,7 @@
    "tileview_capacity" : 6,
    "moreAt_url" : "http://www.septa.org/schedules/rail/index.html",
    "moreAt_regex" : "([a-zA-Z]+\\s)*SEPTA",
-   "metabar_text" : "Villanova to Paoli",
+   "metabar_regex" : "^Villanova\\sto\\sPaoli$",
    "template_group" : "base",
    "custom_selectors" : {
       "time" : "div.tile--septa div.tile__body div.septa__time",
