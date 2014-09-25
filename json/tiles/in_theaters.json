@@ -13,10 +13,12 @@
       "copyright" : "p.detail__subtitle span.copyright",
       "score" : "p.detail__subtitle span.in_theaters--critics_score",
       "rotten_img" : "p.detail__subtitle span.in_theaters--critics_score img.no_retina",
-      "runtime" : "p.detail__subtitle span.in_theaters--runtime"
+      "runtime" : "p.detail__subtitle span.in_theaters--runtime",
+      "reviews" : "div.detail__body__content a.btn"
    },
    "regexes" : {
       "span.in_theaters--runtime span" : "^Run\\sTime:\\s([0-9]\\shr\\.(\\s)[0-9][0-9][0-9]?\\smin\\.?|[0-9][0-9][0-9]?\\smin\\.)$",
-      "span.in_theaters--critics_score" : "([0-9][0-9]?|100)%\\sFresh$"
+      "span.in_theaters--critics_score" : "([0-9][0-9]?|100)%\\sFresh$",
+      "div.detail__body__content a.btn" : "^Reviews\\sand\\sShowtimes$"
    }
 }

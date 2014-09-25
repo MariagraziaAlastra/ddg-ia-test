@@ -1,0 +1,20 @@
+{
+   "name" : "Kwixer",
+   "id" : "kwixer",
+   "status" : "live",
+   "query" : "movies+with+Keira+Knightley",
+   "has_detail": true,
+   "tileview_capacity" : 8,
+   "moreAt_url" : "https://www.kwixer.com/#/public?query=movies%20with%20Keira%20Knightley",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*Kwixer",
+   "template_group" : "media",
+   "has_rating" : "true",
+   "custom_selectors" : {
+      "starring" : "div.detail__body__content p.starring",
+      "reviews" : "div.detail__body__content a.btn"
+   },
+   "regexes" : {
+      "p.starring" : "^<b>Starring:</b>(\\s<a\\shref=\"/\\?q=[A-Z][a-z]+%20[A-Z][a-z]+\">[A-Z][a-z]+\\s[A-Z][a-z]+</a>,?)+$",
+      "div.detail__body__content a.btn" : "^Reviews$"
+   }
+}
