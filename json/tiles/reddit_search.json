@@ -1,0 +1,20 @@
+{
+   "name" : "RedditSearch",
+   "id" : "reddit_search",
+   "ia_tab_id" : "reddit_search",
+   "status" : "live",
+   "query" : "reddit+baking",
+   "has_detail": false,
+   "tileview_capacity" : 5,
+   "moreAt_url" : "http://www.reddit.com/r/search/search?q=baking",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*Reddit",
+   "template_group" : "text",
+   "has_subtitle" : false,
+   "custom_selectors" : {
+      "footer_sub" : "div.tile__footer div.one-line div.sub-title.one-line",
+      "arrow_img" : "div.tile__footer div.one-line img"
+   },
+   "regexes" : {
+      "div.sub-title.one-line" : "^(today|[0-9][0-9]?\\s(days?|months?|years?))\\sago\\son\\s[A-Z][a-z]+$"
+   }
+}
