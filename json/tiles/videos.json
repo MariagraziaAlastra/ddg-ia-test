@@ -1,0 +1,30 @@
+{
+   "name" : "Videos",
+   "id" : "videos",
+   "ia_tab_id" : "videos",
+   "status" : "live",
+   "query" : "ted+video",
+   "has_detail": true,
+   "tileview_capacity" : 6,
+   "moreAt_url" : "",
+   "moreAt_regex" : "",
+   "template_group" : "",
+   "custom_selectors" : {
+      "img" : "div.tile--vid div.tile__media img.tile__media__img.js-lazyload",
+      "duration" : "div.tile--vid div.tile__media span.tile--vid__dur",
+      "title" : "div.tile--vid div.tile__body h6.tile__title",
+      "count_icon" : "div.tile--vid div.tile__body div.tile__count i.tile__count__icon",
+      "user" : "div.detail__desc p.detail__user",
+      "count" : "div.detail__desc p.detail__count",
+      "date" : "div.detail__desc p.detail__date",
+      "media_placeholder" : "div.detail__pane div.detail__media--vid div.detail__media__vid-wrap img.detail__media__placeholder",
+      "privacy_top" : "div.detail__pane div.detail__media--vid div.detail__media__vid-wrap detail__media__privacy__content--top",
+      "privacy_bottom" : "div.detail__pane div.detail__media--vid div.detail__media__vid-wrap detail__media__privacy__content--bottom",
+      "detail_more" : "div.detail__body__content p.detail__more a"
+   },
+   "regexes" : {
+      "p.detail__count" : "[0-9]+(,[0-9]+)*\\sviews$",
+      "p.detail__date" : "[A-Z][a-z][a-z]\\s([0-9]|[1-2][0-9]|30|31)\\s20[0-1][0-9]$",
+      "p.detail__more a" : "([a-zA-Z]+\\s)*YouTube"
+   }
+}

@@ -1,6 +1,6 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/forecast.json";
+    var path = "./json/tiles/videos.json";
     var data = require(path);
     var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+\+?|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for(\s([A-Za-z]+|[A-Z]))*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
@@ -237,16 +237,20 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             test.comment("Check if detail is visible now");
             test.assertVisible((selectors.main + " " + selectors.detail.root), "detail is visible");
 
-            test.comment("Check if detail content has image and body now");
-            test.assertExists((selectors.main + " " + selectors.detail.content.root + " " + selectors.detail.content.media_img),
-                             "detail content has image");
+            if (data.name !== "Videos") {
+            test.comment("Check if detail content has image now");
+                test.assertExists((selectors.main + " " + selectors.detail.content.root + " " + selectors.detail.content.media_img),
+                                 "detail content has image");
+            }
+
+            test.comment("Check if detail content has body now");
             test.assertExists((selectors.main + " " + selectors.detail.content.root + " " + selectors.detail.content.body.root),
                              "detail content has body");
 
             test.comment("Check if detail body has title, subtitle and description");
             test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.title),
                              "detail body has title");
-            if (data.name === "Recipes") {
+            if (data.name === "Recipes" || data.name === "Videos") {
                 test.assertDoesntExist((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.subtitle.root),
                                  "no subtitle in detail body");
             } else {
@@ -344,7 +348,9 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             detail_link = this.getElementAttribute(selectors.main + " " + selectors.detail.content.body.root + " " + 'a', 'href');
             var tile_link = this.getElementAttribute(selectors.main + " " + selectors.tiles.tile.root, 'data-link');
 
-            test.assertEquals(detail_link, tile_link, "detail URL matches selected tile URL");
+            if (data.name !== "Videos") {
+                test.assertEquals(detail_link, tile_link, "detail URL matches selected tile URL");
+            }
 
             if (data.template_group === "products" && data.has_priceAndBrand) {
                 test.comment("Check tile and detail price values");
@@ -387,8 +393,11 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             this.click(selectors.main + " " + selectors.detail.controls.next);
             var new_detail_link = this.getElementAttribute(selectors.main + " " + selectors.detail.content.body.root + " " + 'a', 'href');
             test.assertNotEquals(new_detail_link, detail_link, "detail now links to a different show");
-            test.assertEquals(this.getElementAttribute(selectors.main + " " + selectors.tiles.tile.root + class_selected, 'data-link'), new_detail_link,
-                             "detail now refers to next tile");
+
+            if (data.name !== "Videos") {
+                test.assertEquals(this.getElementAttribute(selectors.main + " " + selectors.tiles.tile.root + class_selected, 'data-link'), new_detail_link,
+                                 "detail now refers to next tile");
+            }
 
             test.comment("Click on the detail close icon and check if detail is now hidden and no tile is selected");
             this.click(selectors.main + " " + selectors.detail.close);
