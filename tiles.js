@@ -1,8 +1,8 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/images.json";
+    var path = "./json/tiles/wgha.json";
     var data = require(path);
-    var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+\+?|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for(\s([A-Za-z]+|[A-Z]))*$/;
+    var metabar_regex = /^Showing\s[0-9]+\s((([A-Za-z]+\+?)+|([A-Z]\.)+)\s)*for(\s([A-Za-z]+|[A-Z]))*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
     var mobile_regex = new RegExp(data.mobile_regex);
     var price_regex = /^..*[0-9][0-9]*(,|\.)[0-9][0-9]$/;
@@ -141,7 +141,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                                  "tiles wrapper contains backwards navigation icon");
                 test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.tile.root),
                                  "tiles wrapper contains tiles");
-                if (data.name !== "Images") {
+                if (data.name !== "Images" && data.name !== "Products") {
                     test.comment("Check that tiles wrapper does not contain mobile tile");
                     test.assertDoesntExist((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.mobile.root),
                                           "tiles wrapper does not contain mobile tile");
@@ -426,7 +426,15 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     casper.then(function() {
         this.reload(function() {
             test.comment("\n###### Start checking tileview navigation functionality ######\n");
-            casper.waitForSelector(selectors.main + " " + selectors.tiles.tile.root, function() {
+            var selector_waitfor;
+            if (data.id === "googleplus") {
+                // Google + takes a while before loading the active ia tab
+                selector_waitfor = selectors.ia_tab + class_active;
+            } else {
+                // Some IAs, especially Images, take a while before loading tiles
+                selector_waitfor = selectors.main + " " + selectors.tiles.tile.root;
+            }
+            casper.waitForSelector(selector_waitfor, function() {
                 // leaving this here for now for debug purposes
                 this.captureSelector('C:\desktop.jpeg', 'html');
 
