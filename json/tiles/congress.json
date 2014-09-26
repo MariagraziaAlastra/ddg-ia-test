@@ -5,7 +5,7 @@
    "status" : "live",
    "query" : "new+york+senators",
    "has_detail": true,
-   "tileview_capacity" : 2,
+   "tileview_capacity" : 8,
    "moreAt_url" : "https://www.govtrack.us/congress/members/New York",
    "moreAt_regex" : "([a-zA-Z]+\\s)*govtrack\\.us",
    "template_group" : "products",
