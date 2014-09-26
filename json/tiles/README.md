@@ -29,6 +29,14 @@
 
 ###Additional parameters for each template group
 
+######Icon
+
+* **has_footer** - (boolean) true if IA has footer;
+
+######Media
+
+* **has_rating** - (boolean) true if IA has rating;
+
 ######Products
 
 * **has_rating** - (boolean) true if IA has rating;
@@ -41,7 +49,4 @@
 
 * **has_subtitle** - (boolean) true if IA has subtitle;
 
-######Media
-
-* **has_rating** - (boolean) true if IA has rating;
-
+* **has_footer** - (boolean) true if IA has footer;
