@@ -1,6 +1,6 @@
 casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/soundcloud.json";
+    var path = "./json/tiles/images.json";
     var data = require(path);
     var metabar_regex = /^Showing\s[0-9]+\s([A-Za-z]+\+?|[A-Z])(\s|\.)(([A-Za-z]+|[A-Z])(\s|\.))*for(\s([A-Za-z]+|[A-Z]))*$/;
     var moreAt_regex = new RegExp(data.moreAt_regex);
@@ -134,15 +134,22 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                                      "metabar text contains item type");
                 }
 
-                test.comment("Check if tiles wrapper contains navigation and tiles and doesn't contain mobile tile");
+                test.comment("Check if tiles wrapper contains navigation and tiles");
                 test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.nav_next),
                                  "tiles wrapper contains forward navigation icon");
                 test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.nav_prev),
                                  "tiles wrapper contains backwards navigation icon");
                 test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.tile.root),
                                  "tiles wrapper contains tiles");
-                test.assertDoesntExist((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.mobile.root),
-                                 "tiles wrapper does not contain mobile tile");
+                if (data.name !== "Images") {
+                    test.comment("Check that tiles wrapper does not contain mobile tile");
+                    test.assertDoesntExist((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.mobile.root),
+                                          "tiles wrapper does not contain mobile tile");
+                } else {
+                    test.comment(data.name + " IA must contain mobile tile");
+                    test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.mobile.root),
+                                          "tiles wrapper contains mobile tile");
+                }
 
                 test.comment(data.name + " IA has template group " + data.template_group);
                 if (data.template_group === "media" || data.template_group === "products") {
@@ -237,10 +244,16 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             test.comment("Check if detail is visible now");
             test.assertVisible((selectors.main + " " + selectors.detail.root), "detail is visible");
 
-            if (data.name !== "Videos") {
-            test.comment("Check if detail content has image now");
+            if (data.name !== "Videos" && data.name !== "Images") {
+                test.comment("Check if detail content has image now");
                 test.assertExists((selectors.main + " " + selectors.detail.content.root + " " + selectors.detail.content.media_img),
                                  "detail content has image");
+            } else if (data.name === "Images") {
+                test.comment("Check if detail content has image thumbnail and image highres");
+                test.assertExists((selectors.main + " " + selectors.detail.content.root + " " + selectors.detail.content.media_img + "-thumbnail"),
+                                 "detail content has image thumbnail");
+                test.assertExists((selectors.main + " " + selectors.detail.content.root + " " + selectors.detail.content.media_img + "-highres"),
+                                 "detail content has image highres");
             }
 
             test.comment("Check if detail content has body now");
@@ -250,7 +263,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             test.comment("Check if detail body has title, subtitle and description");
             test.assertExists((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.title),
                              "detail body has title");
-            if (data.name === "Recipes" || data.name === "Videos") {
+            if (data.name === "Recipes" || data.name === "Videos" || data.name === "Images") {
                 test.assertDoesntExist((selectors.main + " " + selectors.detail.content.body.root + " " + selectors.detail.content.body.subtitle.root),
                                  "no subtitle in detail body");
             } else {
@@ -327,14 +340,16 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             var detail_title = this.fetchText(selectors.main + " " + selectors.detail.content.body.title).trim();
             var tile_title = this.fetchText(selectors.main + " " + selectors.tiles.tile.root + class_selected + " " + selectors.tiles.tile.title.root).trim();
 
-            if (detail_title.length === tile_title.length) {
-                test.assertEquals(detail_title, tile_title, "detail title matches selected tile title");
-            } else if (detail_title.length > tile_title.length) {
-                test.assertEquals(tile_title.substr(-3, 3), "...", "selected tile title has ellipsis");
-                test.assertEquals(tile_title.substr(0, tile_title.length - 3), detail_title.substr(0, tile_title.length - 3),
-                                 "detail title matches selected tile title");
-            } else {
-                test.fail("detail title is different from selected tile title");
+            if (data.name !== "Images") {
+                if (detail_title.length === tile_title.length) {
+                    test.assertEquals(detail_title, tile_title, "detail title matches selected tile title");
+                } else if (detail_title.length > tile_title.length) {
+                    test.assertEquals(tile_title.substr(-3, 3), "...", "selected tile title has ellipsis");
+                    test.assertEquals(tile_title.substr(0, tile_title.length - 3), detail_title.substr(0, tile_title.length - 3),
+                                     "detail title matches selected tile title");
+                } else {
+                    test.fail("detail title is different from selected tile title");
+                }
             }
 
             if (data.template_group === "media") {
@@ -348,7 +363,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             detail_link = this.getElementAttribute(selectors.main + " " + selectors.detail.content.body.root + " " + 'a', 'href');
             var tile_link = this.getElementAttribute(selectors.main + " " + selectors.tiles.tile.root, 'data-link');
 
-            if (data.name !== "Videos") {
+            if (data.name !== "Videos" && data.name !== "Images") {
                 test.assertEquals(detail_link, tile_link, "detail URL matches selected tile URL");
             }
 
@@ -394,7 +409,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
             var new_detail_link = this.getElementAttribute(selectors.main + " " + selectors.detail.content.body.root + " " + 'a', 'href');
             test.assertNotEquals(new_detail_link, detail_link, "detail now links to a different show");
 
-            if (data.name !== "Videos") {
+            if (data.name !== "Videos" && data.name !== "Images") {
                 test.assertEquals(this.getElementAttribute(selectors.main + " " + selectors.tiles.tile.root + class_selected, 'data-link'), new_detail_link,
                                  "detail now refers to next tile");
             }
@@ -411,7 +426,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
     casper.then(function() {
         this.reload(function() {
             test.comment("\n###### Start checking tileview navigation functionality ######\n");
-            casper.waitForSelector(selectors.ia_tab + class_active, function() {
+            casper.waitForSelector(selectors.main + " " + selectors.tiles.tile.root, function() {
                 // leaving this here for now for debug purposes
                 this.captureSelector('C:\desktop.jpeg', 'html');
 
@@ -431,7 +446,8 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
                     test.assert((next_items === ((tot_items - data.tileview_capacity) + 2)), "next navigation has the correct number of items");
                 } else {
                     if (tot_items >= data.tileview_capacity) {
-                        test.assert((next_items === (tot_items - data.tileview_capacity)), "next navigation has the correct number of items");
+                        test.assert((next_items === (tot_items - data.tileview_capacity)),
+                                   ("next navigation has " + next_items + " items, should contain " + (tot_items - data.tileview_capacity)));
                     } else {
                         test.assert((next_items === 0), "next navigation has the correct number of items");
                     }
@@ -486,7 +502,7 @@ casper.test.begin('IAs with tiles are correctly shown', function suite(test) {
 
                 test.comment("Check metabar visibility - should be hidden");
                 test.assertNotVisible((selectors.main + " " + selectors.metabar.root), "metabar is hidden on mobile");
-                if (tot_items > 1 && data.template_group === 'media') {
+                if (tot_items > 1 && data.template_group === 'media' || data.name === "Images") {
                     test.comment("Check elements existence");
                     test.assertExists((selectors.main + " " + selectors.tiles.root + " " + selectors.tiles.mobile.root),
                                      "tiles wrapper now contains mobile tile");

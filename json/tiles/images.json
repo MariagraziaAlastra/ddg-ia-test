@@ -1,0 +1,20 @@
+{
+   "name" : "Images",
+   "id" : "images",
+   "ia_tab_id" : "images",
+   "status" : "live",
+   "query" : "images+new+zealand",
+   "has_detail": true,
+   "tileview_capacity" : 4,
+   "moreAt_url" : "",
+   "moreAt_regex" : "",
+   "template_group" : "",
+   "custom_selectors" : {
+      "image" : "div.tile--img div.tile--img__media span.tile--img__media__i img.tile--img__img.js-lazyload",
+      "icon" : "div.tile--img div.tile--img__details div.tile--img__dimensions i.tile--img__icon",
+      "filemeta" : "div.detail__body__content div.detail__desc div.detail__filemeta"
+   },
+   "regexes" : {
+      "div.detail__filemeta" : "^[A-Z][a-z]+:\\s[0-9]+\\s×\\s[0-9]+"
+   }
+}
