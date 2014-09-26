@@ -6,7 +6,7 @@
 
 * **id** - (string) IA id (suffix for selector div.zci--);
  
-* **ia_tab_id** - (string) suffix for selector a.zcm__link--);
+* **ia_tab_id** - (string) suffix for selector a.zcm__link--;
  
 * **query** - (string) the query to test, as URL;
  
@@ -14,7 +14,9 @@
  
 * **tileview_capacity** - (number) how many tiles fit in a 1336x768 window for that IA;
  
-* **moreAt_url** - (string) raw URL linked in the moreAt placed on the upper right corner of metabar;
+* **moreAt_url** - (string) raw URL linked in the moreAt placed on the upper right corner of metabar, empty string if there is no moreAt;
+
+* [OPTIONAL] **metabar_regex** - (string) regex for metabar primary text, use it only if metabar has no count and item type;
 
 * **moreAt_regex** - (string) regex for moreAt text;
  
@@ -23,4 +25,19 @@
 * **custom_selectors** - (object) contains key-value pairs for names and string values of custom selectors;
 
 * **regexes** - (object) contains key-value pairs for selectors and string values of custom regexes;
+
+
+###Additional parameters for each template group
+
+######Products
+
+* **has_rating**
+
+* **has_priceAndBrand**
+
+* **has_callout**
+
+######Text
+
+* **has_subtitle**
 
