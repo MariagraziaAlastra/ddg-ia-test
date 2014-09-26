@@ -10,7 +10,7 @@
  
 * **query** - (string) the query to test, as URL;
  
-* **has_detail** - (boolean) true if clicking on a tile make the detail appear, false otherwise;
+* **has_detail** - (boolean) true if clicking on a tile makes the detail appear, false otherwise;
  
 * **tileview_capacity** - (number) how many tiles fit in a 1336x768 window for that IA;
  
@@ -31,13 +31,17 @@
 
 ######Products
 
-* **has_rating**
+* **has_rating** - (boolean) true if IA has rating;
 
-* **has_priceAndBrand**
+* **has_priceAndBrand** - (boolean) true if IA has price and brand sections;
 
-* **has_callout**
+* **has_callout** - (boolean) true if IA has detail callout;
 
 ######Text
 
-* **has_subtitle**
+* **has_subtitle** - (boolean) true if IA has subtitle;
+
+######Media
+
+* **has_rating** - (boolean) true if IA has rating;
 
