@@ -2,14 +2,25 @@
 
 ###Main parameters
 
-*name - (string) name of the IA;
-*id - (string) IA id (suffix for selector div.zci--);
-*ia_tab_id - (string) suffix for selector a.zcm__link--);
-*query - (string from the URL) the query to test;
-*has_detail - (boolean) true if clicking on a tile make the detail appear, false otherwise;
-*tileview_capacity - (number) how many tiles fit in a 1336x768 window for that IA;
-*moreAt_url - (string) raw URL linked in the moreAt placed on the upper right corner of metabar;
-*moreAt_regex - (string) regex for moreAt text;
-*template_group - (string) template group name, empty string if it has no template group;
-*custom_selectors - (object) contains key-value pairs for names and string values of custom selectors;
-*regexes - (object) contains key-value pairs for selectors and string values of custom regexes;
+* **name** - (string) name of the IA;
+
+* **id** - (string) IA id (suffix for selector div.zci--);
+ 
+* **ia_tab_id** - (string) suffix for selector a.zcm__link--);
+ 
+* **query** - (string) the query to test, as URL;
+ 
+* **has_detail** - (boolean) true if clicking on a tile make the detail appear, false otherwise;
+ 
+* **tileview_capacity** - (number) how many tiles fit in a 1336x768 window for that IA;
+ 
+* **moreAt_url** - (string) raw URL linked in the moreAt placed on the upper right corner of metabar;
+
+* **moreAt_regex** - (string) regex for moreAt text;
+ 
+* **template_group** - (string) template group name, empty string if it has no template group;
+ 
+* **custom_selectors** - (object) contains key-value pairs for names and string values of custom selectors;
+
+* **regexes** - (object) contains key-value pairs for selectors and string values of custom regexes;
+
