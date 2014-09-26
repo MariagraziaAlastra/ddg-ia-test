@@ -1,0 +1,30 @@
+{
+   "name" : "SoundCloud",
+   "id" : "soundcloud",
+   "ia_tab_id" : "soundcloud",
+   "status" : "live",
+   "query" : "soundcloud+nirvana",
+   "has_detail": false,
+   "tileview_capacity" : 6,
+   "moreAt_url" : "https://soundcloud.com/search?q=nirvana",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*SoundCloud",
+   "template_group" : "",
+   "custom_selectors" : {
+      "rotated_bg" : "div.tile--audio div.tile__media div.audio-controls div.audio-controls__progress div.audio-controls__progress-bg span.rotated-fill",
+      "full_bg" : "div.tile--audio div.tile__media div.audio-controls div.audio-controls__progress div.audio-controls__progress-bg span.full-fill",
+      "rotated_loading" : "div.tile--audio div.tile__media div.audio-controls div.audio-controls__progress div.audio-controls__progress-loading span.rotated-fill",
+      "full_loading" : "div.tile--audio div.tile__media div.audio-controls div.audio-controls__progress div.audio-controls__progress-loading span.full-fill",
+      "rotated_playback" : "div.tile--audio div.tile__media div.audio-controls div.audio-controls__progress div.audio-controls__progress-playback span.rotated-fill",
+      "full_playback" : "div.tile--audio div.tile__media div.audio-controls div.audio-controls__progress div.audio-controls__progress-playback span.full-fill",
+      "audio_action" : "div.tile--audio div.tile__media div.audio-controls span.audio-controls__action ddgsi",
+      "audio_time" : "div.tile--audio div.tile__media div.audio-controls span.audio-controls__time",
+      "img" : "div.tile--audio div.tile__media img.tile__media__img",
+      "title" : "div.tile--audio div.tile__body a.tile__title",
+      "count_icon" : "div.tile__footer span.tile__count.pull-left span.tile__count__icon",
+      "audio_duration" : "div.tile__footer span.tile__duration.pull-right"
+   },
+   "regexes" : {
+      "span.tile__count" : ".+[0-9]+(,[0-9]+)*$",
+      "span.tile__duration" : "^[0-9][0-9]?:[0-9][0-9]$"
+   }
+}
