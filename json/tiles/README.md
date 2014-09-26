@@ -7,6 +7,8 @@
 * **id** - (string) IA id (suffix for selector div.zci--);
  
 * **ia_tab_id** - (string) suffix for selector a.zcm__link--;
+
+* **status** - (string) "live" if IA works normally;
  
 * **query** - (string) the query to test, as URL;
  
