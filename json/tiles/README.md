@@ -1,6 +1,6 @@
 #Documentation - JSON files for Tiles Macrotype
 
-###Main parameters
+##Main parameters
 
 * **name** - (string) name of the IA;
 
@@ -27,17 +27,17 @@
 * **regexes** - (object) contains key-value pairs for selectors and string values of custom regexes;
 
 
-###Additional parameters for each template group
+##Additional parameters for each template group
 
-######Icon
+####Icon
 
 * **has_footer** - (boolean) true if IA has footer;
 
-######Media
+####Media
 
 * **has_rating** - (boolean) true if IA has rating;
 
-######Products
+####Products
 
 * **has_rating** - (boolean) true if IA has rating;
 
@@ -45,7 +45,7 @@
 
 * **has_callout** - (boolean) true if IA has detail callout;
 
-######Text
+####Text
 
 * **has_subtitle** - (boolean) true if IA has subtitle;
 
