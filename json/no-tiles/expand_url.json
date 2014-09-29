@@ -1,0 +1,14 @@
+{
+   "name" : "ExpandURL",
+   "id" : "expand_url",
+   "ia_tab_id" : "expand_url",
+   "status" : "live",
+   "query" : "expand+bit.ly%2Fa",
+   "moreAt_url" : "http://longurl.org/expand?url=bit.ly Fa",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*LongURL",
+   "template_group" : "base",
+   "has_aux" : false,
+   "custom_selectors" : {},
+   "regexes" : {}
+}
+
