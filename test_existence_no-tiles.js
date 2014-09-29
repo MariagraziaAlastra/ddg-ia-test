@@ -25,38 +25,30 @@ casper.test.begin('Check elements existence and correct nesting', function suite
         }
     };
 
+    function checkSelectors(root, elements) {
+        for (var key in elements) {
+            if (elements[key] !== null && key !== 'root') {
+                if (typeof elements[key] === 'object') {
+                    return (casper.exists(root + " " + elements[key].root) && checkSelectors(elements[key].root, elements[key]));
+                } else if (typeof elements[key] === 'string') {
+                    return casper.exists(root + " " + elements[key]);
+                }
+            }
+        }
+}
+
     casper.start("https://bttf.duckduckgo.com/", function() {
         casper.viewport(1336, 768).then(function() {
             this.open("https://bttf.duckduckgo.com/?q=" + data.query).then(function() {
                 test.comment("Viewport changed to {width: 1336, height: 768}");
                 test.assertExists(selectors.ia_tab, data.name + " IA is shown");
 
-               test.comment("Check if cw exists");
-               test.assertExists((selectors.main + " " + selectors.content.root), "cw exists");
-
-               test.comment("Check if cw contains main detail");
-               test.assertExists((selectors.content.root + " " + selectors.content.main_detail.root), "cw contains main detail");
-
-               test.comment("Check if main detail contains body");
-               test.assertExists((selectors.content.main_detail.root + " " + selectors.content.main_detail.body.root),
-                                "main detail contains body");
-
-               test.comment("Check if body contains moreAt");
-               test.assertExists((selectors.content.main_detail.body.root + " " + selectors.content.main_detail.body.moreAt.root),
-                                "body contains moreAt");
-
-               test.comment("Check if moreAt contains icon");
-               test.assertExists((selectors.content.main_detail.body.moreAt.root + " " + selectors.content.main_detail.body.moreAt.icon),
-                                "moreAt contains icon");
+                test.comment("Check content selectors")
+                test.assert(checkSelectors(selectors.main, selectors.content), "Cw and its nested elements exist");
 
                if (data.has_aux) {
-                   test.comment("Check if Infobox exists");
-                   test.assertExists((selectors.main + " " + selectors.aux.root), "Infobox exists");
-
-                  test.comment("Check if Infobox contains header and labels");
-                   test.assertExists((selectors.aux.root + " " + selectors.aux.header), "Infobox contains header");
-                   test.assertExists((selectors.aux.root + " " + selectors.aux.label), "Infobox contains labels");
-                  
+                   test.comment("Check Infobox selectors")
+                   test.assert(checkSelectors(selectors.main, selectors.aux), "Infobox and its nested elements exist");
                }
 
                test.comment("Check existence of custom selectors from JSON file");
