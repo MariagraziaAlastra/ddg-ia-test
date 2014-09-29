@@ -35,7 +35,7 @@ casper.test.begin('Check elements existence and correct nesting', function suite
                 }
             }
         }
-}
+    }
 
     casper.start("https://bttf.duckduckgo.com/", function() {
         casper.viewport(1336, 768).then(function() {
