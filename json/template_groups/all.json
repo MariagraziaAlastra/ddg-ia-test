@@ -1,0 +1,27 @@
+{
+   "tiles" : {
+      "default" : [
+         "nav_next",
+         "nav_prev",
+         "tile"
+      ],
+      "optional" : [
+         "footer"
+      ]
+   },
+   "detail" : {
+      "default" : [
+         "close",
+         "content",
+         "media_img",
+         "body",
+         "title",
+         "subtitle",
+         "desc",
+         "controls",
+         "next",
+         "prev"
+      ],
+      "optional" : []
+   }
+}
