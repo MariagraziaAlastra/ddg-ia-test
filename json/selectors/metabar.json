@@ -1,0 +1,12 @@
+{
+   "mode": "span.zci__metabar__mode-wrap a.zci__metabar__mode",
+   "moreAt": {
+      "root": "div.zci__metabar__more-at a.zci__more-at",
+      "icon": "img.zci__more-at__icon"
+   },
+   "text": {
+      "root": "div.zci__metabar__primary-text",
+      "count": "span.zci__metabar__count",
+      "item_type": "span.js-metabar-itemtype"
+   }
+}

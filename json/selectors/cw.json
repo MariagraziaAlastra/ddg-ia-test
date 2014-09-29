@@ -1,0 +1,12 @@
+{
+   "main_detail" : {
+      "root" : "div.zci__main.zci__main--detail",
+      "body" : {
+         "root" : "div.zci__body",
+         "moreAt" : {
+            "root" : "a.zci__more-at",
+            "icon": "img.zci__more-at__icon"
+         }
+      }
+   }
+}

@@ -1,0 +1,19 @@
+{
+   "nav_next": "i.tile-nav--next",
+   "nav_prev": "i.tile-nav--prev",
+   "tile": {
+      "root": "div.tile",
+      "media_img": "div.tile__media img.tile__media__img",
+      "title": {
+         "root": "div.tile__body .tile__title",
+         "subtitle": "span.tile__title__sub"
+      },
+      "icon": "div.tile__body img.tile__icon",
+      "content": "div.tile__body div.tile__content",
+      "footer": "div.tile__body div.tile__footer",
+      "rating": "div.tile__body div.tile__rating.one-line",
+      "price": "div.tile__body div.tile__tx.tile--pr__sub.one-line span.tile--pr__price.price",
+      "sep": "div.tile__body div.tile__tx.tile--pr__sub.one-line span.tile__sep",
+      "brand": "div.tile__body div.tile__tx.tile--pr__sub.one-line span.tile--pr__brand"
+   }
+}

@@ -1,0 +1,25 @@
+{
+   "close": "i.detail__close",
+   "content": {
+      "root": "div.detail__pane",
+      "media_img": "div.detail__media img.detail__media__img",
+      "body": {
+         "root": "div.detail__body div.detail__body__content",
+         "title": "h5.detail__title",
+         "subtitle": {
+            "root": "p.detail__subtitle",
+            "price": "span.detail__price",
+            "sep": "span.detail__sep",
+            "brand": "span.detail__brand"
+         },
+         "desc": ".detail__desc",
+         "rating": "p.detail__rating",
+         "callout": "span.detail__callout--pr"
+      }
+   },
+   "controls": {
+      "root": "div.detail__controls",
+      "next": "i.js-detail-next",
+      "prev": "i.js-detail-prev"
+   }
+}
