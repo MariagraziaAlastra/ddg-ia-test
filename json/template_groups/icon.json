@@ -1,0 +1,16 @@
+{
+   "tiles" : {
+      "default" : [
+         "icon",
+         "title",
+         "content"
+      ],
+      "optional" : [
+         "footer"
+      ]
+   },
+   "detail" : {
+      "default" : [],
+      "optional" : []
+   }
+}

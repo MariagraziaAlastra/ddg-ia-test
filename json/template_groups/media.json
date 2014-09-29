@@ -1,0 +1,15 @@
+{
+   "tiles" : {
+      "default" : [
+         "media_img",
+         "title"
+      ],
+      "optional" : [
+         "rating"
+      ]
+   },
+   "detail" : {
+      "default" : [],
+      "optional" : []
+   }
+}
