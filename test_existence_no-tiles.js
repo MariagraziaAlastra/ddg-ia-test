@@ -29,12 +29,17 @@ casper.test.begin('Check elements existence and correct nesting', function suite
         for (var key in elements) {
             if (elements[key] !== null && key !== 'root') {
                 if (typeof elements[key] === 'object') {
-                    return (casper.exists(root + " " + elements[key].root) && checkSelectors(elements[key].root, elements[key]));
+                    if (!(casper.exists(root + " " + elements[key].root) && checkSelectors(elements[key].root, elements[key]))) {
+                        return false;
+                    }
                 } else if (typeof elements[key] === 'string') {
-                    return casper.exists(root + " " + elements[key]);
+                    if (!casper.exists(root + " " + elements[key])) {
+                        return false;
+                    }
                 }
             }
         }
+        return true;
     }
 
     casper.start("https://bttf.duckduckgo.com/", function() {
