@@ -2,14 +2,6 @@ casper.test.begin('Check elements existence and correct nesting', function suite
     // This is just for testing - the path should actually be passed as a command-line arg
     var path = "./json/no-tiles/expand_url.json";
     var data = require(path);
-    var metabar_regex = /^Showing\s[0-9]+\s((([A-Za-z]+\+?)+|([A-Z]\.)+)\s)*for(\s([A-Za-z]+|[A-Z]))*$/;
-    var moreAt_regex = new RegExp(data.moreAt_regex);
-    var mobile_regex = new RegExp(data.mobile_regex);
-    var price_regex = /^..*[0-9][0-9]*(,|\.)[0-9][0-9]$/;
-    var class_selected = ".is-selected";
-    var class_scroll = ".can-scroll";
-    var class_grid = ".has-tiles--grid";
-    var class_active = ".is-active";
     var selectors = {
         'ia_tab': 'a.zcm__link--' + data.ia_tab_id,
         'main': 'div.zci--' + data.id,
