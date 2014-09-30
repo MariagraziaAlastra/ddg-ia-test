@@ -15,5 +15,9 @@
       "price": "div.tile__body div.tile__tx.tile--pr__sub.one-line span.tile--pr__price.price",
       "sep": "div.tile__body div.tile__tx.tile--pr__sub.one-line span.tile__sep",
       "brand": "div.tile__body div.tile__tx.tile--pr__sub.one-line span.tile--pr__brand"
+   },
+   "mobile": {
+      "root": "div.tile--m span.tile--m--mob",
+      "mobile_icon": "i.tile--m--mob__icn"
    }
 }

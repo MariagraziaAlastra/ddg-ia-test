@@ -60,5 +60,19 @@
          "prev"
       ],
       "optional" : []
+   },
+   "mobile" : {
+      "tiles" : {
+         "default" : [
+            "nav_next",
+            "nav_prev",
+            "tile",
+            "mobile",
+            "mobile_icon"
+         ],
+         "optional" : [
+            "footer"
+         ]
+      }
    }
 }
