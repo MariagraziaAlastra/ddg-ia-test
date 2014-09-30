@@ -1,7 +1,8 @@
 casper.test.begin('Check elements existence and correct nesting', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/no-tiles/drinks.json";
+    var path = "./json/tiles/bbc.json";
     var data = require(path);
+    var class_selected = ".is-selected";
 
     // Import general template groups JSON file
     var all_groups = require("./json/template_groups/all.json");
@@ -133,6 +134,9 @@ casper.test.begin('Check elements existence and correct nesting', function suite
                     test.assert(checkSelectors(root_selectors.tiles.tiles, tiles_selectors, all_groups.tiles),
                                "Tiles expected nested elements exist");
 
+                    test.comment("Check that no tile is selected right after page loading");
+                    test.assertDoesntExist((root_selectors.main + " " + tiles_selectors.tile.root + class_selected), "No tile is selected");
+
                     if (data.has_detail) {
                         test.comment("Check if detail exists");
                         test.assertExists((root_selectors.main + " " + root_selectors.tiles.detail), "Detail exists");
@@ -143,8 +147,13 @@ casper.test.begin('Check elements existence and correct nesting', function suite
 
                         test.comment("Select tile and see if detail content appears");
                         this.click(root_selectors.main + " " + tiles_selectors.tile.root);
+                        test.assertExists((root_selectors.main + " " + tiles_selectors.tile.root + class_selected), "First tile is selected");
                         test.assert(checkSelectors(root_selectors.tiles.detail, detail_selectors, all_groups.detail_after),
                                    "Detail's content now exists");
+
+                         test.comment("Click on the detail close icon and check that no tile is selected");
+                         this.click(root_selectors.main + " " + detail_selectors.close);
+                         test.assertDoesntExist((root_selectors.main + " " + tiles_selectors.tile.root + class_selected), "No tile is selected");
                     }
 
                 }
@@ -221,6 +230,9 @@ casper.test.begin('Check elements existence and correct nesting', function suite
                     test.assert(checkSelectors(root_selectors.tiles.tiles, tiles_selectors, all_groups.mobile.tiles),
                                "Tiles expected nested elements exist");
 
+                    test.comment("Check that no tile is selected right after page loading");
+                    test.assertDoesntExist((root_selectors.main + " " + tiles_selectors.tile.root + class_selected), "No tile is selected");
+
                     if (data.has_detail) {
                         test.comment("Check if detail exists");
                         test.assertExists((root_selectors.main + " " + root_selectors.tiles.detail), "Detail exists");
@@ -231,8 +243,13 @@ casper.test.begin('Check elements existence and correct nesting', function suite
 
                         test.comment("Select tile and see if detail content appears");
                         this.click(root_selectors.main + " " + tiles_selectors.tile.root);
+                        test.assertExists((root_selectors.main + " " + tiles_selectors.tile.root + class_selected), "First tile is selected");
                         test.assert(checkSelectors(root_selectors.tiles.detail, detail_selectors, all_groups.detail_after),
                                    "Detail's content now exists");
+
+                         test.comment("Click on the detail close icon and check that no tile is selected");
+                         this.click(root_selectors.main + " " + detail_selectors.close);
+                         test.assertDoesntExist((root_selectors.main + " " + tiles_selectors.tile.root + class_selected), "No tile is selected");
                     }
 
                 }
