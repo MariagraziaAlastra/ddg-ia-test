@@ -5,14 +5,16 @@
          "aux_label",
          "aux_value"
       ],
-      "optional" : []
+      "optional" : [],
+      "not_visible" : []
    },
    "cw" : {
       "default" : [
          "main_detail",
          "body"
       ],
-      "optional" : []
+      "optional" : [],
+      "not_visible" : []
    },
    "metabar" : {
       "default" : [
@@ -23,7 +25,8 @@
          "count",
          "item_type"
       ],
-      "optional" : []
+      "optional" : [],
+      "not_visible" : []
    },
    "tiles" : {
       "default" : [
@@ -33,6 +36,10 @@
       ],
       "optional" : [
          "footer"
+      ],
+      "not_visible" : [
+         "nav_next",
+         "nav_prev"
       ]
    },
    "detail_before" : {
@@ -43,7 +50,10 @@
          "next",
          "prev"
       ],
-      "optional" : []
+      "optional" : [],
+      "not_visible" : [
+         "tile"
+      ]
    },
    "detail_after" : {
       "default" : [
@@ -58,7 +68,8 @@
          "next",
          "prev"
       ],
-      "optional" : []
+      "optional" : [],
+      "not_visible" : []
    },
    "mobile" : {
       "tiles" : {
@@ -71,6 +82,10 @@
          ],
          "optional" : [
             "footer"
+         ],
+         "not_visible" : [
+            "nav_next",
+            "nav_prev"
          ]
       }
    }
