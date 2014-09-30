@@ -10,7 +10,8 @@
    "moreAt_regex" : "([a-zA-Z]+\\s)*Google\\+",
    "template_group" : "products",
    "has_rating" : true,
-   "has_priceAndBrand" : false,
+   "has_price" : false,
+   "has_brand" : false,
    "custom_selectors" : {},
    "regexes" : {}
 }

@@ -10,7 +10,8 @@
    "moreAt_regex" : "([a-zA-Z]+\\s)*Amazon",
    "template_group" : "products",
    "has_rating" : true,
-   "has_priceAndBrand" : true,
+   "has_price" : true,
+   "has_brand" : true,
    "has_callout" : true,
    "custom_selectors" : {},
    "regexes" : {

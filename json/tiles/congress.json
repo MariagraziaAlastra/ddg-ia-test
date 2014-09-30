@@ -10,7 +10,8 @@
    "moreAt_regex" : "([a-zA-Z]+\\s)*govtrack\\.us",
    "template_group" : "products",
    "has_rating" : false,
-   "has_priceAndBrand" : false,
+   "has_price" : false,
+   "has_brand" : false,
    "has_callout" : false,
    "custom_selectors" : {
       "congress_link" : "div.detail--congress div.detail__body div.detail__body__content a.congress_link"

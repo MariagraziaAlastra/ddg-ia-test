@@ -10,7 +10,8 @@
    "moreAt_regex" : "([a-zA-Z]+\\s)*.+",
    "template_group" : "products",
    "has_rating" : true,
-   "has_priceAndBrand" : true,
+   "has_price" : true,
+   "has_brand" : true,
    "custom_selectors" : {
       "review_count" : "div.tile__rating span.review-count",
       "moreAt_logo" : "a.zci__more-at img.zci__more-at__logo"

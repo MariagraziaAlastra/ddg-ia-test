@@ -10,7 +10,8 @@
    "moreAt_regex" : "([a-zA-Z]+\\s)*Bootic",
    "template_group" : "products",
    "has_rating" : false,
-   "has_priceAndBrand" : true,
+   "has_price" : true,
+   "has_brand" : true,
    "custom_selectors" : {},
    "regexes" : {}
 }

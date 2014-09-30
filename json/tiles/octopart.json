@@ -10,7 +10,8 @@
    "moreAt_regex" : "([a-zA-Z]+\\s)*Octopart",
    "template_group" : "products",
    "has_rating" : false,
-   "has_priceAndBrand" : true,
+   "has_price" : true,
+   "has_brand" : true,
    "has_callout" : false,
    "custom_selectors" : {
       "datasheet" : "div.detail__body__content a.btn__datasheet",

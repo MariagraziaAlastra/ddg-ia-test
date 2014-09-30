@@ -10,7 +10,8 @@
    "moreAt_regex" : "([a-zA-Z]+\\s)*Yummly",
    "template_group" : "products",
    "has_rating" : true,
-   "has_priceAndBrand" : false,
+   "has_price" : false,
+   "has_brand" : false,
    "has_callout" : false,
    "custom_selectors" : {
       "source" : "div.tile__rating.one-line span.tile__source.one-line",
