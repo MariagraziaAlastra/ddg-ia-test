@@ -11,7 +11,7 @@
          "brand"
       ]
    },
-   "detail" : {
+   "detail-after" : {
       "default" : [],
       "optional" : [
          "price",

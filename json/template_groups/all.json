@@ -1,4 +1,31 @@
 {
+   "aux" : {
+      "default" : [
+         "aux_header",
+         "aux_label"
+      ],
+      "optional" : []
+   },
+   "cw" : {
+      "default" : [
+         "main_detail",
+         "body",
+         "moreAt",
+         "icon"
+      ],
+      "optional" : []
+   },
+   "metabar" : {
+      "default" : [
+         "mode",
+         "moreAt",
+         "icon",
+         "text",
+         "count",
+         "item_type"
+      ],
+      "optional" : []
+   },
    "tiles" : {
       "default" : [
          "nav_next",
@@ -9,7 +36,17 @@
          "footer"
       ]
    },
-   "detail" : {
+   "detail_before" : {
+      "default" : [
+         "close",
+         "content",
+         "controls",
+         "next",
+         "prev"
+      ],
+      "optional" : []
+   },
+   "detail_after" : {
       "default" : [
          "close",
          "content",
