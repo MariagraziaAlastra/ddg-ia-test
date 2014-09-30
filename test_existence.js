@@ -213,8 +213,6 @@ casper.test.begin('Check elements existence and correct nesting', function suite
                     test.comment("Check if metabar contains the expected nested elements");
                     test.assert(checkSelectors(root_selectors.tiles.metabar, metabar_selectors, all_groups.metabar),
                                "Metabar's expected nested elements exist");
-                // leaving this here for now for debug purposes
-                this.captureSelector('mobile.jpeg', 'html');
 
                     test.comment("Check if tiles exist");
                     test.assertExists((root_selectors.main + " " + root_selectors.tiles.tiles), "Tiles exist");
