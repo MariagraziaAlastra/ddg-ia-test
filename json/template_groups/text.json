@@ -1,4 +1,11 @@
 {
+   "cw" : {
+      "default" : [
+         "moreAt",
+         "icon"
+      ],
+      "optional" : []
+   },
    "tiles" : {
       "default" : [
          "title",
