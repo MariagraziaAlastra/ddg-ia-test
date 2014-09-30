@@ -1,6 +1,6 @@
 casper.test.begin('Check elements existence and correct nesting', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
-    var path = "./json/tiles/bbc.json";
+    var path = "./json/no-tiles/drinks.json";
     var data = require(path);
 
     // Import general template groups JSON file
@@ -23,7 +23,7 @@ casper.test.begin('Check elements existence and correct nesting', function suite
             'tiles' : 'div.tile-wrap div.zci__main--tiles.tileview__' + data.id,
             'detail' : 'div.tile-wrap div.zci__detail div.detail__wrap'
         },
-        'no-tiles' : {
+        'no_tiles' : {
             'content': 'div.cw',
             'aux': 'div.zci__aux'
         }
@@ -74,7 +74,7 @@ casper.test.begin('Check elements existence and correct nesting', function suite
                 test.comment("Viewport changed to {width: 1336, height: 768}");
                 test.assertExists(root_selectors.ia_tab, data.name + " IA is shown");
 
-                if (data.template_group !== "base" && data.template_group !== "") {
+                if (data.template_group !== "") {
                     template_group = require("./json/template_groups/" + data.template_group + ".json");
                 }
 
@@ -90,18 +90,18 @@ casper.test.begin('Check elements existence and correct nesting', function suite
                     }
 
                     test.comment("Check if content exists");
-                    test.assertExists((root_selectors.main + " " + root_selectors.no-tiles.content), "Content exists");
+                    test.assertExists((root_selectors.main + " " + root_selectors.no_tiles.content), "Content exists");
 
                     test.comment("Check content selectors")
-                    test.assert(checkSelectors(root_selectors.no-tiles.content, cw_selectors, all_groups.cw),
+                    test.assert(checkSelectors(root_selectors.no_tiles.content, cw_selectors, all_groups.cw),
                                "Content's nested elements exist");
 
                     if (data.has_aux) {
                         test.comment("Check if Infobox exists");
-                        test.assertExists((root_selectors.main + " " + root_selectors.no-tiles.aux), "Infobox exists");
+                        test.assertExists((root_selectors.main + " " + root_selectors.no_tiles.aux), "Infobox exists");
 
                         test.comment("Check Infobox selectors")
-                        test.assert(checkSelectors(root_selectors.no-tiles.aux, aux_selectors, all_groups.aux),
+                        test.assert(checkSelectors(root_selectors.no_tiles.aux, aux_selectors, all_groups.aux),
                                    "Infobox's nested elements exist");
                     }
                 } else {
@@ -163,7 +163,7 @@ casper.test.begin('Check elements existence and correct nesting', function suite
             this.reload(function() {
                 test.assertExists(root_selectors.ia_tab, data.name + " IA is shown");
 
-                if (data.template_group !== "base" && data.template_group !== "") {
+                if (data.template_group !== "") {
                     template_group = require("./json/template_groups/" + data.template_group + ".json");
                 }
 
@@ -179,18 +179,18 @@ casper.test.begin('Check elements existence and correct nesting', function suite
                     }
 
                     test.comment("Check if content exists");
-                    test.assertExists((root_selectors.main + " " + root_selectors.no-tiles.content), "Content exists");
+                    test.assertExists((root_selectors.main + " " + root_selectors.no_tiles.content), "Content exists");
 
                     test.comment("Check content selectors")
-                    test.assert(checkSelectors(root_selectors.no-tiles.content, cw_selectors, all_groups.cw),
+                    test.assert(checkSelectors(root_selectors.no_tiles.content, cw_selectors, all_groups.cw),
                                "Content's nested elements exist");
 
                     if (data.has_aux) {
                         test.comment("Check if Infobox exists");
-                        test.assertExists((root_selectors.main + " " + root_selectors.no-tiles.aux), "Infobox exists");
+                        test.assertExists((root_selectors.main + " " + root_selectors.no_tiles.aux), "Infobox exists");
 
                         test.comment("Check Infobox selectors")
-                        test.assert(checkSelectors(root_selectors.no-tiles.aux, aux_selectors, all_groups.aux),
+                        test.assert(checkSelectors(root_selectors.no_tiles.aux, aux_selectors, all_groups.aux),
                                    "Infobox's nested elements exist");
                     }
                 } else {

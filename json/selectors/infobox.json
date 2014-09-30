@@ -1,4 +1,5 @@
 {
    "aux_header": "h6.info--head",
-   "aux_label": "div.info span.info__label a"
+   "aux_label": "div.info span.info__label",
+   "aux_value" : "div.info span.info__value"
 }

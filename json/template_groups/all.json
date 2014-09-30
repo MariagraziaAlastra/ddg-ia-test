@@ -2,16 +2,15 @@
    "aux" : {
       "default" : [
          "aux_header",
-         "aux_label"
+         "aux_label",
+         "aux_value"
       ],
       "optional" : []
    },
    "cw" : {
       "default" : [
          "main_detail",
-         "body",
-         "moreAt",
-         "icon"
+         "body"
       ],
       "optional" : []
    },

@@ -1,0 +1,14 @@
+{
+   "name" : "Drinks",
+   "id" : "drinks",
+   "ia_tab_id" : "drinks",
+   "status" : "live",
+   "query" : "how+to+mix+a+tom+collins",
+   "moreAt_url" : "http://www.drinkproject.com/mixed-drinks-names/Tom-Collins",
+   "moreAt_regex" : "([a-zA-Z]+\\s)*Drink\\sProject",
+   "template_group" : "info",
+   "has_aux" : true,
+   "custom_selectors" : {},
+   "regexes" : {}
+}
+

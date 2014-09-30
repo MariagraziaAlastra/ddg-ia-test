@@ -1,8 +1,23 @@
 {
    "main_detail" : {
-      "root" : "div.zci__main.zci__main--detail",
+      "root" : "div.zci__main",
       "body" : {
          "root" : "div.zci__body",
+         "header" : "h1.zci__header a",
+         "content" : "div.zci__content.chomp",
+         "links_info" : {
+            "root" : "div.zci__links.zci__links--info",
+            "link_chomp" : {
+               "root" : "a.chomp--link",
+               "link_icon" : "i.chomp--link__icn",
+               "link_more" : "span.chomp--link__mr",
+               "link_less" : "span.chomp--link__ls"
+            },
+            "link_moreAt" : {
+               "root" : "a.zci__more-at--info",
+               "link_moreAt_icon": "img.zci__more-at__icon"
+            }
+         },
          "moreAt" : {
             "root" : "a.zci__more-at",
             "icon": "img.zci__more-at__icon"

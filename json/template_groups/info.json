@@ -1,0 +1,16 @@
+{
+   "cw" : {
+      "default" : [
+         "header",
+         "content",
+         "links_info",
+         "link_chomp",
+         "link_icon",
+         "link_more",
+         "link_less",
+         "link_moreAt",
+         "link_moreAt_icon"
+      ],
+      "optional" : []
+   }
+}
