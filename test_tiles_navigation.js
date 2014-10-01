@@ -4,6 +4,7 @@ casper.test.begin('Check tiles navigation', function suite(test) {
     var data = require(path);
     var class_scroll = ".can-scroll";
     var class_active = ".is-active";
+    var class_grid = ".has-tiles--grid";
     var next_items, prev_items, tot_items, selector_waitfor;
 
     // Import general template groups JSON file
@@ -90,6 +91,20 @@ casper.test.begin('Check tiles navigation', function suite(test) {
                                  test.assert(parseInt(this.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_prev),
                                             'data-items')) > 0, "previous navigation has items now");
                             }
+                        }
+
+                        if (tot_items >= (data.tileview_capacity * 3)) {
+                            test.comment("Check grid mode");
+
+                            test.comment("Click on the metabar mode button and check if tileview expands to grid");
+                            this.click(root_selectors.main + " " + metabar_selectors.mode);
+                            test.assertExists((root_selectors.main + " " + root_selectors.tiles.tileview_grid), "mode switched to grid");
+                            test.assertExists((root_selectors.main + " " + root_selectors.tiles.tiles + class_grid), "tileview expanded to grid");
+
+                            test.comment("Click again on the metabar mode button and check if tileview collapses");
+                            this.click(root_selectors.main + " " + metabar_selectors.mode);
+                            test.assertDoesntExist((root_selectors.main + " " + root_selectors.tiles.tileview_grid), "mode switched back");
+                            test.assertDoesntExist((root_selectors.main + " " + root_selectors.tiles.tiles + class_grid), "tileview collapsed");
                         }
                     });
                 }
