@@ -4,12 +4,7 @@ casper.test.begin('Check detail navigation', function suite(test) {
     var data = require(path);
     var class_selected = ".is-selected";
     var class_scroll = ".can-scroll";
-    var moreAt_selector, detail_title, tile_title, detail_link, tile_link;
-
-    // Regexes
-    var metabar_regex = /^Showing\s[0-9]+\s((([A-Za-z]+\+?)+|([A-Z]\.)+)\s)*for(\s([A-Za-z]+|[A-Z]))*$/;
-    var moreAt_regex = new RegExp(data.moreAt_regex);
-    var price_regex = /^..*[0-9][0-9]*(,|\.)[0-9][0-9]$/;
+    var detail_title, tile_title, detail_link, tile_link;
 
     // Import general template groups JSON file
     var all_groups = require("./json/template_groups/all.json");
