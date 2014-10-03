@@ -1,8 +1,7 @@
 module.exports = function(path, fn) {
-    casper.test.begin('Check tiles navigation', function suite(test) {
-        // This is just for testing - the path should actually be passed as a command-line arg
-        var path = "./json/tiles/bbc.json";
-        var data = require(path);
+    var data = require(path);
+
+    casper.test.begin(data.name + ' IA - Check tiles navigation', function suite(test) {
         var class_scroll = ".can-scroll";
         var class_active = ".is-active";
         var class_grid = ".has-tiles--grid";

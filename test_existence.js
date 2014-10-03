@@ -1,7 +1,7 @@
 module.exports = function(path, fn){
-    casper.test.begin('Check elements existence and correct nesting', function suite(test) {
+    var data = require(path);
 
-        var data = require(path);
+    casper.test.begin(data.name + ' IA - Check elements existence and correct nesting', function suite(test) {
         var class_selected = ".is-selected";
 
         // Import general template groups JSON file

@@ -1,7 +1,7 @@
 module.exports = function(path, fn) {
-    casper.test.begin('Check elements visibility', function suite(test) {
+    var data = require(path);
 
-        var data = require(path);
+    casper.test.begin(data.name + ' IA - Check elements visibility', function suite(test) {
 
         // Import general template groups JSON file
         var all_groups = require("./json/template_groups/all.json");
@@ -29,46 +29,6 @@ module.exports = function(path, fn) {
             }
         };
 
-        /* Recursively checks the visibility of expected nested selectors.
-         * If a selector is not expected, checks it's not visible.
-         * @params: root -> root selector,
-         * elements -> object containing root's children,
-         * expected_selectors -> object containing default and optional selectors for a specific template group
-         */
-        function checkVisibility(root, elements, expected_selectors) {
-            for (var key in elements) {
-                if (elements[key] !== null && key !== 'root') {
-                    if (((expected_selectors.default.indexOf(key) !== -1) || ((expected_selectors.optional.indexOf(key) !== -1) && data['has_' + key])) &&
-                       (expected_selectors.not_visible.indexOf(key) === -1)) {
-                        // Leaving this here for debug purposes
-                        casper.echo("Expected: " + key);
-                        if (typeof elements[key] === 'object') {
-                            if (!(casper.visible(root + " " + elements[key].root) && checkVisibility(elements[key].root, elements[key], expected_selectors))) {
-                                return false;
-                            }
-                        } else if (typeof elements[key] === 'string') {
-                            if (!casper.visible(root + " " + elements[key])) {
-                                return false;
-                            }
-                        }
-                    } else {
-                        // Leaving this here for debug purposes
-                        casper.echo("Unexpected: " + key);
-                        if (typeof elements[key] === 'object') {
-                            if (casper.visible(root + " " + elements[key].root)) {
-                                return false;
-                            }
-                        } else if (typeof elements[key] === 'string') {
-                            if (casper.visible(root + " " + elements[key])) {
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-            return true;
-        }
-
         casper.start("https://bttf.duckduckgo.com/", function() {
             casper.viewport(1336, 768).then(function() {
                 this.open("https://bttf.duckduckgo.com/?q=" + data.query).then(function() {
@@ -93,17 +53,9 @@ module.exports = function(path, fn) {
                         test.comment("Check if content is visible");
                         test.assertVisible((root_selectors.main + " " + root_selectors.no_tiles.content), "Content is visible");
 
-                        test.comment("Check content selectors")
-                        test.assert(checkVisibility(root_selectors.no_tiles.content, cw_selectors, all_groups.cw),
-                            "Content's nested elements are visible");
-
                         if (data.has_aux) {
                             test.comment("Check if Infobox is visible");
                             test.assertVisible((root_selectors.main + " " + root_selectors.no_tiles.aux), "Infobox is visible");
-
-                            test.comment("Check Infobox selectors")
-                            test.assert(checkVisibility(root_selectors.no_tiles.aux, aux_selectors, all_groups.aux),
-                                "Infobox's nested elements are visible");
                         }
                     } else {
                         if (template_group.tiles) {
@@ -115,24 +67,8 @@ module.exports = function(path, fn) {
                             all_groups.detail_after.optional = all_groups.detail_after.optional.concat(template_group.detail.optional);
                         }
 
-                        test.comment("Check if tileview is visible and it's not a grid");
-                        test.assertVisible((root_selectors.main + " " + root_selectors.tiles.tileview), "Tileview is visible");
-                        test.assertNotVisible((root_selectors.main + " " + root_selectors.tiles.tileview_grid),
-                            "Tileview is not a grid");
-
                         test.comment("Check if metabar is visible");
                         test.assertVisible((root_selectors.main + " " + root_selectors.tiles.metabar), "Metabar is visible");
-
-                        test.comment("Check if metabar contains the expected nested elements");
-                        test.assert(checkVisibility(root_selectors.tiles.metabar, metabar_selectors, all_groups.metabar),
-                            "Metabar's expected nested elements are visible");
-
-                        test.comment("Check if tiles are visible");
-                        test.assertVisible((root_selectors.main + " " + root_selectors.tiles.tiles), "Tiles are visible");
-
-                        test.comment("Check if tiles expected nested elements are visible");
-                        test.assert(checkVisibility(root_selectors.tiles.tiles, tiles_selectors, all_groups.tiles),
-                            "Tiles expected nested elements are visible");
 
                         test.comment("Detail shouldn't be visible");
                         test.assertNotVisible((root_selectors.main + " " + root_selectors.tiles.detail), "Detail is hidden");
@@ -144,8 +80,6 @@ module.exports = function(path, fn) {
 
                             test.comment("Check if detail is visible now");
                             test.assertVisible((root_selectors.main + " " + root_selectors.tiles.detail), "Detail is now shown");
-                            test.assert(checkVisibility(root_selectors.tiles.detail, detail_selectors, all_groups.detail_after),
-                                "Detail content is now shown");
                         }
 
                     }
@@ -183,17 +117,9 @@ module.exports = function(path, fn) {
                         test.comment("Check if content is visible");
                         test.assertVisible((root_selectors.main + " " + root_selectors.no_tiles.content), "Content is visible");
 
-                        test.comment("Check content selectors")
-                        test.assert(checkVisibility(root_selectors.no_tiles.content, cw_selectors, all_groups.cw),
-                            "Content's nested elements are visible");
-
                         if (data.has_aux) {
-                            test.comment("Check if Infobox is visible");
-                            test.assertVisible((root_selectors.main + " " + root_selectors.no_tiles.aux), "Infobox is visible");
-
-                            test.comment("Check Infobox selectors")
-                            test.assert(checkVisibility(root_selectors.no_tiles.aux, aux_selectors, all_groups.aux),
-                                "Infobox's nested elements are visible");
+                            test.comment("Infobox shouldn't be visible");
+                            test.assertNotVisible((root_selectors.main + " " + root_selectors.no_tiles.aux), "Infobox is hidden");
                         }
                     } else {
                         if (template_group.tiles) {
@@ -205,25 +131,12 @@ module.exports = function(path, fn) {
                             all_groups.detail_after.optional = all_groups.detail_after.optional.concat(template_group.detail.optional);
                         }
 
-                        test.comment("Check if tileview is visible and it's a grid");
-                        test.assertVisible((root_selectors.main + " " + root_selectors.tiles.tileview_grid),
-                            "Tileview is visible and it's a grid");
-
-                        test.comment("Check if tiles are visible");
-                        test.assertVisible((root_selectors.main + " " + root_selectors.tiles.tiles), "Tiles are visible");
-
-                        test.comment("Check if tiles expected nested elements are visible");
-                        test.assert(checkVisibility(root_selectors.tiles.tiles, tiles_selectors, all_groups.mobile.tiles),
-                            "Tiles expected nested elements are visible");
-
                         test.comment("Metabar shouldn't be visible");
                         test.assertNotVisible((root_selectors.main + " " + root_selectors.tiles.metabar), "Metabar is hidden");
 
                         test.comment("Check metabar visibility after expanding content");
                         this.click(root_selectors.main + " " + tiles_selectors.mobile.root);
                         test.assertVisible((root_selectors.main + " " + root_selectors.tiles.metabar), "Metabar is now visible");
-                        test.assert(checkVisibility(root_selectors.tiles.metabar, metabar_selectors, all_groups.metabar),
-                            "Metabar nested elements are now visible");
 
                         test.comment("Click on metabar mode button and check if tileview collapses");
                         this.click(root_selectors.main + " " + metabar_selectors.mode);
@@ -241,8 +154,6 @@ module.exports = function(path, fn) {
 
                                 test.comment("Check if detail is visible now");
                                 test.assertVisible((root_selectors.main + " " + root_selectors.tiles.detail), "Detail is now shown");
-                                test.assert(checkVisibility(root_selectors.tiles.detail, detail_selectors, all_groups.detail_after),
-                                    "Detail content is now shown");
 
                                 // Placed here in case some custom selectors are in the detail
                                 test.comment("Check visibility of custom selectors from JSON file");

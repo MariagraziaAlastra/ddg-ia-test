@@ -19,7 +19,7 @@ var path_tiles = base_path + "json/tiles";
 var path_no_tiles = base_path + "json/no-tiles";
 var paths = [];
 paths = scanDir(path_no_tiles);
-paths = paths.concat(scanDir(path_tiles));
+//paths = paths.concat(scanDir(path_tiles));
 
 // Require test files
 var testVisibility = require("test_visibility.js");
@@ -34,6 +34,7 @@ var curFile = 0;
     if (!paths[curFile]) {
         return console.log("done!");
     }
+
     var data = require(paths[curFile]);
     console.log("\n ****** Testing " + data.name + " IA ******\n");
     testTilesNav(paths[curFile], function() {

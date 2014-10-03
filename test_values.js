@@ -1,8 +1,7 @@
 module.exports = function(path, fn) {
-    casper.test.begin('Check IA content values', function suite(test) {
-        // This is just for testing - the path should actually be passed as a command-line arg
-        var path = "./json/tiles/bbc.json";
-        var data = require(path);
+    var data = require(path);
+
+    casper.test.begin(data.name + ' IA - Check IA content values', function suite(test) {
         var class_selected = ".is-selected";
         var moreAt_selector, detail_title, tile_title, detail_link, tile_link;
 
