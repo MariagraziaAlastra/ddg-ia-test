@@ -76,26 +76,40 @@ module.exports = function(path, fn){
                     test.comment("Viewport changed to {width: 1336, height: 768}");
                     test.assertExists(root_selectors.ia_tab, data.name + " IA is shown");
 
+                    test.comment("\n" + all_groups.cw.default + "\n");
+
                     if (data.template_group !== "") {
                         template_group = require("./json/template_groups/" + data.template_group + ".json");
+                        test.comment("./json/template_groups/" + data.template_group + ".json");
                     }
 
                     if (path.match(/no-tiles/)) {
+                        var custom_cw = {
+                            "default" : [],
+                            "optional" : []
+                        };
+                        var custom_aux = {
+                            "default" : [],
+                            "optional" : []
+                        };
+
                         if (template_group.cw) {
-                            all_groups.cw.default = all_groups.cw.default.concat(template_group.cw.default);
-                            all_groups.cw.optional = all_groups.cw.optional.concat(template_group.cw.optional);
+                            custom_cw.default = all_groups.cw.default.concat(template_group.cw.default);
+                            custom_cw.optional = all_groups.cw.optional.concat(template_group.cw.optional);
                         }
 
                         if (template_group.aux) {
-                            all_groups.aux.default = all_groups.aux.default.concat(template_group.aux.default);
-                            all_groups.aux.optional = all_groups.aux.optional.concat(template_group.aux.optional);
+                            custom_aux.default = all_groups.aux.default.concat(template_group.aux.default);
+                            custom_aux.optional = all_groups.aux.optional.concat(template_group.aux.optional);
                         }
+
+                        test.comment("\n" + all_groups.cw.default + "\n");
 
                         test.comment("Check if content exists");
                         test.assertExists((root_selectors.main + " " + root_selectors.no_tiles.content), "Content exists");
 
                         test.comment("Check content selectors")
-                        test.assert(checkSelectors(root_selectors.no_tiles.content, cw_selectors, all_groups.cw),
+                        test.assert(checkSelectors(root_selectors.no_tiles.content, cw_selectors, custom_cw),
                                    "Content's nested elements exist");
 
                         if (data.has_aux) {
@@ -103,17 +117,26 @@ module.exports = function(path, fn){
                             test.assertExists((root_selectors.main + " " + root_selectors.no_tiles.aux), "Infobox exists");
 
                             test.comment("Check Infobox selectors")
-                            test.assert(checkSelectors(root_selectors.no_tiles.aux, aux_selectors, all_groups.aux),
+                            test.assert(checkSelectors(root_selectors.no_tiles.aux, aux_selectors, custom_aux),
                                        "Infobox's nested elements exist");
                         }
                     } else {
+                        var custom_tiles = {
+                            "default" : [],
+                            "optional" : []
+                        };
+                        var custom_detail_after = {
+                            "default" : [],
+                            "optional" : []
+                        };
+
                         if (template_group.tiles) {
-                            all_groups.tiles.default = all_groups.tiles.default.concat(template_group.tiles.default);
-                            all_groups.tiles.optional = all_groups.tiles.optional.concat(template_group.tiles.optional);
+                            custom_tiles.default = all_groups.tiles.default.concat(template_group.tiles.default);
+                            custom_tiles.optional = all_groups.tiles.optional.concat(template_group.tiles.optional);
                         }
                         if (template_group.detail) {
-                            all_groups.detail_after.default = all_groups.detail_after.default.concat(template_group.detail.default);
-                            all_groups.detail_after.optional = all_groups.detail_after.optional.concat(template_group.detail.optional);
+                            custom_detail_after.default = all_groups.detail_after.default.concat(template_group.detail.default);
+                            custom_detail_after.optional = all_groups.detail_after.optional.concat(template_group.detail.optional);
                         }
 
                         test.comment("Check if tileview exists and it's not a grid");
@@ -132,7 +155,7 @@ module.exports = function(path, fn){
                         test.assertExists((root_selectors.main + " " + root_selectors.tiles.tiles), "Tiles exist");
 
                         test.comment("Check if tiles contains the expected nested elements");
-                        test.assert(checkSelectors(root_selectors.tiles.tiles, tiles_selectors, all_groups.tiles),
+                        test.assert(checkSelectors(root_selectors.tiles.tiles, tiles_selectors, custom_tiles),
                                    "Tiles expected nested elements exist");
 
                         test.comment("Check that no tile is selected right after page loading");
@@ -149,7 +172,7 @@ module.exports = function(path, fn){
                             test.comment("Select tile and see if detail content appears");
                             this.click(root_selectors.main + " " + tiles_selectors.tile.root);
                             test.assertExists((root_selectors.main + " " + tiles_selectors.tile.root + class_selected), "First tile is selected");
-                            test.assert(checkSelectors(root_selectors.tiles.detail, detail_selectors, all_groups.detail_after),
+                            test.assert(checkSelectors(root_selectors.tiles.detail, detail_selectors, custom_detail_after),
                                         "Detail's content now exists");
 
                             test.comment("Click on the detail close icon and check that no tile is selected");
@@ -171,28 +194,34 @@ module.exports = function(path, fn){
         casper.then(function() {
             casper.viewport(360, 640).then(function() {
                 this.reload(function() {
+                    test.comment("Viewport changed to {width: 360, height: 640}");
                     test.assertExists(root_selectors.ia_tab, data.name + " IA is shown");
 
-                    if (data.template_group !== "") {
-                        template_group = require("./json/template_groups/" + data.template_group + ".json");
-                    }
-
                     if (path.match(/no-tiles/)) {
+                        var custom_cw = {
+                            "default" : [],
+                            "optional" : []
+                        };
+                        var custom_aux = {
+                            "default" : [],
+                            "optional" : []
+                        };
+
                         if (template_group.cw) {
-                            all_groups.cw.default = all_groups.cw.default.concat(template_group.cw.default);
-                            all_groups.cw.optional = all_groups.cw.optional.concat(template_group.cw.optional);
+                            custom_cw.default = all_groups.cw.default.concat(template_group.cw.default);
+                            custom_cw.optional = all_groups.cw.optional.concat(template_group.cw.optional);
                         }
 
                         if (template_group.aux) {
-                            all_groups.aux.default = all_groups.aux.default.concat(template_group.aux.default);
-                            all_groups.aux.optional = all_groups.aux.optional.concat(template_group.aux.optional);
+                            custom_aux.default = all_groups.aux.default.concat(template_group.aux.default);
+                            custom_aux.optional = all_groups.aux.optional.concat(template_group.aux.optional);
                         }
 
                         test.comment("Check if content exists");
                         test.assertExists((root_selectors.main + " " + root_selectors.no_tiles.content), "Content exists");
 
                         test.comment("Check content selectors")
-                        test.assert(checkSelectors(root_selectors.no_tiles.content, cw_selectors, all_groups.cw),
+                        test.assert(checkSelectors(root_selectors.no_tiles.content, cw_selectors, custom_cw),
                                    "Content's nested elements exist");
 
                         if (data.has_aux) {
@@ -200,17 +229,26 @@ module.exports = function(path, fn){
                             test.assertExists((root_selectors.main + " " + root_selectors.no_tiles.aux), "Infobox exists");
 
                             test.comment("Check Infobox selectors")
-                            test.assert(checkSelectors(root_selectors.no_tiles.aux, aux_selectors, all_groups.aux),
+                            test.assert(checkSelectors(root_selectors.no_tiles.aux, aux_selectors, custom_aux),
                                        "Infobox's nested elements exist");
                         }
                     } else {
+                        var custom_tiles = {
+                            "default" : [],
+                            "optional" : []
+                        };
+                        var custom_detail_after = {
+                            "default" : [],
+                            "optional" : []
+                        };
+
                         if (template_group.tiles) {
-                            all_groups.mobile.tiles.default = all_groups.mobile.tiles.default.concat(template_group.tiles.default);
-                            all_groups.mobile.tiles.optional = all_groups.mobile.tiles.optional.concat(template_group.tiles.optional);
+                            custom_tiles.default = all_groups.mobile.tiles.default.concat(template_group.tiles.default);
+                            custom_tiles.optional = all_groups.mobile.tiles.optional.concat(template_group.tiles.optional);
                         }
                         if (template_group.detail) {
-                            all_groups.detail_after.default = all_groups.detail_after.default.concat(template_group.detail.default);
-                            all_groups.detail_after.optional = all_groups.detail_after.optional.concat(template_group.detail.optional);
+                            custom_detail_after.default = all_groups.detail_after.default.concat(template_group.detail.default);
+                            custom_detail_after.optional = all_groups.detail_after.optional.concat(template_group.detail.optional);
                         }
 
                         test.comment("Check if tileview exists and it's a grid");
@@ -228,7 +266,7 @@ module.exports = function(path, fn){
                         test.assertExists((root_selectors.main + " " + root_selectors.tiles.tiles), "Tiles exist");
 
                         test.comment("Check if tiles contains the expected nested elements");
-                        test.assert(checkSelectors(root_selectors.tiles.tiles, tiles_selectors, all_groups.mobile.tiles),
+                        test.assert(checkSelectors(root_selectors.tiles.tiles, tiles_selectors, custom_tiles),
                                    "Tiles expected nested elements exist");
 
                         test.comment("Check that no tile is selected right after page loading");
@@ -245,7 +283,7 @@ module.exports = function(path, fn){
                             test.comment("Select tile and see if detail content appears");
                             this.click(root_selectors.main + " " + tiles_selectors.tile.root);
                             test.assertExists((root_selectors.main + " " + tiles_selectors.tile.root + class_selected), "First tile is selected");
-                            test.assert(checkSelectors(root_selectors.tiles.detail, detail_selectors, all_groups.detail_after),
+                            test.assert(checkSelectors(root_selectors.tiles.detail, detail_selectors, custom_detail_after),
                                        "Detail's content now exists");
 
                             test.comment("Click on the detail close icon and check that no tile is selected");

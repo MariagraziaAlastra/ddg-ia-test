@@ -12,5 +12,9 @@
          "link_moreAt_icon"
       ],
       "optional" : []
+   },
+   "aux" : {
+      "default" : [],
+      "optional" : []
    }
 }

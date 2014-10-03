@@ -35,20 +35,7 @@ module.exports = function(path, fn) {
                     test.comment("Viewport changed to {width: 1336, height: 768}");
                     test.assertVisible(root_selectors.ia_tab, data.name + " IA is shown");
 
-                    if (data.template_group !== "") {
-                        template_group = require("./json/template_groups/" + data.template_group + ".json");
-                    }
-
                     if (path.match(/no-tiles/)) {
-                        if (template_group.cw) {
-                            all_groups.cw.default = all_groups.cw.default.concat(template_group.cw.default);
-                            all_groups.cw.optional = all_groups.cw.optional.concat(template_group.cw.optional);
-                        }
-
-                        if (template_group.aux) {
-                            all_groups.aux.default = all_groups.aux.default.concat(template_group.aux.default);
-                            all_groups.aux.optional = all_groups.aux.optional.concat(template_group.aux.optional);
-                        }
 
                         test.comment("Check if content is visible");
                         test.assertVisible((root_selectors.main + " " + root_selectors.no_tiles.content), "Content is visible");
@@ -99,20 +86,7 @@ module.exports = function(path, fn) {
                     test.comment("Viewport changed to {width: 360, height: 640}");
                     test.assertVisible(root_selectors.ia_tab, data.name + " IA is shown");
 
-                    if (data.template_group !== "") {
-                        template_group = require("./json/template_groups/" + data.template_group + ".json");
-                    }
-
                     if (path.match(/no-tiles/)) {
-                        if (template_group.cw) {
-                            all_groups.cw.default = all_groups.cw.default.concat(template_group.cw.default);
-                            all_groups.cw.optional = all_groups.cw.optional.concat(template_group.cw.optional);
-                        }
-
-                        if (template_group.aux) {
-                            all_groups.aux.default = all_groups.aux.default.concat(template_group.aux.default);
-                            all_groups.aux.optional = all_groups.aux.optional.concat(template_group.aux.optional);
-                        }
 
                         test.comment("Check if content is visible");
                         test.assertVisible((root_selectors.main + " " + root_selectors.no_tiles.content), "Content is visible");
