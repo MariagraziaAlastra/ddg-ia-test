@@ -111,13 +111,27 @@ module.exports = function(path, fn) {
                         test.comment("Metabar shouldn't be visible");
                         test.assertNotVisible((root_selectors.main + " " + root_selectors.tiles.metabar), "Metabar is hidden");
 
-                        test.comment("Check metabar visibility after expanding content");
-                        this.click(root_selectors.main + " " + tiles_selectors.mobile.root);
-                        test.assertVisible((root_selectors.main + " " + root_selectors.tiles.metabar), "Metabar is now visible");
+                        var tot_items;
+                        // If we are passing metabar_regex in JSON file it means there is no metabar count to take tot_items from
+                        if(data.metabar_regex) {
+                            tot_items = this.evaluate(function(selectors) {
+                                return __utils__.findAll(selectors.main + " " + tiles_selectors.tile.root).length;
+                            }, {selectors: root_selectors});
+                        } else {
+                            tot_items = parseInt(this.fetchText(root_selectors.main + " " + metabar_selectors.text.count));
+                        }
 
-                        test.comment("Click on metabar mode button and check if tileview collapses");
-                        this.click(root_selectors.main + " " + metabar_selectors.mode);
-                        test.assertNotVisible((root_selectors.main + " " + root_selectors.tileview), "tileview is hidden");
+                        if (tot_items > 2) {
+                            test.comment("Check metabar visibility after expanding content");
+                            this.click(root_selectors.main + " " + tiles_selectors.mobile.root);
+                            test.assertVisible((root_selectors.main + " " + root_selectors.tiles.metabar), "Metabar is now visible");
+
+                            test.comment("Click on metabar mode button and check if tileview collapses");
+                            this.click(root_selectors.main + " " + metabar_selectors.mode);
+                            test.assertNotVisible((root_selectors.main + " " + root_selectors.tileview), "tileview is hidden");
+                        } else {
+                            test.comment("Skip metabar visibility test on mobile for IA " + data.name + " - has not enough tiles");
+                        }
 
                         test.comment("Detail shouldn't be visible");
                         test.assertNotVisible((root_selectors.main + " " + root_selectors.tiles.detail), "Detail is hidden");

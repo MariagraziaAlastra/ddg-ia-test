@@ -57,9 +57,7 @@ module.exports = function(path, fn) {
                             if(data.metabar_regex) {
                                 tot_items = this.evaluate(function(selectors) {
                                     return __utils__.findAll(selectors.main + " " + tiles_selectors.tile.root).length;
-                                }, {
-                                    selectors: root_selectors
-                                });
+                                }, {selectors: root_selectors});
                             } else {
                                 tot_items = parseInt(this.fetchText(root_selectors.main + " " + metabar_selectors.text.count));
                             }

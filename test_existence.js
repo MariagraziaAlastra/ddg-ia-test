@@ -94,18 +94,12 @@ module.exports = function(path, fn) {
                         };
 
                         if(template_group.cw) {
-                            custom_cw.
-                            default = all_groups.cw.
-                            default.concat(template_group.cw.
-                                default);
+                            custom_cw.default = all_groups.cw.default.concat(template_group.cw.default);
                             custom_cw.optional = all_groups.cw.optional.concat(template_group.cw.optional);
                         }
 
                         if(template_group.aux) {
-                            custom_aux.
-                            default = all_groups.aux.
-                            default.concat(template_group.aux.
-                                default);
+                            custom_aux.default = all_groups.aux.default.concat(template_group.aux.default);
                             custom_aux.optional = all_groups.aux.optional.concat(template_group.aux.optional);
                         }
 
@@ -138,17 +132,11 @@ module.exports = function(path, fn) {
                         };
 
                         if(template_group.tiles) {
-                            custom_tiles.
-                            default = all_groups.tiles.
-                            default.concat(template_group.tiles.
-                                default);
+                            custom_tiles.default = all_groups.tiles.default.concat(template_group.tiles.default);
                             custom_tiles.optional = all_groups.tiles.optional.concat(template_group.tiles.optional);
                         }
                         if(template_group.detail) {
-                            custom_detail_after.
-                            default = all_groups.detail_after.
-                            default.concat(template_group.detail.
-                                default);
+                            custom_detail_after.default = all_groups.detail_after.default.concat(template_group.detail.default);
                             custom_detail_after.optional = all_groups.detail_after.optional.concat(template_group.detail.optional);
                         }
 
@@ -221,18 +209,13 @@ module.exports = function(path, fn) {
                         };
 
                         if(template_group.cw) {
-                            custom_cw.
-                            default = all_groups.cw.
-                            default.concat(template_group.cw.
-                                default);
+                            custom_cw.default = all_groups.cw.default.concat(template_group.cw.default);
                             custom_cw.optional = all_groups.cw.optional.concat(template_group.cw.optional);
                         }
 
                         if(template_group.aux) {
                             custom_aux.
-                            default = all_groups.aux.
-                            default.concat(template_group.aux.
-                                default);
+                            default = all_groups.aux.default.concat(template_group.aux.default);
                             custom_aux.optional = all_groups.aux.optional.concat(template_group.aux.optional);
                         }
 
@@ -262,17 +245,26 @@ module.exports = function(path, fn) {
                         };
 
                         if(template_group.tiles) {
-                            custom_tiles.
-                            default = all_groups.mobile.tiles.
-                            default.concat(template_group.tiles.
-                                default);
-                            custom_tiles.optional = all_groups.mobile.tiles.optional.concat(template_group.tiles.optional);
+                            var tot_items;
+                            // If we are passing metabar_regex in JSON file it means there is no metabar count to take tot_items from
+                            if(data.metabar_regex) {
+                                tot_items = this.evaluate(function(selectors) {
+                                    return __utils__.findAll(selectors.main + " " + tiles_selectors.tile.root).length;
+                                }, {selectors: root_selectors});
+                            } else {
+                                tot_items = parseInt(this.fetchText(root_selectors.main + " " + metabar_selectors.text.count));
+                            }
+
+                            if (tot_items > 2) {
+                                custom_tiles.default = all_groups.mobile.tiles.default.concat(template_group.tiles.default);
+                                custom_tiles.optional = all_groups.mobile.tiles.optional.concat(template_group.tiles.optional);
+                            } else {
+                                custom_tiles.default = all_groups.tiles.default.concat(template_group.tiles.default);
+                                custom_tiles.optional = all_groups.tiles.optional.concat(template_group.tiles.optional);
+                            }
                         }
                         if(template_group.detail) {
-                            custom_detail_after.
-                            default = all_groups.detail_after.
-                            default.concat(template_group.detail.
-                                default);
+                            custom_detail_after.default = all_groups.detail_after.default.concat(template_group.detail.default);
                             custom_detail_after.optional = all_groups.detail_after.optional.concat(template_group.detail.optional);
                         }
 
@@ -289,7 +281,6 @@ module.exports = function(path, fn) {
 
                         test.comment("Check if tiles exist");
                         test.assertExists((root_selectors.main + " " + root_selectors.tiles.tiles), "Tiles exist");
-
                         test.comment("Check if tiles contains the expected nested elements");
                         test.assert(checkSelectors(root_selectors.tiles.tiles, tiles_selectors, custom_tiles),
                             "Tiles expected nested elements exist");
