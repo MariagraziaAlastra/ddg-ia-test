@@ -41,8 +41,8 @@ module.exports = function(path, fn) {
                 this.open("https://bttf.duckduckgo.com/?q=" + data.query).then(function() {
                     test.comment("Viewport changed to {width: 1336, height: 768}");
 
-                    if (path.match(/no-tiles/)) {
-                        if (data.template_group === "info") {
+                    if(path.match(/no-tiles/)) {
+                        if(data.template_group === "info") {
                             moreAt_selector = cw_selectors.main_detail.body.links_info.link_moreAt.root;
                         } else {
                             moreAt_selector = cw_selectors.main_detail.body.moreAt.root;
@@ -51,7 +51,7 @@ module.exports = function(path, fn) {
                         moreAt_selector = metabar_selectors.moreAt.root;
                     }
 
-                    if (data.template_group !== "") {
+                    if(data.template_group !== "") {
                         test.comment("Check moreAt text and URL");
                         test.assertMatch(this.fetchText(root_selectors.main + " " + moreAt_selector).trim(), moreAt_regex,
                             "moreAt text value is correct");
@@ -59,9 +59,9 @@ module.exports = function(path, fn) {
                             "moreAt URL is correct");
                     }
 
-                    if (!path.match(/no-tiles/)) {
+                    if(!path.match(/no-tiles/)) {
                         test.comment("Check metabar text");
-                        if (!data.metabar_regex) {
+                        if(!data.metabar_regex) {
                             test.assertMatch(this.fetchText(root_selectors.main + " " + metabar_selectors.text.root).trim(), metabar_regex,
                                 "metabar text value is correct");
                         } else {
@@ -69,13 +69,13 @@ module.exports = function(path, fn) {
                                 "metabar text value is correct");
                         }
 
-                        if (data.template_group === "products" && data.has_price) {
+                        if(data.template_group === "products" && data.has_price) {
                             test.comment("Check price value");
                             test.assertMatch(this.fetchText(root_selectors.main + " " + tiles_selectors.tile.price), price_regex,
                                 "price text value is correct");
                         }
 
-                        if (data.has_detail) {
+                        if(data.has_detail) {
                             test.comment("Select first tile to make detail show up");
                             this.click(root_selectors.main + " " + tiles_selectors.tile.root);
 
@@ -84,10 +84,10 @@ module.exports = function(path, fn) {
                             tile_title = this.fetchText(root_selectors.main + " " + tiles_selectors.tile.root + class_selected +
                                 " " + tiles_selectors.tile.title.root).trim();
 
-                            if (data.name !== "Images") {
-                                if (detail_title.length === tile_title.length) {
+                            if(data.name !== "Images") {
+                                if(detail_title.length === tile_title.length) {
                                     test.assertEquals(detail_title, tile_title, "detail title matches selected tile title");
-                                } else if (detail_title.length > tile_title.length) {
+                                } else if(detail_title.length > tile_title.length) {
                                     test.assertEquals(tile_title.substr(-3, 3), "...", "selected tile title has ellipsis");
                                     test.assertEquals(tile_title.substr(0, tile_title.length - 3), detail_title.substr(0, tile_title.length - 3),
                                         "detail title matches selected tile title");
@@ -96,7 +96,7 @@ module.exports = function(path, fn) {
                                 }
                             }
 
-                            if (data.template_group === "media") {
+                            if(data.template_group === "media") {
                                 test.comment("Check if detail image matches selected tile image");
                                 var detail_img = this.getElementAttribute(root_selectors.main + " " + detail_selectors.content.media_img, 'src');
                                 var tile_img = this.getElementAttribute(root_selectors.main + " " + tiles_selectors.tile.media_img, 'src');
@@ -107,11 +107,11 @@ module.exports = function(path, fn) {
                             detail_link = this.getElementAttribute(root_selectors.main + " " + detail_selectors.content.body.root + " " + 'a', 'href');
                             tile_link = this.getElementAttribute(root_selectors.main + " " + tiles_selectors.tile.root, 'data-link');
 
-                            if (data.name !== "Videos" && data.name !== "Images") {
+                            if(data.name !== "Videos" && data.name !== "Images") {
                                 test.assertEquals(detail_link, tile_link, "detail URL matches selected tile URL");
                             }
 
-                            if (data.template_group === "products" && data.has_price) {
+                            if(data.template_group === "products" && data.has_price) {
                                 test.comment("Check tile and detail price values");
                                 // Get only the text from the first element which has the given selector
                                 var tile_price = this.evaluate(function(selectors, key) {
@@ -131,7 +131,7 @@ module.exports = function(path, fn) {
                     }
 
                     test.comment("Check regexes from JSON file");
-                    for (var key in data.regexes) {
+                    for(var key in data.regexes) {
                         var regex = new RegExp(data.regexes[key]);
                         // Get only the text from the first element which has the given selector
                         var text = this.evaluate(function(selectors, key) {
@@ -152,7 +152,7 @@ module.exports = function(path, fn) {
                 this.reload(function() {
                     test.comment("Viewport changed to {width: 360, height: 640}");
 
-                    if (data.template_group !== "") {
+                    if(data.template_group !== "") {
                         test.comment("Check moreAt text and URL");
                         test.assertMatch(this.fetchText(root_selectors.main + " " + moreAt_selector).trim(), moreAt_regex,
                             "moreAt text value is correct");
@@ -160,9 +160,9 @@ module.exports = function(path, fn) {
                             "moreAt URL is correct");
                     }
 
-                    if (!path.match(/no-tiles/)) {
+                    if(!path.match(/no-tiles/)) {
                         test.comment("Check metabar text");
-                        if (!data.metabar_regex) {
+                        if(!data.metabar_regex) {
                             test.assertMatch(this.fetchText(root_selectors.main + " " + metabar_selectors.text.root).trim(), metabar_regex,
                                 "metabar text value is correct");
                         } else {
@@ -170,13 +170,13 @@ module.exports = function(path, fn) {
                                 "metabar text value is correct");
                         }
 
-                        if (data.template_group === "products" && data.has_price) {
+                        if(data.template_group === "products" && data.has_price) {
                             test.comment("Check price value");
                             test.assertMatch(this.fetchText(root_selectors.main + " " + tiles_selectors.tile.price), price_regex,
                                 "price text value is correct");
                         }
 
-                        if (data.has_detail) {
+                        if(data.has_detail) {
                             test.comment("Select first tile to make detail show up");
                             this.click(root_selectors.main + " " + tiles_selectors.tile.root);
 
@@ -185,10 +185,10 @@ module.exports = function(path, fn) {
                             tile_title = this.fetchText(root_selectors.main + " " + tiles_selectors.tile.root + class_selected +
                                 " " + tiles_selectors.tile.title.root).trim();
 
-                            if (data.name !== "Images") {
-                                if (detail_title.length === tile_title.length) {
+                            if(data.name !== "Images") {
+                                if(detail_title.length === tile_title.length) {
                                     test.assertEquals(detail_title, tile_title, "detail title matches selected tile title");
-                                } else if (detail_title.length > tile_title.length) {
+                                } else if(detail_title.length > tile_title.length) {
                                     test.assertEquals(tile_title.substr(-3, 3), "...", "selected tile title has ellipsis");
                                     test.assertEquals(tile_title.substr(0, tile_title.length - 3), detail_title.substr(0, tile_title.length - 3),
                                         "detail title matches selected tile title");
@@ -197,7 +197,7 @@ module.exports = function(path, fn) {
                                 }
                             }
 
-                            if (data.template_group === "media") {
+                            if(data.template_group === "media") {
                                 test.comment("Check if detail image matches selected tile image");
                                 var detail_img = this.getElementAttribute(root_selectors.main + " " + detail_selectors.content.media_img, 'src');
                                 var tile_img = this.getElementAttribute(root_selectors.main + " " + tiles_selectors.tile.media_img, 'src');
@@ -208,11 +208,11 @@ module.exports = function(path, fn) {
                             detail_link = this.getElementAttribute(root_selectors.main + " " + detail_selectors.content.body.root + " " + 'a', 'href');
                             tile_link = this.getElementAttribute(root_selectors.main + " " + tiles_selectors.tile.root, 'data-link');
 
-                            if (data.name !== "Videos" && data.name !== "Images") {
+                            if(data.name !== "Videos" && data.name !== "Images") {
                                 test.assertEquals(detail_link, tile_link, "detail URL matches selected tile URL");
                             }
 
-                            if (data.template_group === "products" && data.has_price) {
+                            if(data.template_group === "products" && data.has_price) {
                                 test.comment("Check tile and detail price values");
                                 // Get only the text from the first element which has the given selector
                                 var tile_price = this.evaluate(function(selectors, key) {
@@ -232,7 +232,7 @@ module.exports = function(path, fn) {
                     }
 
                     test.comment("Check regexes from JSON file");
-                    for (var key in data.regexes) {
+                    for(var key in data.regexes) {
                         var regex = new RegExp(data.regexes[key]);
                         // Get only the text from the first element which has the given selector
                         var text = this.evaluate(function(selectors, key) {

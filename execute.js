@@ -1,10 +1,10 @@
 var scanDir = function(path) {
     var arr = [];
-    if (fs.exists(path) && fs.isFile(path)) {
+    if(fs.exists(path) && fs.isFile(path)) {
         arr.push(path);
-    } else if (fs.isDirectory(path)) {
+    } else if(fs.isDirectory(path)) {
         fs.list(path).forEach(function(e) {
-            if (e !== "." && e !== "..") {
+            if(e !== "." && e !== "..") {
                 arr = arr.concat(scanDir(path + '/' + e));
             }
         });
@@ -31,7 +31,7 @@ var testTilesNav = require("test_tiles_navigation.js");
 var curFile = 0;
 
 !function nextTest() {
-    if (!paths[curFile]) {
+    if(!paths[curFile]) {
         return console.log("done!");
     }
 

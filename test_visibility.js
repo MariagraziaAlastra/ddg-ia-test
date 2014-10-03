@@ -35,22 +35,27 @@ module.exports = function(path, fn) {
                     test.comment("Viewport changed to {width: 1336, height: 768}");
                     test.assertVisible(root_selectors.ia_tab, data.name + " IA is shown");
 
-                    if (path.match(/no-tiles/)) {
-
+                    if(path.match(/no-tiles/)) {
                         test.comment("Check if content is visible");
                         test.assertVisible((root_selectors.main + " " + root_selectors.no_tiles.content), "Content is visible");
 
-                        if (data.has_aux) {
+                        if(data.has_aux) {
                             test.comment("Check if Infobox is visible");
                             test.assertVisible((root_selectors.main + " " + root_selectors.no_tiles.aux), "Infobox is visible");
                         }
                     } else {
-                        if (template_group.tiles) {
-                            all_groups.tiles.default = all_groups.tiles.default.concat(template_group.tiles.default);
+                        if(template_group.tiles) {
+                            all_groups.tiles.
+                            default = all_groups.tiles.
+                            default.concat(template_group.tiles.
+                                default);
                             all_groups.tiles.optional = all_groups.tiles.optional.concat(template_group.tiles.optional);
                         }
-                        if (template_group.detail) {
-                            all_groups.detail_after.default = all_groups.detail_after.default.concat(template_group.detail.default);
+                        if(template_group.detail) {
+                            all_groups.detail_after.
+                            default = all_groups.detail_after.
+                            default.concat(template_group.detail.
+                                default);
                             all_groups.detail_after.optional = all_groups.detail_after.optional.concat(template_group.detail.optional);
                         }
 
@@ -60,7 +65,7 @@ module.exports = function(path, fn) {
                         test.comment("Detail shouldn't be visible");
                         test.assertNotVisible((root_selectors.main + " " + root_selectors.tiles.detail), "Detail is hidden");
 
-                        if (data.has_detail) {
+                        if(data.has_detail) {
                             test.comment("Select tile and see if detail is shown");
                             this.click(root_selectors.main + " " + tiles_selectors.tile.root);
                             test.comment("Performed click on the first tile");
@@ -72,7 +77,7 @@ module.exports = function(path, fn) {
                     }
 
                     test.comment("Check visibility of custom selectors from JSON file");
-                    for (var key in data.custom_selectors) {
+                    for(var key in data.custom_selectors) {
                         test.assertVisible((root_selectors.main + " " + data.custom_selectors[key]), data.name + " IA contains " + key);
                     }
 
@@ -86,22 +91,27 @@ module.exports = function(path, fn) {
                     test.comment("Viewport changed to {width: 360, height: 640}");
                     test.assertVisible(root_selectors.ia_tab, data.name + " IA is shown");
 
-                    if (path.match(/no-tiles/)) {
-
+                    if(path.match(/no-tiles/)) {
                         test.comment("Check if content is visible");
                         test.assertVisible((root_selectors.main + " " + root_selectors.no_tiles.content), "Content is visible");
 
-                        if (data.has_aux) {
+                        if(data.has_aux) {
                             test.comment("Infobox shouldn't be visible");
                             test.assertNotVisible((root_selectors.main + " " + root_selectors.no_tiles.aux), "Infobox is hidden");
                         }
                     } else {
-                        if (template_group.tiles) {
-                            all_groups.mobile.tiles.default = all_groups.mobile.tiles.default.concat(template_group.tiles.default);
+                        if(template_group.tiles) {
+                            all_groups.mobile.tiles.
+                            default = all_groups.mobile.tiles.
+                            default.concat(template_group.tiles.
+                                default);
                             all_groups.mobile.tiles.optional = all_groups.mobile.tiles.optional.concat(template_group.tiles.optional);
                         }
-                        if (template_group.detail) {
-                            all_groups.detail_after.default = all_groups.detail_after.default.concat(template_group.detail.default);
+                        if(template_group.detail) {
+                            all_groups.detail_after.
+                            default = all_groups.detail_after.
+                            default.concat(template_group.detail.
+                                default);
                             all_groups.detail_after.optional = all_groups.detail_after.optional.concat(template_group.detail.optional);
                         }
 
@@ -119,7 +129,7 @@ module.exports = function(path, fn) {
                         test.comment("Detail shouldn't be visible");
                         test.assertNotVisible((root_selectors.main + " " + root_selectors.tiles.detail), "Detail is hidden");
 
-                        if (data.has_detail) {
+                        if(data.has_detail) {
                             test.comment("Select tile and see if detail is shown");
                             this.click(root_selectors.main + " " + tiles_selectors.tile.root);
                             // On mobile the detail takes more time to show up
@@ -131,7 +141,7 @@ module.exports = function(path, fn) {
 
                                 // Placed here in case some custom selectors are in the detail
                                 test.comment("Check visibility of custom selectors from JSON file");
-                                for (var key in data.custom_selectors) {
+                                for(var key in data.custom_selectors) {
                                     test.assertVisible((root_selectors.main + " " + data.custom_selectors[key]), data.name + " IA contains " + key);
                                 }
 

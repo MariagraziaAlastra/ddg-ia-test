@@ -38,8 +38,8 @@ module.exports = function(path, fn) {
                 this.open("https://bttf.duckduckgo.com/?q=" + data.query).then(function() {
                     test.comment("Viewport changed to {width: 1336, height: 768}");
 
-                    if (!path.match(/no-tiles/)) {
-                        if (data.id === "googleplus" || data.id === "people_in_space") {
+                    if(!path.match(/no-tiles/)) {
+                        if(data.id === "googleplus" || data.id === "people_in_space") {
                             // Google + takes a while before loading the active ia tab
                             selector_waitfor = root_selectors.ia_tab + class_active;
                         } else {
@@ -54,7 +54,7 @@ module.exports = function(path, fn) {
                             prev_items = parseInt(this.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_prev), 'data-items'));
 
                             // If we are passing metabar_regex in JSON file it means there is no metabar count to take tot_items from
-                            if (data.metabar_regex) {
+                            if(data.metabar_regex) {
                                 tot_items = this.evaluate(function(selectors) {
                                     return __utils__.findAll(selectors.main + " " + tiles_selectors.tile.root).length;
                                 }, {
@@ -65,11 +65,11 @@ module.exports = function(path, fn) {
                             }
                             test.comment("Check tileview navigation");
                             test.assertDoesntExist((root_selectors.main + " " + tiles_selectors.nav_prev + class_scroll), "previous navigation is disabled");
-                            if (data.id === "products") {
+                            if(data.id === "products") {
                                 test.assert((next_items === ((tot_items - data.tileview_capacity) + 2)), "next navigation has the correct number of items");
                             } else {
                                 // Fails for Images
-                                if (tot_items >= data.tileview_capacity) {
+                                if(tot_items >= data.tileview_capacity) {
                                     test.assert((next_items === (tot_items - data.tileview_capacity)), ("next navigation has " + next_items + " items, should contain " + (tot_items - data.tileview_capacity)));
                                 } else {
                                     test.assert((next_items === 0), "next navigation has the correct number of items");
@@ -77,11 +77,11 @@ module.exports = function(path, fn) {
                             }
                             test.assert((prev_items === 0), "previous navigation is empty");
 
-                            if (next_items > 0) {
+                            if(next_items > 0) {
                                 test.assertExists((root_selectors.main + " " + tiles_selectors.nav_next + class_scroll), "next navigation is active");
                                 test.comment("Click on next navigation and check number of items again");
                                 this.click(root_selectors.main + " " + tiles_selectors.nav_next);
-                                if (next_items >= (data.tileview_capacity * 2)) {
+                                if(next_items >= (data.tileview_capacity * 2)) {
                                     test.assert(parseInt(this.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_next), 'data-items')) ===
                                         (tot_items - (data.tileview_capacity * 2)), "next navigation has the correct number of items");
                                     test.assert(parseInt(this.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_prev),
@@ -94,7 +94,7 @@ module.exports = function(path, fn) {
                                 }
                             }
 
-                            if (tot_items >= (data.tileview_capacity * 3)) {
+                            if(tot_items >= (data.tileview_capacity * 3)) {
                                 test.comment("Check grid mode");
 
                                 test.comment("Click on the metabar mode button and check if tileview expands to grid");
