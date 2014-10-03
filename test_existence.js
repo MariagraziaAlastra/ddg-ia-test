@@ -1,6 +1,6 @@
-casper.test.begin('Check elements existence and correct nesting', function suite(test) {
+module.exports = function(path, fn){
+    casper.test.begin('Check elements existence and correct nesting', function suite(test) {
 
-    module.exports = function(path, fn){
         var data = require(path);
         var class_selected = ".is-selected";
 
@@ -265,6 +265,7 @@ casper.test.begin('Check elements existence and correct nesting', function suite
 
         casper.run(function() {
             fn();
+            test.done();
         });
-    }
-});
+    });
+}

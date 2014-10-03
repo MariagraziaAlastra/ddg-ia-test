@@ -1,3 +1,4 @@
+module.exports = function(path, fn) {
 casper.test.begin('Check detail navigation', function suite(test) {
     // This is just for testing - the path should actually be passed as a command-line arg
     var path = "./json/tiles/bbc.json";
@@ -122,6 +123,8 @@ casper.test.begin('Check detail navigation', function suite(test) {
 
 
     casper.run(function() {
+        fn();
         test.done();
     });
 });
+}
