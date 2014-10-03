@@ -9,5 +9,17 @@
    "aux" : {
       "default" : [],
       "optional" : []
+   },
+   "tiles" : {
+      "default" : [],
+      "optional" : []
+   },
+   "detail" : {
+      "default" : [],
+      "optional" : []
+   },
+   "metabar" : {
+      "default" : [],
+      "optional" : []
    }
 }
