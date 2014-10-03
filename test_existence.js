@@ -78,9 +78,6 @@ module.exports = function(path, fn) {
                     test.comment("Viewport changed to {width: 1336, height: 768}");
                     test.assertExists(root_selectors.ia_tab, data.name + " IA is shown");
 
-                    test.comment("\n" + all_groups.cw.
-                        default +"\n");
-
                     if(data.template_group !== "") {
                         template_group = require("./json/template_groups/" + data.template_group + ".json");
                         test.comment("./json/template_groups/" + data.template_group + ".json");
