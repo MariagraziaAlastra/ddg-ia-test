@@ -73,14 +73,7 @@ module.exports = function(path, fn) {
                             test.comment("Check if detail is visible now");
                             test.assertVisible((root_selectors.main + " " + root_selectors.tiles.detail), "Detail is now shown");
                         }
-
                     }
-
-                    test.comment("Check visibility of custom selectors from JSON file");
-                    for(var key in data.custom_selectors) {
-                        test.assertVisible((root_selectors.main + " " + data.custom_selectors[key]), data.name + " IA contains " + key);
-                    }
-
                 });
             });
         });
@@ -139,20 +132,12 @@ module.exports = function(path, fn) {
                                 test.comment("Check if detail is visible now");
                                 test.assertVisible((root_selectors.main + " " + root_selectors.tiles.detail), "Detail is now shown");
 
-                                // Placed here in case some custom selectors are in the detail
-                                test.comment("Check visibility of custom selectors from JSON file");
-                                for(var key in data.custom_selectors) {
-                                    test.assertVisible((root_selectors.main + " " + data.custom_selectors[key]), data.name + " IA contains " + key);
-                                }
-
                                 test.comment("Click on the detail close icon and check if detail is now hidden");
                                 this.click(root_selectors.main + " " + detail_selectors.close);
                                 test.assertNotVisible((root_selectors.main + " " + root_selectors.tiles.detail), "detail is hidden");
                             });
                         }
-
                     }
-
                 });
             });
         });
