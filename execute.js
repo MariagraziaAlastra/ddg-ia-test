@@ -25,8 +25,8 @@ paths = scanDir(path_no_tiles);
 var testVisibility = require("test_visibility.js");
 var testExistence = require("test_existence.js");
 var testValues = require("test_values.js");
-var testDetailNav = require("test_detail_navigation");
-var testTilesNav = require("test_tiles_navigation");
+var testDetailNav = require("test_detail_navigation.js");
+var testTilesNav = require("test_tiles_navigation.js");
 
 var curFile = 0;
 

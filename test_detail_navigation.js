@@ -70,7 +70,11 @@ module.exports = function(path, fn) {
                             this.click(root_selectors.main + " " + detail_selectors.close);
                             test.assertNotVisible((root_selectors.main + " " + detail_selectors.root), "detail is hidden");
                             test.assertDoesntExist((root_selectors.main + " " + tiles_selectors.tile.root + class_selected), "no tile selected");
+                        } else {
+                            test.comment("Skip detail navigation test for IA " + data.name + " - has no detail");
                         }
+                    } else {
+                        test.comment("Skip detail navigation test for IA " + data.name + " - has no tiles");
                     }
                 });
             });
@@ -114,7 +118,11 @@ module.exports = function(path, fn) {
                             this.click(root_selectors.main + " " + detail_selectors.close);
                             test.assertNotVisible((root_selectors.main + " " + detail_selectors.root), "detail is hidden");
                             test.assertDoesntExist((root_selectors.main + " " + tiles_selectors.tile.root + class_selected), "no tile selected");
+                        } else {
+                            test.comment("Skip detail navigation test for IA " + data.name + " - has no detail");
                         }
+                    } else {
+                        test.comment("Skip detail navigation test for IA " + data.name + " - has no tiles");
                     }
                 });
             });

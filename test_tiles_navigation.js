@@ -108,6 +108,8 @@ module.exports = function(path, fn) {
                                 test.assertDoesntExist((root_selectors.main + " " + root_selectors.tiles.tiles + class_grid), "tileview collapsed");
                             }
                         });
+                    } else {
+                        test.comment("Skip tiles navigation test for IA " + data.name + " - has no tiles");
                     }
                 });
             });
