@@ -8,7 +8,7 @@
    "tileview_capacity" : 6,
    "moreAt_url" : "http://forecast.io/#/f/37.6167,15.0833",
    "moreAt_regex" : "([a-zA-Z]+\\s)*Forecast\\.io",
-   "metabar_regex" : "^Weather\\sfor\\s[A-Z][a-z]+,\\s[A-Za-z]+$",
+   "metabar_regex" : "^Weather\\sfor\\s([A-Z][a-z]\\s?)+,\\s[A-Za-z]+$",
    "template_group" : "",
    "custom_selectors" : {
       "fahrenheit" : "div.zci__metabar__secondary-text a#fe_temp_switch span#fe_fahrenheit",

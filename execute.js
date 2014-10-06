@@ -32,51 +32,69 @@ var curFile = 0;
 var tiles_done = false;
 var no_tiles_done = false;
 
-!function nextTest() {
+! function nextTest() {
     var path = paths[curFile];
     if(!path) {
         return console.log("done!");
     }
 
     var data = require(path);
-    console.log("\n ****** Testing " + data.name + " IA ******\n");
 
-    testValues(path, function() {
-        if (!path.match(/no-tiles/)) {
-            // These tests are only for IAs with tiles
-            testDetailNav(path, function() {
-                testTilesNav(path, function() {
-                    if (!tiles_done) {
-                        testExistence(path, function() {
-                            testVisibility(path, function() {
+    casper.test.begin("\n ****** Testing " + data.name + " IA ******\n", function suite(test) {
+        var ia_tab = 'a.zcm__link--' + data.ia_tab_id;
+        casper.options.viewportSize = {
+            width: 1336,
+            height: 768
+        };
 
-                                console.log("\n ****** tiles_done: " + tiles_done + " " + data.name + " IA ******\n");
-                                tiles_done = true;
-                                curFile++;
-                                nextTest();
-                            });
-                        });
-                    } else {
-                        curFile++;
-                        nextTest();
-                    }
-                });
-            });
-        } else {
-            if (!no_tiles_done) {
-                testExistence(path, function() {
-                    testVisibility(path, function() {
+        casper.start("https://bttf.duckduckgo.com/?q=" + data.query, function() {
+            test.comment("\n Test " + data.name + " IA content values \n");
+            test.comment(casper.options.viewportSize.width);
+            testValues(path);
+        });
 
-                                console.log("\n ****** tiles_done: " + no_tiles_done + " " + data.name + " IA ******\n");
-                        no_tiles_done = true;
-                        curFile++;
-                        nextTest();
-                    });
-                });
+        casper.then(function() {
+            if(!path.match(/no-tiles/)) {
+                test.comment("\n Test " + data.name + " IA detail navigation \n");
+                testDetailNav(path);
             } else {
-                curFile++;
-                nextTest();
+                test.comment("Skip detail navigation test for " + data.name + " - has no tiles");
             }
-        }
+        });
+
+        casper.then(function() {
+            if(!path.match(/no-tiles/)) {
+                test.comment("\n Test " + data.name + " IA tiles navigation \n");
+                testTilesNav(path);
+            } else {
+                test.comment("Skip tiles navigation test for " + data.name + " - has no tiles");
+            }
+        });
+
+        casper.then(function() {
+            if(!path.match(/no-tiles/) && !tiles_done || path.match(/no-tiles/) && !no_tiles_done) {
+                test.comment("\n Test " + data.name + " IA elements existence and correct nesting \n");
+                testExistence(path);
+            }
+        });
+
+        casper.then(function() {
+            if(!path.match(/no-tiles/) && !tiles_done || path.match(/no-tiles/) && !no_tiles_done) {
+                if (path.match(/no-tiles/)) {
+                    no_tiles_done = true;
+                } else {
+                    tiles_done = true;
+                }
+
+                test.comment("\n Test " + data.name + " IA elements visibility \n");
+                testVisibility(path);
+            }
+        });
+
+        casper.run(function() {
+            test.done();
+            curFile++;
+            nextTest();
+        });
     });
 }();
