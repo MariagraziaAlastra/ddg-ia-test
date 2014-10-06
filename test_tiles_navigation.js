@@ -1,4 +1,4 @@
-module.exports = function(path, fn) {
+module.exports = function(path) {
     var data = require(path);
     var class_scroll = ".can-scroll";
     var class_active = ".is-active";
@@ -33,14 +33,7 @@ module.exports = function(path, fn) {
 
 
     if(!path.match(/no-tiles/)) {
-        if(data.id === "googleplus" || data.id === "people_in_space") {
-            // Google + takes a while before loading the active ia tab
-            selector_waitfor = root_selectors.ia_tab + class_active;
-        } else {
-            // Some IAs, especially Images, take a while before loading tiles
-            selector_waitfor = root_selectors.main + " " + tiles_selectors.tile.root;
-        }
-        casper.waitForSelector(selector_waitfor, function() {
+        casper.wait(5000, function() {
             // leaving this here for now for debug purposes
             casper.captureSelector('C:\desktop.jpeg', 'html');
             next_items = parseInt(casper.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_next), 'data-items'));
@@ -50,9 +43,8 @@ module.exports = function(path, fn) {
             if(data.metabar_regex) {
                 tot_items = casper.evaluate(function(selectors) {
                     return __utils__.findAll(selectors.main + " " + tiles_selectors.tile.root).length;
-                }, {
-                    selectors: root_selectors
-                });
+                }, {selectors: root_selectors});
+
             } else {
                 tot_items = parseInt(casper.fetchText(root_selectors.main + " " + metabar_selectors.text.count));
             }
@@ -92,10 +84,12 @@ module.exports = function(path, fn) {
 
             if(tot_items >= (data.tileview_capacity * 3)) {
                 casper.test.comment("Check grid mode");
+
                 casper.test.comment("Click on the metabar mode button and check if tileview expands to grid");
                 casper.click(root_selectors.main + " " + metabar_selectors.mode);
                 casper.test.assertExists((root_selectors.main + " " + root_selectors.tiles.tileview_grid), "mode switched to grid");
                 casper.test.assertExists((root_selectors.main + " " + root_selectors.tiles.tiles + class_grid), "tileview expanded to grid");
+
                 casper.test.comment("Click again on the metabar mode button and check if tileview collapses");
                 casper.click(root_selectors.main + " " + metabar_selectors.mode);
                 casper.test.assertDoesntExist((root_selectors.main + " " + root_selectors.tiles.tileview_grid), "mode switched back");

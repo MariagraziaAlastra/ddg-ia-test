@@ -1,4 +1,4 @@
-module.exports = function(path, fn) {
+module.exports = function(path) {
     var data = require(path);
     var class_selected = ".is-selected";
     var class_scroll = ".can-scroll";
@@ -52,7 +52,7 @@ module.exports = function(path, fn) {
             casper.click(root_selectors.main + " " + detail_selectors.controls.next);
 
             var new_detail_link = casper.getElementAttribute(root_selectors.main + " " + detail_selectors.content.body.root + " " + 'a', 'href');
-            casper.test.assertNotEquals(new_detail_link, detail_link, "detail now links to a different show");
+            casper.test.assertNotEquals(new_detail_link, detail_link, "detail now links to next tile");
 
             if(data.name !== "Videos" && data.name !== "Images") {
                 casper.test.assertEquals(casper.getElementAttribute(root_selectors.main + " " + tiles_selectors.tile.root + class_selected, 'data-link'),
@@ -69,49 +69,4 @@ module.exports = function(path, fn) {
     } else {
         casper.test.comment("Skip detail navigation test for IA " + data.name + " - has no tiles");
     }
-
-    casper.viewport(360, 640).then(function() {
-        casper.reload(function() {
-            casper.test.comment("Viewport changed to {width: 360, height: 640}");
-            if(!path.match(/no-tiles/)) {
-                if(data.has_detail) {
-                    casper.test.comment("Select first tile to make detail show up");
-                    casper.click(root_selectors.main + " " + tiles_selectors.tile.root);
-
-                    casper.test.comment("Check selected tile and detail content");
-                    detail_title = casper.fetchText(root_selectors.main + " " + detail_selectors.content.body.title).trim();
-                    tile_title = casper.fetchText(root_selectors.main + " " + tiles_selectors.tile.root + class_selected + " " +
-                                 tiles_selectors.tile.title.root).trim();
-                    detail_link = casper.getElementAttribute(root_selectors.main + " " + detail_selectors.content.body.root + " " + 'a', 'href');
-                    tile_link = casper.getElementAttribute(root_selectors.main + " " + tiles_selectors.tile.root, 'data-link');
-
-                    casper.test.comment("Check detail controls");
-                    casper.test.assertExists((root_selectors.main + " " + detail_selectors.controls.next + class_scroll),
-                                            "next control is active");
-                    casper.test.assertDoesntExist((root_selectors.main + " " + detail_selectors.controls.prev + class_scroll),
-                                                 "previous control is disabled");
-
-                    casper.test.comment("Click on next control and check if detail now refers to next tile");
-                    casper.click(root_selectors.main + " " + detail_selectors.controls.next);
-
-                    var new_detail_link = casper.getElementAttribute(root_selectors.main + " " + detail_selectors.content.body.root + " " + 'a', 'href');
-                    casper.test.assertNotEquals(new_detail_link, detail_link, "detail now links to a different show");
-
-                    if(data.name !== "Videos" && data.name !== "Images") {
-                        casper.test.assertEquals(casper.getElementAttribute(root_selectors.main + " " + tiles_selectors.tile.root + class_selected, 'data-link'),
-                                                new_detail_link, "detail now refers to next tile");
-                    }
-
-                    casper.test.comment("Click on the detail close icon and check if detail is now hidden and no tile is selected");
-                    casper.click(root_selectors.main + " " + detail_selectors.close);
-                    casper.test.assertNotVisible((root_selectors.main + " " + detail_selectors.root), "detail is hidden");
-                    casper.test.assertDoesntExist((root_selectors.main + " " + tiles_selectors.tile.root + class_selected), "no tile selected");
-                } else {
-                    casper.test.comment("Skip detail navigation test for IA " + data.name + " - has no detail");
-                }
-            } else {
-                casper.test.comment("Skip detail navigation test for IA " + data.name + " - has no tiles");
-            }
-        });
-    });
 }

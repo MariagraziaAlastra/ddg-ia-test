@@ -1,4 +1,4 @@
-module.exports = function(path, fn) {
+module.exports = function(path) {
     var data = require(path);
     var class_selected = ".is-selected";
     var moreAt_selector, detail_title, tile_title, detail_link, tile_link;
@@ -46,8 +46,10 @@ module.exports = function(path, fn) {
 
     if(data.template_group !== "") {
         casper.test.comment("Check moreAt text and URL");
-        casper.test.assertMatch(casper.fetchText(root_selectors.main + " " + moreAt_selector).trim(), moreAt_regex, "moreAt text value is correct");
-        casper.test.assertEquals(casper.getElementAttribute(root_selectors.main + " " + moreAt_selector, 'href'), data.moreAt_url, "moreAt URL is correct");
+        casper.test.assertMatch(casper.fetchText(root_selectors.main + " " + moreAt_selector).trim(), moreAt_regex,
+                               "moreAt text value is correct");
+        casper.test.assertEquals(casper.getElementAttribute(root_selectors.main + " " + moreAt_selector, 'href'), data.moreAt_url,
+                                "moreAt URL is correct");
     }
 
     if(!path.match(/no-tiles/)) {
@@ -62,7 +64,8 @@ module.exports = function(path, fn) {
 
         if(data.template_group === "products" && data.has_price) {
             casper.test.comment("Check price value");
-            casper.test.assertMatch(casper.fetchText(root_selectors.main + " " + tiles_selectors.tile.price), price_regex, "price text value is correct");
+            casper.test.assertMatch(casper.fetchText(root_selectors.main + " " + tiles_selectors.tile.price), price_regex,
+                                   "price text value is correct");
         }
 
         if(data.has_detail) {
@@ -92,22 +95,21 @@ module.exports = function(path, fn) {
                 var tile_img = casper.getElementAttribute(root_selectors.main + " " + tiles_selectors.tile.media_img, 'src');
                 casper.test.assertEquals(detail_img, tile_img, "detail image matches selected tile image");
             }
+
             detail_link = casper.getElementAttribute(root_selectors.main + " " + detail_selectors.content.body.root + " " + 'a', 'href');
             tile_link = casper.getElementAttribute(root_selectors.main + " " + tiles_selectors.tile.root, 'data-link');
 
             if(data.name !== "Videos" && data.name !== "Images") {
                 casper.test.assertEquals(detail_link, tile_link, "detail URL matches selected tile URL");
             }
+
             if(data.template_group === "products" && data.has_price) {
                 casper.test.comment("Check tile and detail price values");
                 // Get only the text from the first element which has the given selector
-                var tile_price = casper.evaluate(function(selectors, key) {
-                    var elements = __utils__.findAll(root_selectors.main + " " + tiles_selectors.tile.price);
+                var tile_price = casper.evaluate(function(selectors) {
+                    var elements = __utils__.findAll(selectors.main + " " + tiles_selectors.tile.price);
                     return elements[0].innerHTML.trim();
-                }, {
-                    selectors: selectors,
-                    key: key
-                });
+                }, {selectors: root_selectors});
 
                 var detail_price = casper.fetchText(root_selectors.main + " " + detail_selectors.content.body.subtitle.price).trim();
                 casper.test.assertMatch(tile_price, price_regex, "tile price has the correct value");
@@ -124,106 +126,8 @@ module.exports = function(path, fn) {
         var text = casper.evaluate(function(selectors, key) {
             var elements = __utils__.findAll(selectors.main + " " + key);
             return elements[0].innerHTML.trim();
-        }, {
-            selectors: root_selectors,
-            key: key
-        });
+        }, {selectors: root_selectors, key: key});
+
         casper.test.assertMatch(text, regex, key + " text value is correct");
     }
-
-    casper.viewport(360, 640).then(function() {
-        casper.reload(function() {
-            casper.test.comment("Viewport changed to {width: 360, height: 640}");
-
-            if(data.template_group !== "") {
-                casper.test.comment("Check moreAt text and URL");
-                casper.test.assertMatch(casper.fetchText(root_selectors.main + " " + moreAt_selector).trim(), moreAt_regex,
-                                       "moreAt text value is correct");
-                casper.test.assertEquals(casper.getElementAttribute(root_selectors.main + " " + moreAt_selector, 'href'), data.moreAt_url,
-                                        "moreAt URL is correct");
-            }
-            if(!path.match(/no-tiles/)) {
-                casper.test.comment("Check metabar text");
-                if(!data.metabar_regex) {
-                    casper.test.assertMatch(casper.fetchText(root_selectors.main + " " + metabar_selectors.text.root).trim(), metabar_regex,
-                                           "metabar text value is correct");
-                } else {
-                    casper.test.assertMatch(casper.fetchText(root_selectors.main + " " + metabar_selectors.text.root).trim(), new RegExp(data.metabar_regex),
-                                           "metabar text value is correct");
-                }
-
-                if(data.template_group === "products" && data.has_price) {
-                    casper.test.comment("Check price value");
-                    casper.test.assertMatch(casper.fetchText(root_selectors.main + " " + tiles_selectors.tile.price), price_regex, "price text value is correct");
-                }
-
-                if(data.has_detail) {
-                    casper.test.comment("Select first tile to make detail show up");
-                    casper.click(root_selectors.main + " " + tiles_selectors.tile.root);
-
-                    casper.test.comment("Check selected tile and detail content");
-                    detail_title = casper.fetchText(root_selectors.main + " " + detail_selectors.content.body.title).trim();
-                    tile_title = casper.fetchText(root_selectors.main + " " + tiles_selectors.tile.root + class_selected + " " +
-                                               tiles_selectors.tile.title.root).trim();
-
-                    if(data.name !== "Images") {
-                        if(detail_title.length === tile_title.length) {
-                            casper.test.assertEquals(detail_title, tile_title, "detail title matches selected tile title");
-                        } else if(detail_title.length > tile_title.length) {
-                            casper.test.assertEquals(tile_title.substr(-3, 3), "...", "selected tile title has ellipsis");
-                            casper.test.assertEquals(tile_title.substr(0, tile_title.length - 3), detail_title.substr(0, tile_title.length - 3),
-                                                    "detail title matches selected tile title");
-                        } else {
-                            casper.test.fail("detail title is different from selected tile title");
-                        }
-                    }
-
-                    if(data.template_group === "media") {
-                        casper.test.comment("Check if detail image matches selected tile image");
-                        var detail_img = casper.getElementAttribute(root_selectors.main + " " + detail_selectors.content.media_img, 'src');
-                        var tile_img = casper.getElementAttribute(root_selectors.main + " " + tiles_selectors.tile.media_img, 'src');
-                        casper.test.assertEquals(detail_img, tile_img, "detail image matches selected tile image");
-                    }
-
-                    detail_link = casper.getElementAttribute(root_selectors.main + " " + detail_selectors.content.body.root + " " + 'a', 'href');
-                    tile_link = casper.getElementAttribute(root_selectors.main + " " + tiles_selectors.tile.root, 'data-link');
-
-                    if(data.name !== "Videos" && data.name !== "Images") {
-                        casper.test.assertEquals(detail_link, tile_link, "detail URL matches selected tile URL");
-                    }
-
-                    if(data.template_group === "products" && data.has_price) {
-                        casper.test.comment("Check tile and detail price values");
-                        // Get only the text from the first element which has the given selector
-                        var tile_price = casper.evaluate(function(selectors, key) {
-                            var elements = __utils__.findAll(root_selectors.main + " " + tiles_selectors.tile.price);
-                            return elements[0].innerHTML.trim();
-                        }, {
-                            selectors: selectors,
-                            key: key
-                        });
-
-                        var detail_price = casper.fetchText(root_selectors.main + " " + detail_selectors.content.body.subtitle.price).trim();
-                        casper.test.assertMatch(tile_price, price_regex, "tile price has the correct value");
-                        casper.test.assertMatch(detail_price, price_regex, "detail price has the correct value");
-                        casper.test.assertEquals(detail_price, tile_price, "detail and selected tile have the same price");
-                    }
-                }
-            }
-
-            casper.test.comment("Check regexes from JSON file");
-            for(var key in data.regexes) {
-                var regex = new RegExp(data.regexes[key]);
-                // Get only the text from the first element which has the given selector
-                var text = casper.evaluate(function(selectors, key) {
-                    var elements = __utils__.findAll(selectors.main + " " + key);
-                    return elements[0].innerHTML.trim();
-                }, {
-                    selectors: root_selectors,
-                    key: key
-                });
-                casper.test.assertMatch(text, regex, key + " text value is correct");
-            }
-        });
-    });
 }
