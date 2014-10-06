@@ -20,6 +20,7 @@ var path_no_tiles = base_path + "json/no-tiles";
 var paths = [];
 paths = scanDir(path_no_tiles);
 paths = paths.concat(scanDir(path_tiles));
+console.log(paths.length);
 
 // Require test files
 var testVisibility = require("test_visibility.js");
@@ -55,8 +56,12 @@ var no_tiles_done = false;
 
         casper.then(function() {
             if(!path.match(/no-tiles/)) {
-                test.comment("\n Test " + data.name + " IA detail navigation \n");
-                testDetailNav(path);
+                if (data.has_detail) {
+                    test.comment("\n Test " + data.name + " IA detail navigation \n");
+                    testDetailNav(path);
+                } else {
+                    test.comment("Skip detail navigation test for " + data.name + " - has no detail");
+                }
             } else {
                 test.comment("Skip detail navigation test for " + data.name + " - has no tiles");
             }
