@@ -29,24 +29,54 @@ var testDetailNav = require("test_detail_navigation.js");
 var testTilesNav = require("test_tiles_navigation.js");
 
 var curFile = 0;
+var tiles_done = false;
+var no_tiles_done = false;
 
 !function nextTest() {
-    if(!paths[curFile]) {
+    var path = paths[curFile];
+    if(!path) {
         return console.log("done!");
     }
 
-    var data = require(paths[curFile]);
+    var data = require(path);
     console.log("\n ****** Testing " + data.name + " IA ******\n");
-    testExistence(paths[curFile], function() {
-        testVisibility(paths[curFile], function() {
-            testValues(paths[curFile], function() {
-                testDetailNav(paths[curFile], function() {
-                    testTilesNav(paths[curFile], function() {
+
+    testValues(path, function() {
+        if (!path.match(/no-tiles/)) {
+            // These tests are only for IAs with tiles
+            testDetailNav(path, function() {
+                testTilesNav(path, function() {
+                    if (!tiles_done) {
+                        testExistence(path, function() {
+                            testVisibility(path, function() {
+
+                                console.log("\n ****** tiles_done: " + tiles_done + " " + data.name + " IA ******\n");
+                                tiles_done = true;
+                                curFile++;
+                                nextTest();
+                            });
+                        });
+                    } else {
+                        curFile++;
+                        nextTest();
+                    }
+                });
+            });
+        } else {
+            if (!no_tiles_done) {
+                testExistence(path, function() {
+                    testVisibility(path, function() {
+
+                                console.log("\n ****** tiles_done: " + no_tiles_done + " " + data.name + " IA ******\n");
+                        no_tiles_done = true;
                         curFile++;
                         nextTest();
                     });
                 });
-            });
-        });
+            } else {
+                curFile++;
+                nextTest();
+            }
+        }
     });
 }();
