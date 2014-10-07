@@ -31,72 +31,68 @@ module.exports = function(path) {
         }
     };
 
+    casper.wait(3500, function() {
+        // leaving this here for now for debug purposes
+        casper.captureSelector('C:\desktop.jpeg', 'html');
+        next_items = parseInt(casper.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_next), 'data-items'));
+        prev_items = parseInt(casper.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_prev), 'data-items'));
 
-    if(!path.match(/no-tiles/)) {
-        casper.wait(5000, function() {
-            // leaving this here for now for debug purposes
-            casper.captureSelector('C:\desktop.jpeg', 'html');
-            next_items = parseInt(casper.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_next), 'data-items'));
-            prev_items = parseInt(casper.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_prev), 'data-items'));
+        // If we are passing metabar_regex in JSON file it means there is no metabar count to take tot_items from
+        if(data.metabar_regex) {
+            tot_items = casper.evaluate(function(root_selectors, tiles_selectors) {
+                return document.querySelectorAll(root_selectors.main + " " + tiles_selectors.tile.root).length;
+            }, {root_selectors: root_selectors, tiles_selectors: tiles_selectors});
 
-            // If we are passing metabar_regex in JSON file it means there is no metabar count to take tot_items from
-            if(data.metabar_regex) {
-                tot_items = casper.evaluate(function(selectors) {
-                    return __utils__.findAll(selectors.main + " " + tiles_selectors.tile.root).length;
-                }, {selectors: root_selectors});
+        } else {
+            tot_items = parseInt(casper.fetchText(root_selectors.main + " " + metabar_selectors.text.count));
+        }
 
+        casper.test.comment("Check tileview navigation");
+        casper.test.assertDoesntExist((root_selectors.main + " " + tiles_selectors.nav_prev + class_scroll), "previous navigation is disabled");
+
+        if(data.id === "products") {
+            casper.test.assert((next_items === ((tot_items - data.tileview_capacity) + 2)),
+                              "next navigation has " + next_items + " items, should contain " + ((tot_items - data.tileview_capacity) + 2));
+        } else {
+            // Fails for Images
+            if(tot_items >= data.tileview_capacity) {
+                casper.test.assert((next_items === (tot_items - data.tileview_capacity)),
+                                  ("next navigation has " + next_items + " items, should contain " + (tot_items - data.tileview_capacity)));
             } else {
-                tot_items = parseInt(casper.fetchText(root_selectors.main + " " + metabar_selectors.text.count));
+                casper.test.assert((next_items === 0), "next navigation has zero items");
             }
+        }
 
-            casper.test.comment("Check tileview navigation");
-            casper.test.assertDoesntExist((root_selectors.main + " " + tiles_selectors.nav_prev + class_scroll), "previous navigation is disabled");
-
-            if(data.id === "products") {
-                casper.test.assert((next_items === ((tot_items - data.tileview_capacity) + 2)), "next navigation has the correct number of items");
+        casper.test.assert((prev_items === 0), "previous navigation is empty");
+        if(next_items > 0) {
+            casper.test.assertExists((root_selectors.main + " " + tiles_selectors.nav_next + class_scroll), "next navigation is active");
+            casper.test.comment("Click on next navigation and check number of items again");
+            casper.click(root_selectors.main + " " + tiles_selectors.nav_next);
+            if(next_items >= (data.tileview_capacity * 2)) {
+                casper.test.assert(parseInt(casper.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_next), 'data-items')) === 
+                                  (tot_items - (data.tileview_capacity * 2)), "next navigation has the correct number of items");
+                casper.test.assert(parseInt(casper.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_prev), 'data-items')) == 
+                                  data.tileview_capacity, "previous navigation has the correct number of items");
             } else {
-                // Fails for Images
-                if(tot_items >= data.tileview_capacity) {
-                    casper.test.assert((next_items === (tot_items - data.tileview_capacity)),
-                                      ("next navigation has " + next_items + " items, should contain " + (tot_items - data.tileview_capacity)));
-                } else {
-                    casper.test.assert((next_items === 0), "next navigation has the correct number of items");
-                }
+                casper.test.assert(parseInt(casper.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_next), 'data-items')) < next_items,
+                                  "next navigation has less items now");
+                casper.test.assert(parseInt(casper.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_prev), 'data-items')) > 0,
+                                  "previous navigation has items now");
             }
+        }
 
-            casper.test.assert((prev_items === 0), "previous navigation is empty");
-            if(next_items > 0) {
-                casper.test.assertExists((root_selectors.main + " " + tiles_selectors.nav_next + class_scroll), "next navigation is active");
-                casper.test.comment("Click on next navigation and check number of items again");
-                casper.click(root_selectors.main + " " + tiles_selectors.nav_next);
-                if(next_items >= (data.tileview_capacity * 2)) {
-                    casper.test.assert(parseInt(casper.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_next), 'data-items')) === 
-                                      (tot_items - (data.tileview_capacity * 2)), "next navigation has the correct number of items");
-                    casper.test.assert(parseInt(casper.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_prev), 'data-items')) == 
-                                      data.tileview_capacity, "previous navigation has the correct number of items");
-                } else {
-                    casper.test.assert(parseInt(casper.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_next), 'data-items')) < next_items,
-                                      "next navigation has less items now");
-                    casper.test.assert(parseInt(casper.getElementAttribute((root_selectors.main + " " + tiles_selectors.nav_prev), 'data-items')) > 0,
-                                      "previous navigation has items now");
-                }
-            }
+        if(tot_items >= (data.tileview_capacity * 3)) {
+            casper.test.comment("Check grid mode");
 
-            if(tot_items >= (data.tileview_capacity * 3)) {
-                casper.test.comment("Check grid mode");
+            casper.test.comment("Click on the metabar mode button and check if tileview expands to grid");
+            casper.click(root_selectors.main + " " + metabar_selectors.mode);
+            casper.test.assertExists((root_selectors.main + " " + root_selectors.tiles.tileview_grid), "mode switched to grid");
+            casper.test.assertExists((root_selectors.main + " " + root_selectors.tiles.tiles + class_grid), "tileview expanded to grid");
 
-                casper.test.comment("Click on the metabar mode button and check if tileview expands to grid");
-                casper.click(root_selectors.main + " " + metabar_selectors.mode);
-                casper.test.assertExists((root_selectors.main + " " + root_selectors.tiles.tileview_grid), "mode switched to grid");
-                casper.test.assertExists((root_selectors.main + " " + root_selectors.tiles.tiles + class_grid), "tileview expanded to grid");
-
-                casper.test.comment("Click again on the metabar mode button and check if tileview collapses");
-                casper.click(root_selectors.main + " " + metabar_selectors.mode);
-                casper.test.assertDoesntExist((root_selectors.main + " " + root_selectors.tiles.tileview_grid), "mode switched back");
-                casper.test.assertDoesntExist((root_selectors.main + " " + root_selectors.tiles.tiles + class_grid), "tileview collapsed");
-            }
-        });
-    } else {
-        casper.test.comment("Skip tiles navigation test for IA " + data.name + " - has no tiles");
-    }
+            casper.test.comment("Click again on the metabar mode button and check if tileview collapses");
+            casper.click(root_selectors.main + " " + metabar_selectors.mode);
+            casper.test.assertDoesntExist((root_selectors.main + " " + root_selectors.tiles.tileview_grid), "mode switched back");
+            casper.test.assertDoesntExist((root_selectors.main + " " + root_selectors.tiles.tiles + class_grid), "tileview collapsed");
+        }
+    });
 }

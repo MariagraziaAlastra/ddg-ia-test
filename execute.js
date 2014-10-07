@@ -20,7 +20,6 @@ var path_no_tiles = base_path + "json/no-tiles";
 var paths = [];
 paths = scanDir(path_no_tiles);
 paths = paths.concat(scanDir(path_tiles));
-console.log(paths.length);
 
 // Require test files
 var testVisibility = require("test_visibility.js");
@@ -35,13 +34,20 @@ var no_tiles_done = false;
 
 ! function nextTest() {
     var path = paths[curFile];
-    if(!path) {
-        return console.log("done!");
-    }
 
     var data = require(path);
 
     casper.test.begin("\n ****** Testing " + data.name + " IA ******\n", function suite(test) {
+        if(!path) {
+            test.done();
+            return console.log("done!");
+        }
+
+        if (data.status !== "live") {
+            curFile++;
+            naxtTest();
+        }
+
         var ia_tab = 'a.zcm__link--' + data.ia_tab_id;
         casper.options.viewportSize = {
             width: 1336,
@@ -97,9 +103,9 @@ var no_tiles_done = false;
         });
 
         casper.run(function() {
-            test.done();
             curFile++;
             nextTest();
+            test.done();
         });
     });
 }();

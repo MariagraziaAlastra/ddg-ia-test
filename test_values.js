@@ -106,10 +106,10 @@ module.exports = function(path) {
             if(data.template_group === "products" && data.has_price) {
                 casper.test.comment("Check tile and detail price values");
                 // Get only the text from the first element which has the given selector
-                var tile_price = casper.evaluate(function(selectors) {
+                var tile_price = casper.evaluate(function(selectors, tiles_selectors) {
                     var elements = __utils__.findAll(selectors.main + " " + tiles_selectors.tile.price);
                     return elements[0].innerHTML.trim();
-                }, {selectors: root_selectors});
+                }, {selectors: root_selectors, tiles_selectors: tiles_selectors});
 
                 var detail_price = casper.fetchText(root_selectors.main + " " + detail_selectors.content.body.subtitle.price).trim();
                 casper.test.assertMatch(tile_price, price_regex, "tile price has the correct value");
