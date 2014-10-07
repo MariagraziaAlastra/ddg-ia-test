@@ -46,13 +46,10 @@ module.exports = function(path) {
     casper.test.assertExists((root_selectors.main + " " + detail_selectors.controls.next + class_scroll), "next control is active");
     casper.test.assertDoesntExist((root_selectors.main + " " + detail_selectors.controls.prev + class_scroll), "previous control is disabled");
 
-    casper.wait(3000, function() {
+    casper.wait(1000, function() {
         casper.test.comment("Click on next control and check if detail now refers to next tile");
         casper.test.assertVisible(root_selectors.main + " " + detail_selectors.controls.next);
         casper.click(root_selectors.main + " " + detail_selectors.controls.next);
-    });
-
-    casper.wait(3000, function() {
         // leaving this here for now for debug purposes
         casper.captureSelector('detail.jpeg', 'html');
         var new_detail_link = casper.getElementAttribute(root_selectors.main + " " + detail_selectors.content.body.root + " " + 'a', 'href');
