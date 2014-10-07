@@ -34,14 +34,13 @@ var no_tiles_done = false;
 
 ! function nextTest() {
     var path = paths[curFile];
+    if(!path) {
+        return;
+    }
 
     var data = require(path);
 
     casper.test.begin("\n ****** Testing " + data.name + " IA ******\n", function suite(test) {
-        if(!path) {
-            test.done();
-            return console.log("done!");
-        }
 
         if (data.status !== "live") {
             curFile++;
@@ -103,9 +102,10 @@ var no_tiles_done = false;
         });
 
         casper.run(function() {
-            curFile++;
-            nextTest();
             test.done();
         });
     });
+
+    curFile++;
+    nextTest();
 }();
