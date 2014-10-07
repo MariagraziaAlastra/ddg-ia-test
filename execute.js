@@ -56,7 +56,12 @@ var no_tiles_done = false;
         casper.start("https://bttf.duckduckgo.com/?q=" + data.query, function() {
             test.comment("\n Test " + data.name + " IA content values \n");
             casper.wait(2500, function() {
-                testValues(path);
+                if (this.exists(ia_tab)) {
+                    testValues(path);
+                } else {
+                    test.comment("No results for IA " + data.name);
+                    test.done();
+                }
             });
         });
 
