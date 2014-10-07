@@ -45,6 +45,7 @@ module.exports = function(path) {
     }
 
     if(data.template_group !== "") {
+        casper.test.assertVisible((root_selectors.main + " " + moreAt_selector), "MoreAt is visible");
         casper.test.comment("Check moreAt text and URL");
         casper.test.assertMatch(casper.fetchText(root_selectors.main + " " + moreAt_selector).trim(), moreAt_regex,
                                "moreAt text value is correct");

@@ -55,8 +55,9 @@ var no_tiles_done = false;
 
         casper.start("https://bttf.duckduckgo.com/?q=" + data.query, function() {
             test.comment("\n Test " + data.name + " IA content values \n");
-            test.comment(casper.options.viewportSize.width);
-            testValues(path);
+            casper.wait(2500, function() {
+                testValues(path);
+            });
         });
 
         casper.then(function() {
